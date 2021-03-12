@@ -3,7 +3,8 @@ import { Auth } from 'aws-amplify';
 export const AmplifyEnum = {
     needNewPassword: 'NEW_PASSWORD_REQUIRED',
     inValidUser: 'INVALID_USER',
-    emailFail: 'SEND_EMAIL_FAILED'
+    emailFail: 'SEND_EMAIL_FAILED',
+    success :'SUCCESS'
 }
 
 export default class AmplifyAuth {
@@ -33,7 +34,7 @@ export default class AmplifyAuth {
             const response = await Auth.completeNewPassword(authUser, newPassword, requiredAttributes);
             const signedInUser = await Auth.currentSession();
             localStorage.setItem("token", signedInUser.getIdToken().getJwtToken());
-            return response;
+            return {success: AmplifyEnum.success};
         } catch(error) {
             return {error: AmplifyEnum.inValidUser}
         }

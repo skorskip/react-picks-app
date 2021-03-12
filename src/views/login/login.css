@@ -39,7 +39,7 @@
 }
 
 .loginInput {
-    width: 65%;
+    width: 210px;
 }
 
 .loginForm {
@@ -47,7 +47,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 100%;
 }
 
 .paddingBottom {

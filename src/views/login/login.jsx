@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { PickLogo } from '../../components/pick-logo/pick-logo'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './login.css'
-import { Form, Icon, Button, Card } from 'react-bulma-components'
-import { faKey, faLock, faUserAlt } from '@fortawesome/free-solid-svg-icons'
+import { Form, Input, Button, Message,Icon } from 'semantic-ui-react'
 import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth'
 import store from '../../store'
 import { fetchUser } from '../../controller/user/userSlice'
@@ -66,6 +64,7 @@ export const Login = () => {
                 setPasswordIncorrect(true);
             } else if(result.challengeName != null && result.challengeName === AmplifyEnum.needNewPassword) {
                 setFormData({...formData, authUser: result});
+                setTitle('Welcome!');
                 setCompleteLoginForm(true);
                 setFormData({...formData, password: ''});
             } else {
@@ -83,6 +82,7 @@ export const Login = () => {
         event.preventDefault();
         setLoader(true);
         if(formData.username === '') {
+            setLoader(false);
             setEmptyUsername(true);
         } else {
             if(forgotPasswordForm) {
@@ -105,78 +105,104 @@ export const Login = () => {
     }
 
     const usernameForm = !completeLoginForm && (
-        <Form.Field>
-            <Form.Control iconLeft>
-                <Form.Input className="is-medium" name="username" color={passwordIncorrect ? "danger" : null} type="text" placeholder="Username/Email" onChange={handleChange} value={formData.username}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faUserAlt} />
-                </Icon>
-            </Form.Control>
-            { emptyUsername && <Form.Help align="left" color="danger">Must provide username or email</Form.Help>}
-        </Form.Field>
+        <Form.Field
+            control={Input}
+            name="username"
+            placeholder="Username/Email"
+            type="text"
+            icon='user'
+            iconPosition='left'
+            onChange={handleChange} 
+            value={formData.username}
+            className="loginInput"
+            error={emptyUsername && {
+                content: 'Must provide username or email',
+                pointing: 'above'
+            } || passwordIncorrect}
+        />
     );
 
     const codeForm = forgotPasswordForm && (
-        <Form.Field>
-            <Form.Control iconLeft>
-                <Form.Input className="is-medium" name="code" type="text" placeholder="Verification code" onChange={handleChange} value={formData.code}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faKey} />
-                </Icon>
-            </Form.Control>
-        </Form.Field>
+        <Form.Field 
+            control={Input}
+            name="code"
+            type="text"
+            placeholder="Verification code"
+            icon='key'
+            iconPosition='left'
+            className="loginInput"
+            onChange={handleChange}
+            value={formData.code}
+        />
     );
 
     const passwordForm = (
-        <Form.Field>
-            <Form.Control iconLeft>
-                    <Form.Input className="is-medium" name="password" color={passwordIncorrect ? "danger" : null} type="password" placeholder={forgotPasswordForm ? "New Password" : "Password"} onChange={handleChange} value={formData.password}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faLock} />
-                </Icon>
-            </Form.Control>
-            { passwordIncorrect && <Form.Help align="left" color="danger"><a onClick={forgotPassword}>Forgot Password?</a></Form.Help> }
-        </Form.Field>
+        <Form.Field
+            control={Input}
+            name='password'
+            placeholder={forgotPasswordForm ? "New Password" : "Password"}
+            icon='lock'
+            iconPosition='left'
+            type="password"
+            className="loginInput"
+            onChange={handleChange} 
+            value={formData.password}
+            error={passwordIncorrect && {
+                content: 'Username or password incorrect',
+                pointing: 'above'
+            }}
+        />
     );
 
     const passwordConfirmForm = (forgotPasswordForm || completeLoginForm) && (
-        <Form.Field>
-            <Form.Control iconLeft>
-                <Form.Input className="is-medium" name="confirmPassword" type="password" placeholder="Confirm Password" onChange={handleChange} value={formData.confirmPassword}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faLock} />
-                </Icon>
-            </Form.Control>
-            { passwordMismatch && <Form.Help align="left" color="danger">Passwords don't match</Form.Help>}
-        </Form.Field>
+        <Form.Field
+            control={Input}
+            name='confirmPassword'
+            placeholder='Confirm password'
+            type='password'
+            icon='lock'
+            iconPosition='left'
+            onChange={handleChange} 
+            value={formData.confirmPassword}
+            className="loginInput"
+            error={passwordMismatch && { 
+                content: 'Passwords do not match.',
+                pointing: 'above'
+            }}
+        />
     )
 
     return (
 
         <div className="loginContainer">
             <div className="loginHeader">
-            <div>
-                <PickLogo sizeParam="'m'"></PickLogo>
-            </div>
-            <div className="loginTitle">
-                {title}
-            </div>
+                <div>
+                    <PickLogo sizeParam="'m'"></PickLogo>
+                </div>
+                <div className="loginTitle">
+                    {title}
+                </div>
+                { forgotPasswordForm && 
+                <Message warning>
+                    <Icon name='info circle'/>
+                    Check your email for a code.
+                </Message> }
+                <Form onSubmit={attemptLogin} className="loginForm" size='big'>
+                    { usernameForm }
+                    { codeForm }
+                    { passwordForm }
+                    { passwordConfirmForm }
 
-            <form onSubmit={attemptLogin} className="loginForm">
-
-                { usernameForm }
-                { codeForm }
-                { passwordForm }
-                { passwordConfirmForm }
-
-                {laoder ? 
-                    <Button loading className="loginButton primary-background base noSelect"></Button> :
-                    <Button type="submit" className="loginButton primary-background base noSelect">
-                        Login
-                    </Button>
-                }
-            </form>
-
+                    {laoder ? 
+                        <Button loading basic className="loginButton primary-background base noSelect">Loading</Button>:
+                        <Button basic content="Login" type="submit" className="loginButton primary-background base noSelect" />
+                    }
+                </Form>
+                { passwordIncorrect && 
+                <Message warning>
+                    <Icon name='help circle'/>
+                    Forgot Password?&nbsp;<a onClick={forgotPassword}>Reset here.</a>
+                </Message> }
             </div>
         </div>  
     );

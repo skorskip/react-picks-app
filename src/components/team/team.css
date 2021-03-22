@@ -1,0 +1,116 @@
+.team-card{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	border-radius: 18px;
+	width: 150px;
+	height: 110px;
+	float: left;
+	box-shadow: 0 0 8px rgba(0,0,0,0.2);
+	border: none;
+}
+
+.team-card-medium{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	border-radius: 9px;
+	width: 140px;
+	height:50px;
+	float: left;
+	box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+.team-info {
+	border-radius: 18px;
+	width: 150px;
+	height: 110px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.team-info-medium {
+	border-radius: 9px;
+	width: 140px;
+	height: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.team-info-result {
+	border-radius: 18px;
+	width: 140px;
+	height: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.large-text{
+	font-size:2em; 
+	margin:0; 
+	text-align:center;
+	font-family: 'Roboto Mono';
+}
+
+.large-text-padding{
+	font-size:2em;
+	margin: 10px; 
+	text-align:center;
+	font-family: 'Roboto Mono';
+}
+
+.small-text-middle{
+	font-size:1.5em; 
+	margin:0; 
+	text-align:center;
+	font-family: 'Roboto Mono';
+}
+
+.location {
+	margin-left:10px;
+}
+
+.game-card-spread {
+	position: absolute;
+	float: left;
+	margin-left: 100px;
+	margin-top: -8px;
+    text-align: center;
+	border-radius: 50%;
+	padding: 5px;
+	border: solid 1px;
+}
+
+.game-card-spread-icon {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	font-size:1em; 
+	margin:0; 
+	text-align:center;
+	padding: 10px;
+	height: 25px;
+	width:25px;
+	border-radius: 50%;
+}
+
+.highlight-team {
+	border: solid 3px;
+	box-shadow: 0px 0px 5px 0px;
+}
+
+.disabled {
+	pointer-events: none;
+}
+
+@media only screen and (min-width: 650px) {
+	.team-info:hover {
+		border: solid 2px;
+	}
+}

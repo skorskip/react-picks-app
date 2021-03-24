@@ -10,7 +10,7 @@ export const Game = ({ id, previousId, index }) => {
     const previousGame = useSelector((state) => selectGamesById(state, previousId));
 
     const showSubmitTime = () => {
-        if((index === 0) || previousGame.pick_submit_by_date != game.pick_submit_by_date ) {
+        if((index === 0) || previousGame.pick_submit_by_date !== game.pick_submit_by_date ) {
             return new Date(game.pick_submit_by_date ) > new Date();
         } else return false;
     }
@@ -44,28 +44,31 @@ export const Game = ({ id, previousId, index }) => {
     const gameItem =  (
         <div className="game-card base-background tiertary">
             { timeStatus }
-            <Team 
-                id={game.home_team_id}
-                score={game.home_team_score}
-                highlight='false'
-                locked={unpickable}
-                fill={fillTeam(game.home_team_id)}
-            />
-            <Team 
-                id={game.away_team_id}
-                score={game.away_team_score}
-                highlight='false'
-                locked={unpickable}
-                fill={fillTeam(game.away_team_id)}
-            />
+            <div className="team-group secondary">
+                <Team 
+                    id={game.away_team_id}
+                    score={game.away_team_score}
+                    highlight='false'
+                    locked={unpickable}
+                    fill={fillTeam(game.away_team_id)}
+                />
+                <Team 
+                    id={game.home_team_id}
+                    score={game.home_team_score}
+                    highlight='false'
+                    locked={unpickable}
+                    fill={fillTeam(game.home_team_id)}
+                    spread={game.home_spread}
+                />
+            </div>
         </div>
     )
 
     return (
-        <li>
+        <>
             { submitBy }
             { gameItem }
-        </li>
+        </>
     )
 
 }

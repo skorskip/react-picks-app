@@ -1,16 +1,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectGamesById } from '../../../../controller/games/gamesSlice';
+import { selectGameIds } from '../../../../controller/games/gamesSlice';
 import './game-dashboard.css';
 import { PickLoader } from '../../../../components/pick-loader/pick-loader';
 import { Game } from '../game/game';
 
 export const GameDashboard = () => {
 
-    const gamesIds = useSelector(selectGamesById);
+    const gamesIds = useSelector(selectGameIds);
     const loader = useSelector((state) => state.games.status);
 
-    if(loader === 'loading') {
+    if(loader === 'loading' || gamesIds === undefined) {
         return (
             <PickLoader />
         )
@@ -32,12 +32,11 @@ export const GameDashboard = () => {
         )
     });
 
+
     return (
         <div className="games-container">
-            <ul>
-                { noGames }
-                { games }
-            </ul>
+            { noGames }
+            { games }
         </div>
     );
 } 

@@ -3,8 +3,9 @@ import { PickLogo } from '../../components/pick-logo/pick-logo'
 import './login.css'
 import { Form, Input, Button, Message,Icon } from 'semantic-ui-react'
 import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth'
-import store from '../../store'
 import { fetchUser } from '../../controller/user/userSlice'
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
 
 export const Login = () => {
     const formInfo = {
@@ -23,6 +24,9 @@ export const Login = () => {
     const [emptyUsername, setEmptyUsername] = useState(false);
     const [formData, setFormData] = useState(formInfo);
     const [laoder, setLoader] = useState(false);
+
+    const history = useHistory();
+    const dispatch = useDispatch();
 
     const handleChange = (event) => {
         setFormData({
@@ -74,7 +78,8 @@ export const Login = () => {
     }
     
     const getUserInfo = () => {
-        store.dispatch(fetchUser(formData.username, formData.passsword));
+        dispatch(fetchUser(formData.username, formData.passsword));
+        history.push('/games');
         setLoader(false);
     }
 
@@ -115,10 +120,10 @@ export const Login = () => {
             onChange={handleChange} 
             value={formData.username}
             className="loginInput"
-            error={emptyUsername && {
+            error={(emptyUsername && {
                 content: 'Must provide username or email',
                 pointing: 'above'
-            } || passwordIncorrect}
+            }) || passwordIncorrect}
         />
     );
 
@@ -201,7 +206,7 @@ export const Login = () => {
                 { passwordIncorrect && 
                 <Message warning>
                     <Icon name='help circle'/>
-                    Forgot Password?&nbsp;<a onClick={forgotPassword}>Reset here.</a>
+                    Forgot Password?&nbsp;<div onClick={forgotPassword}>Reset here.</div>
                 </Message> }
             </div>
         </div>  

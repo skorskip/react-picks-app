@@ -7,20 +7,28 @@ const usersUrl = environment.userServiceURL + 'users';
 
 const userAdapter = createEntityAdapter();
 
+const initialState = userAdapter.getInitialState({
+    status: 'idle',
+});
+
 export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password) => {
     const url = usersUrl + '/login';
     const newUser = new User(0, username, password, '', '', '', '', '', '', '');
     const response = await client.post(url, newUser);
-    return response[0];
+    return response;
 })   
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: userAdapter.getInitialState(),
+    initialState,
     extraReducers : (builder) => {
         builder
             .addCase(fetchUser.fulfilled, (state, action) => {
                 userAdapter.setAll(state, action.payload)
+                state.status = 'complete'
+            })
+            .addCase(fetchUser.pending, (state, action) => {
+                state.status = 'loading'
             })
     },
 });

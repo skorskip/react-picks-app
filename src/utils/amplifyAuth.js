@@ -31,7 +31,7 @@ export default class AmplifyAuth {
     static async CompletePasswordLogin(newPassword, authUser) {
         const { requiredAttributes } = authUser.challengeParam;
         try {
-            const response = await Auth.completeNewPassword(authUser, newPassword, requiredAttributes);
+            await Auth.completeNewPassword(authUser, newPassword, requiredAttributes);
             const signedInUser = await Auth.currentSession();
             localStorage.setItem("token", signedInUser.getIdToken().getJwtToken());
             return {success: AmplifyEnum.success};

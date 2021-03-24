@@ -1,33 +1,34 @@
 import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
 import { environment } from '../../configs/environment';
-import { setTeamsSlice } from '../teams/teamsSlice';
-import { useDispatch } from 'react-redux';
 
-const weekUrl = environment.userServiceURL + 'week';
+const weekUrl = environment.weekServiceURL + 'week';
 
 const gamesAdapter = createEntityAdapter();
 
-const initialState = {
+const initialState = gamesAdapter.getInitialState({
     status: 'idle',
-    entities: {}
-}
+    games: [],
+    teams: []
+});
 
-export const fetchGames = createAsyncThunk('user/fetchGames',  async (season, seasonType, week, user) => {
-    const url = weekUrl + '?season=' + season + '&seasonType=' + seasonType + '&week=' + week;
-    const response = await client.post(url, user);
-    useDispatch(setTeamsSlice(response.teams));
+export const fetchGames = createAsyncThunk('user/fetchGames',  async (param) => {
+    const url = weekUrl + '?season=' + param.season + '&seasonType=' + param.seasonType + '&week=' + param.week;
+    const response = await client.post(url, param.user);
+    localStorage.setItem("games", JSON.stringify(response.games));
+    localStorage.setItem("teams", JSON.stringify(response.teams));
     return response;
 })
 
 const gamesSlice = createSlice({
     name: 'games',
-    initialState: initialState,
+    initialState,
     extraReducers : (builder) => {
         builder
             .addCase(fetchGames.fulfilled, (state, action) => {
+                state.games = state.games.concat(action.payload.games)
+                state.teams = state.teams.concat(action.payload.teams)
                 state.status = 'idle'
-                gamesAdapter.setAll(state, action.payload)
             })
             .addCase(fetchGames.pending, (state, action) => {
                 state.status = 'loading'
@@ -35,11 +36,14 @@ const gamesSlice = createSlice({
     },
 });
 
-const gamesSelectors = gamesAdapter.getSelectors((state) => state.games)
+export const selectGames = (state) => state.games.games
 
-export const {
-    selectAll: selectGames,
-    selectById: selectGamesById
-} = gamesSelectors
+export const selectGamesById = (state, gameId) => state.games.games.find((game) => game.game_id === gameId);
+
+export const selectGameIds = (state) => state.games.games.map((game) => game.game_id);
+
+export const selectTeams = (state) => state.games.teams
+
+export const selectTeamById = (state, teamId) => state.games.teams.find((team) => team.team_id === teamId); 
 
 export default gamesSlice.reducer

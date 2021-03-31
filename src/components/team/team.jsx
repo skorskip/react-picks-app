@@ -1,11 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Button } from 'semantic-ui-react'
-import { selectTeamById } from '../../controller/games/gamesSlice';
 import './team.css'
 
-export const Team = ({ id, score, highlight, locked, fill, size, spread }) => {
-    const team = useSelector((state) => selectTeamById(state, id));
+export const Team = ({ team, score, highlight, locked, fill, size, spread }) => {
 
     const getClass = (context) => {
         switch(context) {
@@ -45,8 +41,8 @@ export const Team = ({ id, score, highlight, locked, fill, size, spread }) => {
 
     const teamWithScore = locked && (
         <div className={ getClass('score') }>
-            <div class="large-text-padding">{ score }</div>
-            <div class="small-text-middle">{ team.abbreviation }</div>
+            <div className="large-text-padding">{ score }</div>
+            <div className="small-text-middle">{ team.abbreviation }</div>
         </div>
     );
 
@@ -69,11 +65,11 @@ export const Team = ({ id, score, highlight, locked, fill, size, spread }) => {
 
     return (
         <>
-            <Button className={ getClass('card') }>
+            <div className={ getClass('card') }>
                 { teamWithScore }
                 { teamWithName }
-            </Button>
-            { spreadIcon }
+                { spreadIcon }
+            </div>
         </>
     ); 
 

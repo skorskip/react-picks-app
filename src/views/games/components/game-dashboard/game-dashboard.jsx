@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectGameIds } from '../../../../controller/games/gamesSlice';
 import './game-dashboard.css';
 import { PickLoader } from '../../../../components/pick-loader/pick-loader';
-import { Game } from '../game/game';
+import { GameDashboardWrapper } from './game-dashboard-wrapper';
 
 export const GameDashboard = () => {
 
@@ -24,14 +24,14 @@ export const GameDashboard = () => {
 
     const games = gamesIds.map((gameId, index) => {
         return(
-            <Game 
+            <GameDashboardWrapper
+                key={gameId}
                 id={gameId} 
-                previousId={gamesIds[index - 1 ]}
+                previousId={gamesIds[index - 1]}
                 index={index}
             />
         )
     });
-
 
     return (
         <div className="games-container">

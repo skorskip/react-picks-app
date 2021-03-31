@@ -2,7 +2,7 @@
 	display: flex;
     justify-content: center;
     align-items: center;
-	border-radius: 18px;
+	border-radius: 22px;
 	width: 150px;
 	height: 110px;
 	float: left;
@@ -79,12 +79,12 @@
 .game-card-spread {
 	position: absolute;
 	float: left;
-	margin-left: 100px;
-	margin-top: -8px;
+	margin-left: 120px;
+	margin-top: -75px;
     text-align: center;
 	border-radius: 50%;
 	padding: 5px;
-	border: solid 1px;
+	border: solid 2px;
 }
 
 .game-card-spread-icon {

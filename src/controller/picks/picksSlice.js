@@ -37,13 +37,11 @@ const picksSlice = createSlice({
     },
 });
 
-export const selectPicks = (state) => state.picks.picks
+export const selectPicks = (state) => state.picks.picks;
 
 export const selectPicksById = (state, pickId) => state.picks.picks.find((pick) => pick.pick_id === pickId);
 
 export const selectPicksIds = (state) => state.picks.picks.map((pick) => pick.pick_id);
-
-export const selectPicksGamesIds = (state) => state.picks.games.map((game) => game.game_id);
 
 export const selectPicksGameById = (state, gameId) => state.picks.games.find((game) => game.game_id === gameId);
 

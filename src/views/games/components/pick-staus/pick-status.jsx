@@ -1,15 +1,16 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
+import { GameWinStatusEnum } from '../../../../model/game/game';
 import './pick-status.css';
 
 export const PickStatus = ({ submitTime, pickSuccess }) => {
     const status = () => {
         switch(pickSuccess) {
-            case "WIN" : 
+            case GameWinStatusEnum.win : 
                 return <Icon circular className="pick-status-icon success" name="check" size="large"/>;
-            case "LOSE" : 
+            case GameWinStatusEnum.lose : 
                 return <Icon circular className="pick-status-icon failure" name="times" size="large"/>;
-            case "PUSH" : 
+            case GameWinStatusEnum.push : 
                 return <Icon circular className="pick-status-icon secondary" name="exchange" size="large"/>;
             default :
                 if(new Date(submitTime) >  new Date()){
@@ -21,8 +22,10 @@ export const PickStatus = ({ submitTime, pickSuccess }) => {
     }
 
     return (
-        <div className="pick-icon base-background tiertary">
-            { status() }
+        <div className="pick-status base-background">
+            <div className="pick-icon base-background tiertary">
+                { status() }
+            </div>
         </div>
     );
 }

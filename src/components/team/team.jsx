@@ -1,7 +1,7 @@
 import React from 'react';
 import './team.css'
 
-export const Team = ({ team, score, highlight, locked, fill, size, spread }) => {
+export const Team = ({ team, score, highlight, locked, disabled, fill, size, spread, onTeamSelected }) => {
 
     const getClass = (context) => {
         switch(context) {
@@ -39,6 +39,12 @@ export const Team = ({ team, score, highlight, locked, fill, size, spread }) => 
         } 
     }
 
+    const teamSelected = () => {
+        if(!locked && !disabled){
+            onTeamSelected({team: team, highlight: !highlight})
+        }
+    }
+
     const teamWithScore = locked && (
         <div className={ getClass('score') }>
             <div className="large-text-padding">{ score }</div>
@@ -55,7 +61,7 @@ export const Team = ({ team, score, highlight, locked, fill, size, spread }) => 
 
     const spreadIcon = (spread != null) && (
         <div className="game-card-spread tiertary base-background">
-            <div class="game-card-spread-icon accent base-background">
+            <div className="game-card-spread-icon accent base-background">
                 <b>
                     { getGameSpread(spread) }
                 </b>
@@ -65,7 +71,7 @@ export const Team = ({ team, score, highlight, locked, fill, size, spread }) => 
 
     return (
         <>
-            <div className={ getClass('card') }>
+            <div className={ getClass('card') } onClick={teamSelected}>
                 { teamWithScore }
                 { teamWithName }
                 { spreadIcon }

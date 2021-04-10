@@ -79,7 +79,7 @@ export const Login = () => {
     
     const getUserInfo = () => {
         dispatch(fetchUser(formData.username, formData.passsword));
-        history.push('/games');
+        history.push('/games/game');
         setLoader(false);
     }
 

@@ -1,10 +1,13 @@
 import { GameStatusEnum } from '../model/game/game';
 
+const months = ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+const days = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
+
 export const formatDate = (date) => {
     var formattedDate = "";
 
-    formattedDate += this.days[date.getDay()];
-    formattedDate += ", " +  this.months[date.getMonth()];
+    formattedDate += days[date.getDay()];
+    formattedDate += ", " +  months[date.getMonth()];
     formattedDate += " " + (date.getDate());
     if(date.getMinutes() < 10) {
       formattedDate += " at " + date.getHours() + ":" + 0+ date.getMinutes();

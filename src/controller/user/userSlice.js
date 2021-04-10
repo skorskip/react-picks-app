@@ -8,14 +8,16 @@ const usersUrl = environment.userServiceURL + 'users';
 const userAdapter = createEntityAdapter();
 
 const initialState = userAdapter.getInitialState({
-    status: 'idle',
+    status: localStorage.getItem("user") === null ? 'idle' :'complete',
+    user: localStorage.getItem("user") === null ? {} : JSON.parse(localStorage.getItem("user"))
 });
 
 export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password) => {
     const url = usersUrl + '/login';
     const newUser = new User(0, username, password, '', '', '', '', '', '', '');
     const response = await client.post(url, newUser);
-    return response;
+    localStorage.setItem("user", JSON.stringify(response[0]));
+    return response[0];
 })   
 
 const userSlice = createSlice({
@@ -24,7 +26,7 @@ const userSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchUser.fulfilled, (state, action) => {
-                userAdapter.setAll(state, action.payload)
+                state.user = action.payload
                 state.status = 'complete'
             })
             .addCase(fetchUser.pending, (state, action) => {
@@ -35,11 +37,7 @@ const userSlice = createSlice({
 
 export const { usersLoaded } = userSlice.actions
 
-const userSelectors = userAdapter.getSelectors((state) => state.user)
-
-export const {
-    selectAll: selectUser
-} = userSelectors
+export const selectUser = (state) => state.user.user;
 
 export default userSlice.reducer
 

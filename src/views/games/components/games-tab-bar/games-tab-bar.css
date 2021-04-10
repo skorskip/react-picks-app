@@ -1,0 +1,30 @@
+.toggle-picks-container {
+	position: fixed;
+    height: 50px;
+    z-index: 3;
+    top:0;
+    display: flex;
+    justify-content: space-around;
+	width: 100%;
+	padding: 4px;
+}
+
+.toggle-button {
+    border-radius: 4px;
+	cursor: pointer;
+    width: 100px;
+}
+
+.spectator-container {
+	display: flex;
+	padding: 5px;
+	align-items: center;
+	justify-content: space-between;
+	border-radius: 4px;
+	padding-right: 10px;
+    padding-left: 10px;
+}
+
+.spectator-icon {
+	padding-right: 10px;
+}

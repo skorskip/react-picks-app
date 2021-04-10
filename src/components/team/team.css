@@ -77,10 +77,19 @@
 }
 
 .game-card-spread {
-	position: absolute;
+	/* position: absolute;
 	float: left;
 	margin-left: 120px;
 	margin-top: -75px;
+    text-align: center;
+	border-radius: 50%;
+	padding: 5px;
+	border: solid 2px; */
+
+	position: absolute;
+	float: left;
+	margin-left: 70px;
+	margin-top: -40px;
     text-align: center;
 	border-radius: 50%;
 	padding: 5px;

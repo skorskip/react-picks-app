@@ -4,6 +4,12 @@ export const GameStatusEnum = {
     unplayed: "UNPLAYED"
 };
 
+export const GameWinStatusEnum = {
+    win: "WIN",
+    loss: "LOSS",
+    push: "PUSH"
+}
+
 export class Game {
     constructor(
         game_id,

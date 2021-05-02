@@ -73,7 +73,7 @@ export const Game = ({
     const submitBy = showSubmitTime && (
         <div className='full-row'>
             <div className="game-card-date">
-                <div className="date-text primary">
+                <div className="date-text primary-color">
                     Submit by: { formatDate(new Date(game.pick_submit_by_date)) }
                 </div>
             </div>
@@ -88,14 +88,14 @@ export const Game = ({
         </div>
     );
 
-    const getGameContainerClass = () => {
-        return (remove) ? "disable" : "game-card base-background tiertary"
+    const getGameContainerClass = (isRemoved) => {
+        return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
     }
 
     const gameItem =  (
-        <div className={ getGameContainerClass }>
+        <div className={ getGameContainerClass(remove) }>
             { timeStatus }
-            <div className="team-group secondary">
+            <div className="team-group secondary-color">
                 <Team 
                     team={awayTeam}
                     score={game.away_team_score}

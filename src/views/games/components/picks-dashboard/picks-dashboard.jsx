@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import { useSelector } from 'react-redux';
-import { selectPicksIds, selectPicks } from '../../../../controller/picks/picksSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectPicksIds, selectPicks, updatePicks, deletePicks } from '../../../../controller/picks/picksSlice';
 import './picks-dashboard.css';
 import { PickLoader } from '../../../../components/pick-loader/pick-loader';
 import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
+import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, Subscriber, publish } from '../../../../utils/pubSub';
 
 export const PicksDashboard = () => {
 
@@ -11,8 +12,11 @@ export const PicksDashboard = () => {
     const loader = useSelector((state) => state.picks.status);
     const picks = useSelector(selectPicks);
 
-    const [updatePicks, setUpdatePicks] = useState([]);
-    const [deletePicks, setDeletePicks] = useState([]); 
+    const [updatePicksArray, setUpdatePicks] = useState([]);
+    const [deletePicksArray, setDeletePicks] = useState([]); 
+    const [showDelete, setShowDelete] = useState(false);
+
+    const dispatch = useDispatch();
 
     if(loader === 'loading' || pickIds === undefined) {
         return (
@@ -21,22 +25,57 @@ export const PicksDashboard = () => {
     }
 
     const teamSelected = (event) => {
-        const updatePick = picks.find((pick) => pick.game_id === event.gameId);
-
+        let updatePick = JSON.parse(JSON.stringify(picks.find((pick) => pick.game_id === event.gameId)));
         if(event.highlight) {
-            let tempUpdate = updatePicks;
+            let tempUpdate = updatePicksArray;
             updatePick.team_id = event.teamId;
+            tempUpdate.forEach((item, index) => {
+                if(item.game_id === updatePick.game_id) {
+                    tempUpdate.splice(index, 1);
+                }
+            });
             tempUpdate.push(updatePick);
             setUpdatePicks(tempUpdate);
-        } else {
-            let tempDelete = deletePicks;
-            tempDelete.push(updatePick);
-            setDeletePicks(tempDelete);
         }
     }   
 
+    const showDeleteButton = (show) => {
+        setShowDelete(show);
+        return null;
+    }
+
+    const submitDelete = (submit) => {
+        if(submit) {
+            if(deletePicksArray.length !== 0 ) {
+                deletePicksArray.forEach(pick => {
+                    dispatch(deletePicks(pick.pick_id));
+                });
+            }
+            if(updatePicksArray.length !== 0){
+                updatePicksArray.forEach(pick => {
+                    dispatch(updatePicks(pick));
+                });
+            }
+            publish(NAV_DONE_BUTTON, null);
+        }
+        return null;
+    }
+
+    const onDelete = (pickToDelete) => {
+        let tempDelete = deletePicksArray;
+        let tempUpdate = updatePicksArray;
+        tempUpdate.forEach((item, index) => {
+            if(item.game_id === pickToDelete.game_id) {
+                tempUpdate.splice(index, 1);
+            }
+        });
+        tempDelete.push(pickToDelete);
+        setDeletePicks(tempDelete);
+        setUpdatePicks(tempUpdate);
+    }
+
     const noPicks = pickIds.size === 0 && (
-        <div className="no-games-set secondary">
+        <div className="no-games-set secondary-color">
             No Picks made
         </div>
     );
@@ -49,6 +88,8 @@ export const PicksDashboard = () => {
                 previousId={pickIds[index - 1]}
                 index={index}
                 onTeamSelected={teamSelected}
+                showDelete={showDelete}
+                onDelete={onDelete}
             />
         )
     });
@@ -56,6 +97,12 @@ export const PicksDashboard = () => {
     return (
         <div className="games-container">
             { noPicks }
+            <Subscriber topic={NAV_EDIT_BUTTON}>
+                { data => (<>{showDeleteButton(data)}</>)}
+            </Subscriber>
+            <Subscriber topic={NAV_DONE_BUTTON}>
+                { data => (<>{submitDelete(data)}</>) }
+            </Subscriber>
             { games }
         </div>
     );

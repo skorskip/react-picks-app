@@ -47,6 +47,29 @@
 	margin: 10px;
 }
 
+.submit-container {
+	position: fixed;
+	width: 100%;
+	height: 65px;
+	transition-duration: 500ms;
+	transition-timing-function: ease-in-out;
+	display:flex;
+	z-index: 3;
+}
+
+.hide-submit-button {
+	bottom: -65px;
+}
+
+.show-submit-button {
+	bottom: 100px;
+}
+
+.submit-button {
+	width: 100%;
+	margin: 10px !important;
+}
+
 @media only screen and (min-width: 650px) {
 	.games-container {
 		display: flex;

@@ -14,7 +14,7 @@ export const Team = ({ team, score, highlight, locked, disabled, fill, size, spr
             case 'score' : {
                 let classList = 'team-info disabled ';
                 classList += highlight ? 'highlight-team ' : '';
-                classList += fill ? 'base team-info-result ' : team.display_color;
+                classList += fill ? 'base-color team-info-result ' : team.display_color;
                 return classList;
             };
             case 'card' : {
@@ -60,7 +60,7 @@ export const Team = ({ team, score, highlight, locked, disabled, fill, size, spr
     );
 
     const spreadIcon = (spread != null) && (
-        <div className="game-card-spread tiertary base-background">
+        <div className="game-card-spread tiertary-color base-background">
             <div className="game-card-spread-icon accent base-background">
                 <b>
                     { getGameSpread(spread) }

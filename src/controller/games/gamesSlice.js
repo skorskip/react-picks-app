@@ -28,7 +28,7 @@ const gamesSlice = createSlice({
             .addCase(fetchGames.fulfilled, (state, action) => {
                 state.games = state.games.concat(action.payload.games)
                 state.teams = state.teams.concat(action.payload.teams)
-                state.status = 'idle'
+                state.status = 'complete'
             })
             .addCase(fetchGames.pending, (state, action) => {
                 state.status = 'loading'

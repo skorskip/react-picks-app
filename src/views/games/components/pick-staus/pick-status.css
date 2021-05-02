@@ -1,5 +1,11 @@
 .pick-icon {
     border-radius: 50%;
+    height: 65px;
+    width: 65px;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pick-status-icon {

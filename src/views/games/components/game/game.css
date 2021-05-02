@@ -45,7 +45,7 @@
 	margin-left: 2%;
 }
 
-.disable {
+.remove {
 	opacity: .3;
 	transition-duration: 500ms;
 	transition-timing-function: ease-in-out;

@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectPicksGameById, selectPicksTeamById, selectPicksById } from '../../../../controller/picks/picksSlice';
+import { selectPicksById } from '../../../../controller/picks/picksSlice';
+import { selectGamesById, selectTeamById } from '../../../../controller/games/gamesSlice';
 import { Game } from '../game/game';
+import { Button, Icon } from 'semantic-ui-react';
 
-export const PicksDashboardWrapper = ({ id, previousId, index, onTeamSelected}) => {
+export const PicksDashboardWrapper = ({ 
+    id, 
+    previousId, 
+    index, 
+    onTeamSelected,
+    showDelete,
+    onDelete
+}) => {
 
     const pick = useSelector((state) => selectPicksById(state, id))
     const previousPick = useSelector((state) => selectPicksById(state, previousId));
-    const game = useSelector((state) => selectPicksGameById(state, pick.game_id));
+    const game = useSelector((state) => selectGamesById(state, pick.game_id));
     const previousGame = useSelector((state) => {
-        if(previousPick !== undefined){selectPicksGameById(state, previousPick.game_id)}
+        if(previousPick !== undefined){selectGamesById(state, previousPick.game_id)}
     });
     
-    const homeTeam = useSelector((state) => selectPicksTeamById(state, game.home_team_id));
-    const awayTeam = useSelector((state) => selectPicksTeamById(state, game.away_team_id))
+    const homeTeam = useSelector((state) => selectTeamById(state, game?.home_team_id));
+    const awayTeam = useSelector((state) => selectTeamById(state, game?.away_team_id));
+    const [removeGame, setRemoveGame] = useState(false);
 
     const showSubmitTime = () => {
         if(previousGame !== undefined && ((index === 0) || previousGame.pick_submit_by_date !== game.pick_submit_by_date)) {
@@ -21,16 +31,34 @@ export const PicksDashboardWrapper = ({ id, previousId, index, onTeamSelected}) 
         } else return false;
     }
 
+    const deleteClicked = () => {
+        onDelete(pick);
+        setRemoveGame(true);
+    }
+
+    const gamePastEdit = () => {
+        return new Date() > game?.pick_submit_by_date;
+    }
+
     return(
-        <Game
-            key={id}
-            game={game}
-            homeTeam={homeTeam}
-            awayTeam={awayTeam}
-            pick={pick}
-            showSubmitTime={showSubmitTime()}
-            disabled={true}
-            onTeamSelected={(event) => onTeamSelected(event)}
-        />
+        <>
+            <Game
+                key={id}
+                game={game}
+                homeTeam={homeTeam}
+                awayTeam={awayTeam}
+                pick={pick}
+                showSubmitTime={showSubmitTime()}
+                disabled={(!showDelete && !gamePastEdit())}
+                remove={removeGame}
+                onTeamSelected={(event) => onTeamSelected(event)}
+            />
+            { (showDelete && !removeGame && !gamePastEdit()) && (
+                <Button className="delete-button bottom-margin failure-color base-background" onClick={() => deleteClicked()}>
+                    <Icon name= "trash alternate outline" />
+                    Delete
+                </Button>
+            )}
+        </>
     )
 }

@@ -4,7 +4,7 @@
     z-index: 3;
     top:0;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 	width: 100%;
 	padding: 4px;
 }
@@ -13,6 +13,7 @@
     border-radius: 4px;
 	cursor: pointer;
     width: 100px;
+	box-shadow: none !important;
 }
 
 .spectator-container {
@@ -25,6 +26,15 @@
     padding-left: 10px;
 }
 
+.edit-button-container {
+	padding: 4px;
+}
+
 .spectator-icon {
 	padding-right: 10px;
+}
+
+.toggle-container {
+	border-radius: 4px;
+	padding: 4px;
 }

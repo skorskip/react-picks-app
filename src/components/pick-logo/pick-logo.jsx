@@ -9,6 +9,7 @@ export const PickLogo = (sizeParam) => {
         switch(param) {
             case 'm': setSizeClass('medium'); break;
             case 's': setSizeClass('small'); break;
+            case 'xs' : setSizeClass('xsmall'); break;
             case 'l': setSizeClass('large'); break;
             default: setSizeClass('small'); break;
         }

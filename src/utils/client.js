@@ -37,3 +37,7 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   client.post = function (endpoint, body, customConfig = {}) {
     return client(endpoint, { ...customConfig, body })
   }
+
+  client.delete = function (endpoint, body, customConfig = {}) {
+    return client(endpoint, { ...customConfig, method: 'DELETE' })
+  }

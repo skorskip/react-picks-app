@@ -9,6 +9,7 @@ import "./games.css";
 
 export const Games = ({routes}) => {
     const user = useSelector(selectUser);
+    const gameLoadStatus = useSelector((state) => state.games.status);
     const userState = useSelector((state) => state.user.status);
     const pickIds = useSelector(selectPicksIds);
     const dispatch = useDispatch();

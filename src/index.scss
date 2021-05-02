@@ -38,13 +38,13 @@ $success: 			rgb(27, 136, 52);
 $failure:			rgb(211, 71, 71);
 $warn:				#ca7220;
 
-.success    					{ color: $success; }
-.failure    					{ color: $failure; }
-.warn       					{ color: $warn; }
+.success-color    					{ color: $success !important; }
+.failure-color    					{ color: $failure !important; }
+.warn-color       					{ color: $warn !important; }
 
-.success-background 			{ background-color: $success; }
-.failure-background  			{ background-color: $failure; }
-.warn-background  				{ background-color: $warn; }
+.success-background 			{ background-color: $success !important; }
+.failure-background  			{ background-color: $failure !important; }
+.warn-background  				{ background-color: $warn !important; }
 
 
 .failure-snack {
@@ -66,27 +66,27 @@ $quaternary:    white;
 $base:          white;
 $accent:        $primary;
 
-.primary {
+.primary-color {
     color:  $primary !important;
 }
 
-.secondary {
+.secondary-color {
     color: $secondary !important;
 }
 
-.tiertary {
+.tiertary-color {
     color: $tiertary !important;
 }
 
-.tiertary-light {
+.tiertary-light-color {
     color: $tiertary-light !important;
 }
 
-.quaternary {
+.quaternary-color {
     color: $quaternary !important;
 }
 
-.base {
+.base-color {
     color: $base !important;
 }
 

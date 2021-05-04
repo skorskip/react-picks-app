@@ -7,16 +7,16 @@ export const PickStatus = ({ submitTime, pickSuccess }) => {
     const status = () => {
         switch(pickSuccess) {
             case GameWinStatusEnum.win : 
-                return <Icon className="pick-status-icon success-color" name="check" size="large"/>;
+                return <Icon className="pick-status-icon success-color" name="check" size="big"/>;
             case GameWinStatusEnum.lose : 
-                return <Icon className="pick-status-icon failure-color" name="times" size="large"/>;
+                return <Icon className="pick-status-icon failure-color" name="times" size="big"/>;
             case GameWinStatusEnum.push : 
-                return <Icon className="pick-status-icon secondary-color" name="exchange" size="large"/>;
+                return <Icon className="pick-status-icon secondary-color" name="exchange" size="big"/>;
             default :
                 if(new Date(submitTime) >  new Date()){
-                    return <Icon className="pick-status-icon tiertary-color" name="at" size="large"/>;
+                    return <Icon className="pick-status-icon tiertary-color" name="at" size="big"/>;
                 } else {
-                    return <Icon className="pick-status-icon warn" name="lock" size="large"/>;
+                    return <Icon className="pick-status-icon warn-color" name="lock" size="big"/>;
                 }
         }
     }

@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPicksIds, selectPicks, updatePicks, deletePicks } from '../../../../controller/picks/picksSlice';
 import './picks-dashboard.css';
-import { PickLoader } from '../../../../components/pick-loader/pick-loader';
+import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, Subscriber, publish } from '../../../../utils/pubSub';
+import { Icon } from 'semantic-ui-react';
 
 export const PicksDashboard = () => {
 
@@ -20,7 +21,7 @@ export const PicksDashboard = () => {
 
     if(loader === 'loading' || pickIds === undefined) {
         return (
-            <PickLoader />
+            <GameLoader />
         )
     }
 
@@ -47,14 +48,10 @@ export const PicksDashboard = () => {
     const submitDelete = (submit) => {
         if(submit) {
             if(deletePicksArray.length !== 0 ) {
-                deletePicksArray.forEach(pick => {
-                    dispatch(deletePicks(pick.pick_id));
-                });
+                dispatch(deletePicks({ picks: deletePicksArray.map(pick => pick.pick_id) }))
             }
             if(updatePicksArray.length !== 0){
-                updatePicksArray.forEach(pick => {
-                    dispatch(updatePicks(pick));
-                });
+                dispatch(updatePicks({ picks: updatePicksArray }));
             }
             publish(NAV_DONE_BUTTON, null);
         }
@@ -74,16 +71,19 @@ export const PicksDashboard = () => {
         setUpdatePicks(tempUpdate);
     }
 
-    const noPicks = pickIds.size === 0 && (
+    const noPicks = pickIds.length === 0 && (
         <div className="no-games-set secondary-color">
-            No Picks made
+            No picks made
+            <div className="secondary-color empty-icon">
+                <Icon size="big" name="pointing left" />
+            </div>
         </div>
     );
 
     const games = pickIds.map((pickId, index) => {
         return(
             <PicksDashboardWrapper
-                key={pickId}
+                key={"game-wrapper-" + pickId}
                 id={pickId} 
                 previousId={pickIds[index - 1]}
                 index={index}
@@ -95,7 +95,7 @@ export const PicksDashboard = () => {
     });
 
     return (
-        <div className="games-container">
+        <div className="games-container page">
             { noPicks }
             <Subscriber topic={NAV_EDIT_BUTTON}>
                 { data => (<>{showDeleteButton(data)}</>)}

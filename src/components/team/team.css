@@ -2,7 +2,7 @@
 	display: flex;
     justify-content: center;
     align-items: center;
-	border-radius: 22px;
+	border-radius: 1rem;
 	width: 150px;
 	height: 110px;
 	float: left;
@@ -22,7 +22,7 @@
 }
 
 .team-info {
-	border-radius: 18px;
+	border-radius: 1rem;
 	width: 150px;
 	height: 110px;
 	display: flex;

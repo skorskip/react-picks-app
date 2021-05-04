@@ -4,10 +4,11 @@ import { selectUser } from '../../../../controller/user/userSlice';
 import { addPicks, selectPicksGamesIds } from '../../../../controller/picks/picksSlice';
 import { selectGameIds } from '../../../../controller/games/gamesSlice';
 import './game-dashboard.css';
-import { PickLoader } from '../../../../components/pick-loader/pick-loader';
+import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { GameDashboardWrapper } from './game-dashboard-wrapper';
 import { useState } from 'react/cjs/react.development';
-import { Button } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react';
+import { useHistory } from 'react-router-dom';
 
 export const GameDashboard = () => {
     const user = useSelector(selectUser);
@@ -15,12 +16,14 @@ export const GameDashboard = () => {
     const selectedPicksGames = useSelector(selectPicksGamesIds);
     const gamesIds = selectedGames.filter(gameId => !selectedPicksGames.includes(gameId));
     const gameLoader = useSelector((state) => state.games.status);
+    const pickLoader = useSelector((state) => state.picks.status);
     const initialStaged = JSON.parse(localStorage.getItem("stagedPicks"));
     const [stagedPicks, setStagedPicks] = useState(
         initialStaged === null ? {} : initialStaged 
     );
     const [stagedCount, setStagedCount] = useState(initialStaged === null ? 0 : Object.keys(initialStaged).length);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const teamSelected = (event) => {
         let updated = stagedPicks;
@@ -28,7 +31,7 @@ export const GameDashboard = () => {
             let newPick = {
                 game_id: event.gameId,
                 team_id: event.teamId,
-                submitted_date: new Date(),
+                submitted_date: new Date().toISOString(),
                 user_id: user.user_id
             }
 
@@ -49,9 +52,11 @@ export const GameDashboard = () => {
         setStagedCount(0);
         localStorage.setItem("stagedPicks", null);
         dispatch(addPicks({ picks: Object.values(stagedPicks) }));
+        history.push("/games/pick");
+
     }
 
-    const noGames = gamesIds.size === 0 && (
+    const noGames = gamesIds.length === 0 && (
         <div className="no-games-set secondary-color">
             No Unpicked Games
         </div>
@@ -64,7 +69,7 @@ export const GameDashboard = () => {
     const games = gamesIds.map((gameId, index) => {
         return(
             <GameDashboardWrapper
-                key={gameId}
+                key={"game-wrapper-" + gameId}
                 id={gameId} 
                 previousId={gamesIds[index - 1]}
                 index={index}
@@ -74,14 +79,14 @@ export const GameDashboard = () => {
         )
     });
 
-    if(gameLoader === 'loading' || gamesIds === undefined) {
+    if(gameLoader === 'loading' || gamesIds === undefined || pickLoader === 'loading') {
         return (
-            <PickLoader />
+            <GameLoader />
         )
     }
 
     return (
-        <div className="games-container">
+        <div className="games-container page">
             { noGames }
             { games }
             <div className={getSubmitClass()}>

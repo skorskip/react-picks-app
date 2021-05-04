@@ -18,11 +18,16 @@
 .no-games-set {
 	font-size: 2em;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-content: center;
 	text-align: center;
 	height: 250px;
 	margin-top:20%;
+	padding: 10px;
+}
+
+.empty-icon {
 	padding: 10px;
 }
 

@@ -18,7 +18,7 @@ export const GameDashboardWrapper = ({ id, previousId, index, picked, onTeamSele
 
     return(
         <Game
-            key={id}
+            key={"game-" + id}
             game={game}
             homeTeam={homeTeam}
             awayTeam={awayTeam}

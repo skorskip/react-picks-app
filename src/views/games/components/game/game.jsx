@@ -19,6 +19,7 @@ export const Game = ({
 
     const [highlightHome, setHighlightHome] = useState(false);
     const [highlightAway, setHighlightAway] = useState(false);
+    const gameLocked = new Date(game?.pick_submit_by_date) <= new Date();
 
     const pickResult = () => {
         if(game.game_status === GameStatusEnum.completed && pick !== null && pick !== undefined){
@@ -33,10 +34,6 @@ export const Game = ({
           else {
             return null;
           }
-    }
-
-    const gameLocked = () => {
-        return new Date(game.pick_submit_by_date) <= new Date();
     }
 
     const fillTeam = (teamId) => {
@@ -92,7 +89,7 @@ export const Game = ({
         return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
     }
 
-    const gameItem =  (
+    const gameItem =  game !== undefined && (
         <div className={ getGameContainerClass(remove) }>
             { timeStatus }
             <div className="team-group secondary-color">
@@ -100,20 +97,20 @@ export const Game = ({
                     team={awayTeam}
                     score={game.away_team_score}
                     highlight={highlightAway}
-                    locked={gameLocked()}
+                    locked={gameLocked}
                     fill={fillTeam(game.away_team_id)}
                     disabled={disabled}
                     onTeamSelected={teamSelected}
                 />
                 <PickStatus
-                    submitTime={game.pick_submit_by_date}
+                    submitTime={game?.pick_submit_by_date}
                     pickSuccess={pickResult()}
                 />
                 <Team 
                     team={homeTeam}
                     score={game.home_team_score}
                     highlight={highlightHome}
-                    locked={gameLocked()}
+                    locked={gameLocked}
                     fill={fillTeam(game.home_team_id)}
                     spread={game.home_spread}
                     disabled={disabled}
@@ -126,7 +123,7 @@ export const Game = ({
     useEffect(() => {
         const highlightPicks = () => {
             if(pick !== null && pick !== undefined) {
-                (game.home_team_id === pick.team_id) ? setHighlightHome(true) : setHighlightAway(true)
+                (game?.home_team_id === pick.team_id) ? setHighlightHome(true) : setHighlightAway(true)
             }
         };
 

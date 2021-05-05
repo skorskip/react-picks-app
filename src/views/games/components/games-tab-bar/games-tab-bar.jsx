@@ -1,17 +1,31 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { useState } from 'react/cjs/react.development';
 import { Button } from 'semantic-ui-react';
 import { publish, NAV_EDIT_BUTTON, NAV_DONE_BUTTON } from '../../../../utils/pubSub';
+import { useSelector } from 'react-redux';
+import { selectLeague } from '../../../../controller/league/leagueSlice';
 import './games-tab-bar.css';
 
 export const GamesTabBar = ({pickCount}) => {
     let { view } = useParams();
+    const league = useSelector(selectLeague);
     const history = useHistory();
     const [isEditSelected, setIsEditSelected] = useState(false);
+    const currentWeek = league.currentWeek;
+    let { search } = useLocation();
+    const query = new URLSearchParams(search);
+    const season = query.get("season");
+    const week = query.get("week") ? query.get("week") : currentWeek;
+    const seasonType = query.get("seasonType");
+    const weekQuery = `?season=${season}&seasonType=${seasonType}&week=${week}`;
 
     const clickView = (view) => {
-        history.push("/games/" + view);
+        if(season === null) {
+            history.push("/games/" + view);
+        } else {
+            history.push("/games/" + view + weekQuery);
+        }
     }
 
     const getButtonClass = (selectedView) => {
@@ -33,7 +47,7 @@ export const GamesTabBar = ({pickCount}) => {
         setIsEditSelected(false);
     }
 
-    const editButton = (view === "pick" && !isEditSelected) && (
+    const editButton = (view === "pick" && !isEditSelected && pickCount > 0 && parseInt(week) === currentWeek) && (
         <Button basic onClick={() => selectEdit()}>Edit</Button>
     )
 

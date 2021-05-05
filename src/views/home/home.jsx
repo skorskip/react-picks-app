@@ -1,12 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { routes } from '../../utils/routes';
-import { BrowserRouter as Router, Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route, useLocation } from "react-router-dom";
 import { NavBar } from '../../components/nav-bar/nav-bar';
+import { PickLoader } from '../../components/pick-loader/pick-loader';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchLeague } from '../../controller/league/leagueSlice';
+import { Login } from '../login/login';
+import AmplifyAuth from '../../utils/amplifyAuth'
 
 export const Home = () => {     
 
+    const leagueState = useSelector((state) => state.league.status);
+    const userState = useSelector((state) => state.user.status);
+    const dispatch = useDispatch();
     const {pathname} = useLocation();
-    const route = (pathname.split("/").length > 0) ? pathname.split("/")[1] : ""
+    const route = (pathname.split("/").length > 0) ? pathname.split("/")[1] : "";
+
+    useEffect(() => {
+        if(userState === 'complete') {
+            dispatch(fetchLeague());
+        }
+    }, [userState, dispatch]);
+
+    if(!AmplifyAuth.TokenIsValid()) {
+        return (
+            <Login />
+        )
+    }
+
+    if(userState === 'loading' || leagueState === 'loading') {
+        return (
+            <PickLoader />
+        )
+    }
 
     return (
         <>
@@ -26,7 +52,7 @@ export const Home = () => {
                     )
                 )}
             </Switch>
-            { (route !== "login") && (<NavBar />)}
+            { (route !== "login" && route !== "") && (<NavBar />)}
         </>
     );
 }

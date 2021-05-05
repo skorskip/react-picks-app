@@ -1,4 +1,27 @@
 .route-container {
-    padding-top: 50px;
     padding-bottom: 95px;
+}
+
+.week-switcher-container {
+    padding-top: 50px;
+}
+
+.header-container {
+    display: flex;
+	justify-content: center;
+	padding-bottom:10px;
+}
+
+.spectator-container {
+	display: flex;
+	padding: 5px;
+	align-items: center;
+	justify-content: space-around;
+	border-radius: 4px;
+	padding-right: 10px;
+    padding-left: 10px;
+}
+
+.spectator-icon {
+	padding-right: 10px;
 }

@@ -1,7 +1,6 @@
-import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
 import { environment } from '../../configs/environment';
-import { useParams } from 'react-router';
 
 const pickUrl = environment.picksServiceURL + 'picks';
 
@@ -14,9 +13,7 @@ const pickResponse = {
 
 const initialState = picksAdapter.getInitialState({
     status: 'idle',
-    picks: [],
-    teams: [],
-    games: []
+    picks: []
 });
 
 export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) => {
@@ -87,9 +84,7 @@ const picksSlice = createSlice({
                 state.status = 'loading'
             })
             .addCase(fetchPicks.fulfilled, (state, action) => {
-                state.picks = state.picks.concat(action.payload.picks)
-                state.games = state.games.concat(action.payload.games)
-                state.teams = state.teams.concat(action.payload.teams)
+                state.picks = action.payload.picks;
                 state.status = 'idle'
             })
             .addCase(addPicks.pending, (state, action) => {
@@ -138,10 +133,5 @@ export const selectPicksById = (state, pickId) => state.picks.picks.find((pick) 
 export const selectPicksIds = (state) => state.picks.picks.map((pick) => pick.pick_id);
 
 export const selectPicksGamesIds = (state) => state.picks.picks.map((pick) => pick.game_id);
-
-export const selectPicksGameById = (state, gameId) => state.picks.games.find((game) => game.game_id === gameId);
-
-export const selectPicksTeamById = (state, teamId) => state.picks.teams.find((team) => team.team_id === teamId); 
-
 
 export default picksSlice.reducer

@@ -6,10 +6,10 @@ export const GameLoader = () => {
     const game = (
         <div className="game-card">
             <div className="team-group">
-                <Placeholder style={{ height: 110, width: 150, borderRadius: 22, margin: 0}}>
+                <Placeholder style={{ height: 110, width: 150, borderRadius: "1em", margin: 0}}>
                     <Placeholder.Image />
                 </Placeholder>
-                <Placeholder style={{ height: 110, width: 150, borderRadius: 22, margin: 0}}>
+                <Placeholder style={{ height: 110, width: 150, borderRadius: "1em", margin: 0}}>
                     <Placeholder.Image />
                 </Placeholder>
             </div>

@@ -26,8 +26,8 @@ const gamesSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchGames.fulfilled, (state, action) => {
-                state.games = state.games.concat(action.payload.games)
-                state.teams = state.teams.concat(action.payload.teams)
+                state.games = action.payload.games;
+                state.teams = action.payload.teams;
                 state.status = 'complete'
             })
             .addCase(fetchGames.pending, (state, action) => {

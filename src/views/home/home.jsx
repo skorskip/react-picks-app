@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { routes } from '../../utils/routes';
 import { Switch, Route, useLocation } from "react-router-dom";
-import { NavBar } from '../../components/nav-bar/nav-bar';
+import { NavBar } from './components/nav-bar/nav-bar';
 import { PickLoader } from '../../components/pick-loader/pick-loader';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchLeague } from '../../controller/league/leagueSlice';

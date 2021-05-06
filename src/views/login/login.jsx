@@ -120,6 +120,7 @@ export const Login = () => {
             onChange={handleChange} 
             value={formData.username}
             className="loginInput"
+            size="big"
             error={(emptyUsername && {
                 content: 'Must provide username or email',
                 pointing: 'above'
@@ -138,6 +139,7 @@ export const Login = () => {
             className="loginInput"
             onChange={handleChange}
             value={formData.code}
+            size="big"
         />
     );
 
@@ -152,6 +154,7 @@ export const Login = () => {
             className="loginInput"
             onChange={handleChange} 
             value={formData.password}
+            size="big"
             error={passwordIncorrect && {
                 content: 'Username or password incorrect',
                 pointing: 'above'
@@ -170,6 +173,7 @@ export const Login = () => {
             onChange={handleChange} 
             value={formData.confirmPassword}
             className="loginInput"
+            size="big"
             error={passwordMismatch && { 
                 content: 'Passwords do not match.',
                 pointing: 'above'

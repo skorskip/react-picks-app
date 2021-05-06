@@ -1,10 +1,11 @@
 import React from 'react';
-import { gameTimeStatusQuarters, formatDate } from '../../../../utils/dateFormatter';
-import { Team } from '../../../../components/team/team';
-import { PickStatus } from '../pick-staus/pick-status';
+import { gameTimeStatusQuarters, formatDate } from '../../utils/dateFormatter';
+import { Team } from './components/team/team';
+import { PickStatus } from './components/pick-staus/pick-status';
 import './game.css';
 import { useEffect, useState } from 'react/cjs/react.development';
-import { GameWinStatusEnum, GameStatusEnum } from '../../../../model/game/game';
+import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
+import { UsersPickData } from './components/users-pick-data/users-pick-data';
 
 export const Game = ({ 
     game, 
@@ -85,6 +86,10 @@ export const Game = ({
         </div>
     );
 
+    const pickData = (
+        <UsersPickData game={game}/>
+    )
+
     const getGameContainerClass = (isRemoved) => {
         return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
     }
@@ -117,11 +122,14 @@ export const Game = ({
                     onTeamSelected={teamSelected}
                 />
             </div>
+            { pickData }
         </div>
     );
 
     useEffect(() => {
         const highlightPicks = () => {
+            setHighlightAway(false);
+            setHighlightHome(false);
             if(pick !== null && pick !== undefined) {
                 (game?.home_team_id === pick.team_id) ? setHighlightHome(true) : setHighlightAway(true)
             }

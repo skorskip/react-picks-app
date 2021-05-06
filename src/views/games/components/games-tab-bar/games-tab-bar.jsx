@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { useState } from 'react/cjs/react.development';
 import { Button } from 'semantic-ui-react';
 import { publish, NAV_EDIT_BUTTON, NAV_DONE_BUTTON } from '../../../../utils/pubSub';
 import { useSelector } from 'react-redux';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
-import { PickLogo } from '../pick-logo/pick-logo';
+import { PickLogo } from '../../../../components/pick-logo/pick-logo';
 import './nav-bar.css';
 
 export const NavBar = () => {

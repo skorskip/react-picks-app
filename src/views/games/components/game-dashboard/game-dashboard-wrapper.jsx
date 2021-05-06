@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectGamesById, selectTeamById } from '../../../../controller/games/gamesSlice';
-import { Game } from '../game/game';
+import { Game } from '../../../../components/game/game';
 
 export const GameDashboardWrapper = ({ id, previousId, index, picked, onTeamSelected}) => {
 

@@ -7,11 +7,12 @@ import { selectLeague } from '../../controller/league/leagueSlice';
 import { Switch, Route, useLocation, useParams } from "react-router-dom";
 import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
 import { WeekSwitcher } from '../../components/week-switcher/week-switcher';
-import {  TransitionGroup, CSSTransition } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Icon } from 'semantic-ui-react';
 import { WEEK_SHOW_WEEKS, Subscriber } from '../../utils/pubSub';
 import "./games.css";
 import "../../utils/slideTransition.scss";
+import { fetchUserPickData } from '../../controller/user-pick-data/userPickDataSlice';
 
 export const Games = ({routes}) => {
     const user = useSelector(selectUser);
@@ -76,6 +77,7 @@ export const Games = ({routes}) => {
         if(season !== null && week !== null && seasonType !== null){
             dispatch(fetchGames({ season: season, seasonType: seasonType, week: week, user: user }));
             dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
+            dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }))
         }
     }, [dispatch, user, season, week, seasonType])
 

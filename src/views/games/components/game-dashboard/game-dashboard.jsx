@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../../../controller/user/userSlice';
 import { addPicks, selectPicksGamesIds } from '../../../../controller/picks/picksSlice';
 import { selectGameIds } from '../../../../controller/games/gamesSlice';
-import './game-dashboard.css';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { GameDashboardWrapper } from './game-dashboard-wrapper';
-import { useState } from 'react/cjs/react.development';
 import { Button } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
+import './game-dashboard.css';
 
 export const GameDashboard = () => {
     const user = useSelector(selectUser);

@@ -6,8 +6,8 @@ const leagueUrl = environment.leagueServiceURL + 'league';
 const leagueAdapter = createEntityAdapter();
 
 const initialState = leagueAdapter.getInitialState({
-    status: 'idle',
-    league: {}
+    status: localStorage.getItem("settings") === null ? 'idle' : 'complete',
+    league: localStorage.getItem("settings") === null ? {} : localStorage.getItem("settings")
 });
 
 export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
@@ -33,5 +33,6 @@ const leagueSlice = createSlice({
 });
 
 export const selectLeague = (state) => state.league.league;
+export const selectMessageSource = (state) => state.league.league?.messageSource;
 
 export default leagueSlice.reducer

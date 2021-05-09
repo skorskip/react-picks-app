@@ -15,6 +15,7 @@ export const Home = () => {
     const dispatch = useDispatch();
     const {pathname} = useLocation();
     const route = (pathname.split("/").length > 0) ? pathname.split("/")[1] : "";
+    const tokenValid = AmplifyAuth.TokenIsValid();
 
     useEffect(() => {
         if(userState === 'complete') {
@@ -22,7 +23,7 @@ export const Home = () => {
         }
     }, [userState, dispatch]);
 
-    if(!AmplifyAuth.TokenIsValid()) {
+    if(!tokenValid) {
         return (
             <Login />
         )
@@ -30,7 +31,10 @@ export const Home = () => {
 
     if(userState === 'loading' || leagueState === 'loading') {
         return (
-            <PickLoader />
+            <>
+                <PickLoader />
+                <NavBar />
+            </>
         )
     }
 
@@ -52,7 +56,7 @@ export const Home = () => {
                     )
                 )}
             </Switch>
-            { (route !== "login" && route !== "") && (<NavBar />)}
+            <NavBar />
         </>
     );
 }

@@ -74,7 +74,7 @@ export const Games = ({routes}) => {
     );
 
     useEffect(() => {
-        if(season !== null && week !== null && seasonType !== null){
+        if(season && week && seasonType){
             dispatch(fetchGames({ season: season, seasonType: seasonType, week: week, user: user }));
             dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
             dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }))

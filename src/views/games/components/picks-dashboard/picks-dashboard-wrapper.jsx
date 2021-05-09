@@ -18,7 +18,7 @@ export const PicksDashboardWrapper = ({
     const previousPick = useSelector((state) => selectPicksById(state, previousId));
     const game = useSelector((state) => selectGamesById(state, pick.game_id));
     const previousGame = useSelector((state) => {
-        if(previousPick !== undefined){selectGamesById(state, previousPick.game_id)}
+        if(previousPick !== undefined){ return selectGamesById(state, previousPick.game_id)}
     });
     
     const homeTeam = useSelector((state) => selectTeamById(state, game?.home_team_id));
@@ -27,7 +27,7 @@ export const PicksDashboardWrapper = ({
     const gamePasssedEdit = new Date() > game?.pick_submit_by_date;
 
     const showSubmitTime = () => {
-        if(previousGame !== undefined && ((index === 0) || previousGame.pick_submit_by_date !== game.pick_submit_by_date)) {
+        if((index === 0) || previousGame.pick_submit_by_date !== game.pick_submit_by_date) {
             return new Date(game.pick_submit_by_date ) > new Date();
         } else return false;
     }

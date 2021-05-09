@@ -86,7 +86,7 @@ export const Game = ({
         </div>
     );
 
-    const pickData = (
+    const pickData = gameLocked && (
         <UsersPickData game={game}/>
     )
 

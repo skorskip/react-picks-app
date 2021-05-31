@@ -3,6 +3,7 @@ import { Login } from '../views/login/login';
 import { GameDashboard } from '../views/games/components/game-dashboard/game-dashboard';
 import { PicksDashboard } from '../views/games/components/picks-dashboard/picks-dashboard';
 import { Announcements } from '../views/announcements/announcements';
+import { Standings } from '../views/standings/standings';
 
 export const routes = [
 
@@ -23,6 +24,10 @@ export const routes = [
     {
         path: '/announcements',
         component: Announcements
+    },
+    {
+        path: '/standings',
+        component: Standings
     },
     {
         path: '/login',

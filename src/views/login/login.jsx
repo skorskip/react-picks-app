@@ -203,8 +203,8 @@ export const Login = () => {
                     { passwordConfirmForm }
 
                     {laoder ? 
-                        <Button loading basic className="loginButton primary-background base-color noSelect">Loading</Button>:
-                        <Button basic content="Login" type="submit" className="loginButton primary-background base-color noSelect" />
+                        <Button loading basic size="massive" className="loginButton primary-background base-color noSelect">Loading</Button>:
+                        <Button basic content="Login" type="submit" size="massive" className="loginButton primary-background base-color noSelect" />
                     }
                 </Form>
                 { passwordIncorrect && 

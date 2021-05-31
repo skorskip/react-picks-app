@@ -18,15 +18,20 @@ export const Games = ({routes}) => {
     const user = useSelector(selectUser);
     const league = useSelector(selectLeague);
     const pickIds = useSelector(selectPicksIds);
+    const gamesState = useSelector((state) => state.games.status);
+    const leagueState = useSelector((state) => state.league.status);
     const dispatch = useDispatch();
     let location = useLocation();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
     const animationTime = { enter: 200, exit: 200};
     let { view } = useParams();
-    const season = query.get("season") === null ? league.currentSeason : query.get("season");
-    const week = query.get("week") === null ? league.currentWeek : query.get("week");
-    const seasonType = query.get("seasonType") === null ? league.currentSeasonType : query.get("seasonType");
+    const season = query.get("season")
+    const week = query.get("week")
+    const seasonType = query.get("seasonType")
+    const currSeason = league.currentSeason
+    const currWeek = league.currentWeek 
+    const currSeasonType = league.currentSeasonType
     const [weeksShown, setWeeksShown] = useState(false);
 
     const showWeeks = (show) => {
@@ -39,7 +44,7 @@ export const Games = ({routes}) => {
                 <div class="base-color spectator-icon">
                     <Icon name="binoculars" />
                 </div>
-                <span class="base">
+                <span class="base-color">
                     Spectator Mode
                 </span>
             </div>
@@ -72,6 +77,14 @@ export const Games = ({routes}) => {
             </CSSTransition>
         </TransitionGroup>
     );
+
+    useEffect(() => {
+        if(gamesState === 'idle' && leagueState === 'complete') {
+            dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+            dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+            dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }))
+        }
+    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch])
 
     useEffect(() => {
         if(season && week && seasonType){

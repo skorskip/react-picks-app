@@ -59,20 +59,4 @@ export default class AmplifyAuth {
             return {error: AmplifyEnum.emailFail}
         }
     }
-
-    static async TokenIsValid() {
-        try {
-            const response = await Auth.currentSession();
-            var expiration = new Date(response.getIdToken().getExpiration() * 1000);
-            if(new Date() > expiration) {
-                return false;
-            } else {
-                localStorage.setItem("token", response.getIdToken().getJwtToken());
-                return true;
-            }
-        } catch(error) {
-            return false;
-        }
-
-    }
 }

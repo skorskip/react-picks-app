@@ -21,9 +21,9 @@ export const GamesTabBar = ({pickCount}) => {
 
     const clickView = (view) => {
         if(season === null) {
-            history.push("/games/" + view);
+            history.push(`/games/${view}`);
         } else {
-            history.push("/games/" + view + weekQuery);
+            history.push(`/games/${view}${weekQuery}`);
         }
     }
 
@@ -58,10 +58,10 @@ export const GamesTabBar = ({pickCount}) => {
         <div className="toggle-picks-container base-background">
             <div className="toggle-container tiertary-light-background">
                 <Button className={getButtonClass("game")} onClick={() => clickView("game")}>
-                    Games
+                    🏈 &nbsp;Games 
                 </Button>
                 <Button className={getButtonClass("pick")} onClick={() =>clickView("pick")}>
-                    Picks({pickCount})
+                    👇 Picks ({pickCount})
                 </Button>
             </div>
             <div className="edit-button-container">

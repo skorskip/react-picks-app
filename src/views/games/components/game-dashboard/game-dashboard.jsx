@@ -52,7 +52,6 @@ export const GameDashboard = () => {
         localStorage.setItem("stagedPicks", null);
         dispatch(addPicks({ picks: Object.values(stagedPicks) }));
         history.push("/games/pick");
-
     }
 
     const noGames = gamesIds.length === 0 && (
@@ -79,9 +78,7 @@ export const GameDashboard = () => {
     });
 
     if(gameLoader === 'loading' || gamesIds === undefined || pickLoader === 'loading') {
-        return (
-            <GameLoader />
-        )
+        return (<GameLoader />)
     }
 
     return (

@@ -25,7 +25,7 @@ export const UsersPickData = ({ game }) => {
     }
 
     const picksDataButton = (!showPickers) && (
-        <Button className="picks-data-overview accent base-background" onClick={picksDataClick}>
+        <div className="picks-data-overview accent base-background">
             <div className="pick-data-button-group">
                 {/* <div className="pick-data" name="away">
                     <div className="pick-data-icon">
@@ -44,7 +44,7 @@ export const UsersPickData = ({ game }) => {
                     </div>
                 </div> */}
                 <Button as= 'div' labelPosition='right'>
-                    <Button basic>
+                    <Button basic onClick={picksDataClick}>
                         <Icon className="accent" size='large' name='users' />
                     </Button>
                     <Label as='a' className="accent" basic pointing='left'>
@@ -52,7 +52,7 @@ export const UsersPickData = ({ game }) => {
                     </Label>
                 </Button>
                 <Button as= 'div' labelPosition='right'>
-                    <Button basic>
+                    <Button basic onClick={picksDataClick}>
                         <Icon className="accent" size='large' name='users' />
                     </Button>
                     <Label className="accent" as='a' basic pointing='left'>
@@ -60,13 +60,13 @@ export const UsersPickData = ({ game }) => {
                     </Label>
                 </Button>
             </div>
-        </Button>
+        </div>
     );
 
     const buttonListAway = awayPicks.map((pick) => {
         return (
             <Button className="user-item tiertary-color base-background" onClick={() => setUserModal(pick)}>
-                <div class="accent">{ pick.first_name } {pick.last_name.substring(0,1)}.</div>
+                <div className="accent">{ pick.first_name } {pick.last_name.substring(0,1)}.</div>
             </Button>
         );
     });

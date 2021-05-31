@@ -7,9 +7,14 @@
 }
 
 .header-container {
+	position: fixed;
+    height: 50px;
+    z-index: 3;
+    top:0;
     display: flex;
-	justify-content: center;
-	padding-bottom:10px;
+    justify-content: center;
+	width: 100%;
+	padding: 4px;
 }
 
 .spectator-container {

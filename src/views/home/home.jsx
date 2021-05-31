@@ -1,40 +1,17 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { routes } from '../../utils/routes';
-import { Switch, Route, useLocation } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { NavBar } from './components/nav-bar/nav-bar';
-import { PickLoader } from '../../components/pick-loader/pick-loader';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchLeague } from '../../controller/league/leagueSlice';
 import { Login } from '../login/login';
-import AmplifyAuth from '../../utils/amplifyAuth'
+import { useSelector } from 'react-redux';
+import { selectToken } from '../../controller/token/tokenSlice';
 
-export const Home = () => {     
+export const Home = () => {   
+    const token = useSelector(selectToken);  
 
-    const leagueState = useSelector((state) => state.league.status);
-    const userState = useSelector((state) => state.user.status);
-    const dispatch = useDispatch();
-    const {pathname} = useLocation();
-    const route = (pathname.split("/").length > 0) ? pathname.split("/")[1] : "";
-    const tokenValid = AmplifyAuth.TokenIsValid();
-
-    useEffect(() => {
-        if(userState === 'complete') {
-            dispatch(fetchLeague());
-        }
-    }, [userState, dispatch]);
-
-    if(!tokenValid) {
+    if(token === null) {
         return (
             <Login />
-        )
-    }
-
-    if(userState === 'loading' || leagueState === 'loading') {
-        return (
-            <>
-                <PickLoader />
-                <NavBar />
-            </>
         )
     }
 

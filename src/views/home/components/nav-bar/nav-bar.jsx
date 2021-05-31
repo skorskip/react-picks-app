@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { PickLogo } from '../../../../components/pick-logo/pick-logo';
 import { selectMessageSource } from '../../../../controller/league/leagueSlice';
@@ -9,6 +9,7 @@ import './nav-bar.css';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
+    const history = useHistory();
     const route = (pathname.split("/").length > 0) ? pathname.split("/")[1] : "";
     const messageSource = useSelector(selectMessageSource);
     const messagesSelect = useSelector(selectAnnouncements);
@@ -24,6 +25,13 @@ export const NavBar = () => {
     const goToChat = () => {
         let url = `https://slack.com/app_redirect?channel=${messageSource.chatChannel}`;
         window.open(url, '_blank');
+    }
+
+    const clickNav = (location) => {
+        if(location === "/announcements") {
+            clickAnnouncements();
+        }
+        history.push(location)
     }
 
     const messageNotif = (messages > 0) && (
@@ -53,31 +61,31 @@ export const NavBar = () => {
     return (
         <div className="base-background nav-container">
             <div className="button-group">
-                <Button icon basic className="nav-button">
-                    <div onClick={goToChat} className="secondary-color" >
+                <Button icon basic className="nav-button" onClick={goToChat}>
+                    <div className="secondary-color" >
                         <Icon size='large' name='slack'/>
                     </div>
                 </Button>
-                <Button icon basic className="nav-button">
-                    <a href="/standings" className={getIconClass("standings")}>
+                <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
+                    <div className={getIconClass("standings")}>
                         <Icon size='large' name='list'/>
-                    </a>
+                    </div>
                 </Button>
                 <div className="logo-container">
-                    <a href="/games/game">
+                    <div onClick={() => clickNav("/games/game")}>
                         <PickLogo sizeParam='xs'/>
-                    </a>
+                    </div>
                 </div>
-                <Button icon basic className="nav-button">
-                    <a href="/announcements" onClick={clickAnnouncements} className={getIconClass("announcements")}>
+                <Button icon basic className="nav-button" onClick={() => clickNav("/announcements")}>
+                    <div className={getIconClass("announcements")}>
                         <Icon size='large' name='bullhorn'/>
                         { messageNotif }
-                    </a>
+                    </div>
                 </Button>
-                <Button icon basic className="nav-button">
-                    <a href="/profile" className={getIconClass("profile")}>
+                <Button icon basic className="nav-button" onClick={() => clickNav("/profile")}>
+                    <div className={getIconClass("profile")}>
                         <Icon size='large' name='address card outline' />
-                    </a>
+                    </div>
                 </Button>
             </div>
         </div>

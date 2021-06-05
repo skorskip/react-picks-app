@@ -70,18 +70,6 @@
     border-radius: 16px;
 }
 
-.init-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: solid 2px;
-    border-radius: 50%;
-    height: 15px;
-    width: 15px;
-    padding: 10px;
-    font-size: 1.2em;
-}
-
 .edit-loader {
 	display: flex;
 	justify-content: center;

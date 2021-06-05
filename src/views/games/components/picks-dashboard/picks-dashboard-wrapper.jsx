@@ -27,8 +27,8 @@ export const PicksDashboardWrapper = ({
     const gamePasssedEdit = new Date() > game?.pick_submit_by_date;
 
     const showSubmitTime = () => {
-        if((index === 0) || previousGame.pick_submit_by_date !== game.pick_submit_by_date) {
-            return new Date(game.pick_submit_by_date ) > new Date();
+        if((index === 0) || previousGame?.pick_submit_by_date !== game?.pick_submit_by_date) {
+            return new Date(game?.pick_submit_by_date ) > new Date();
         } else return false;
     }
 

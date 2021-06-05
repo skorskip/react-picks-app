@@ -84,7 +84,7 @@ export const Games = ({routes}) => {
             dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
             dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }))
         }
-    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch])
+    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user])
 
     useEffect(() => {
         if(season && week && seasonType){

@@ -85,7 +85,7 @@ const picksSlice = createSlice({
             })
             .addCase(fetchPicks.fulfilled, (state, action) => {
                 state.picks = action.payload.picks;
-                state.status = 'idle'
+                state.status = 'complete';
             })
             .addCase(addPicks.pending, (state, action) => {
                 state.status = 'loading';

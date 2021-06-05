@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
 import { fetchUserStandings, selectUserStandings } from '../../controller/user-standings/userStandingsSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
-import { Placeholder } from 'semantic-ui-react';
 import './standings.css';
 import { StandingsLoader } from './components/standings-loader';
+import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
+import { SHOW_MODAL, publish } from '../../utils/pubSub';
 
 export const Standings = () => {
     const standings = useSelector(selectUserStandings);
@@ -13,6 +14,7 @@ export const Standings = () => {
     const currentUser = useSelector(selectUser);
     const league = useSelector(selectLeague);
     const leagueStatus = useSelector((state) => state.league.status);
+    const [selectedUser, setSelectedUser] = useState({});
     const dispatch = useDispatch();
 
     const getItemClass = (user_id, addClass) => {
@@ -21,6 +23,11 @@ export const Standings = () => {
 
     const getCardClass = (user_id) => {
         return (user_id === currentUser.user_id) ? 'standing-card primary-color primary-background' : 'standing-card primary-color quaternary-background'
+    }
+
+    const viewModal = (standing) => {
+        setSelectedUser(standing);
+        publish(SHOW_MODAL, true);
     }
 
     const rank = (standing) => {
@@ -81,7 +88,7 @@ export const Standings = () => {
 
     const standingCards = (standingsStatus === 'complete') && standings.map((standing) => {
         return (
-            <div className={getCardClass(standing.user_id)}>
+            <div className={getCardClass(standing.user_id)} onClick={() => viewModal(standing)}>
                 { rank(standing) }
                 { user(standing) }
                 { wins(standing) }
@@ -102,9 +109,17 @@ export const Standings = () => {
     }, [dispatch, standingsStatus, leagueStatus]);
 
     return (
-        <div className="standings-container">
-            { standingCardsLoading }
-            { standingCards }
-        </div>
+        <>
+            <div className="standings-container">
+                { standingCardsLoading }
+                { standingCards }
+            </div>
+            <PickPeekModal 
+                firstname={selectedUser.first_name}
+                lastname={selectedUser.last_name}
+                inits={selectedUser.user_inits}
+                userId={selectedUser.user_id}
+            />
+        </>
     )
 }

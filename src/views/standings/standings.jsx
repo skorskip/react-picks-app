@@ -14,7 +14,6 @@ export const Standings = () => {
     const currentUser = useSelector(selectUser);
     const league = useSelector(selectLeague);
     const leagueStatus = useSelector((state) => state.league.status);
-    const [selectedUser, setSelectedUser] = useState({});
     const dispatch = useDispatch();
 
     const getItemClass = (user_id, addClass) => {
@@ -26,8 +25,7 @@ export const Standings = () => {
     }
 
     const viewModal = (standing) => {
-        setSelectedUser(standing);
-        publish(SHOW_MODAL, true);
+        publish(SHOW_MODAL, standing);
     }
 
     const rank = (standing) => {
@@ -114,12 +112,7 @@ export const Standings = () => {
                 { standingCardsLoading }
                 { standingCards }
             </div>
-            <PickPeekModal 
-                firstname={selectedUser.first_name}
-                lastname={selectedUser.last_name}
-                inits={selectedUser.user_inits}
-                userId={selectedUser.user_id}
-            />
+            <PickPeekModal />
         </>
     )
 }

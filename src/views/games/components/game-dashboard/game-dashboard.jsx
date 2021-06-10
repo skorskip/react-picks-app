@@ -78,7 +78,7 @@ export const GameDashboard = () => {
     });
 
     if(gameLoader === 'loading' || gamesIds === undefined || pickLoader === 'loading') {
-        return (<GameLoader />)
+        return (<GameLoader height="110" count="8"/>)
     }
 
     return (

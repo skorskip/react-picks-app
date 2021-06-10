@@ -21,7 +21,7 @@ export const PicksDashboard = () => {
 
     if(loader === 'loading' || pickIds === undefined) {
         return (
-            <GameLoader />
+            <GameLoader height="110" count="8"/>
         )
     }
 

@@ -47,13 +47,9 @@
 }
 
 .modal-header {
-	padding-top: 10px;
-	padding-left: 10px;
 	display: flex;
 	justify-content: flex-start;
 	height: 80px;
-	border-top-left-radius: 12px;
-	border-top-right-radius: 12px;
 	margin-bottom: 45px;
 }
 
@@ -128,15 +124,21 @@
 
 .game-icon {
 	font-size: 2.5em;
+	z-index: 2;
 }
 
-@media only screen and (min-width: 650px) {
-	.user-modal {
-		width: calc(100% - 300px);
-	}
+.game-icon-container {
+	position:absolute;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
-	.modal-container {
-		left: 300px;
-		width: calc(100% - 300px);
-	}
+.picks-none-container {
+	padding: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2em;
 }

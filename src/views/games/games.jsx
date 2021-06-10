@@ -13,6 +13,7 @@ import { WEEK_SHOW_WEEKS, Subscriber } from '../../utils/pubSub';
 import "./games.css";
 import "../../utils/slideTransition.scss";
 import { fetchUserPickData } from '../../controller/user-pick-data/userPickDataSlice';
+import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 
 export const Games = ({routes}) => {
     const user = useSelector(selectUser);
@@ -104,6 +105,7 @@ export const Games = ({routes}) => {
             <div className="week-switcher-container">
                 <WeekSwitcher />
             </div>
+            <PickPeekModal />
             { transitionGroup }
         </>
     );

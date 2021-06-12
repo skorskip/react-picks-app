@@ -58,7 +58,6 @@
 
 @media only screen and (min-width: 650px) {
 	.game-card  {
-		width: 100%;
 		margin: 10px;
 	}
 }

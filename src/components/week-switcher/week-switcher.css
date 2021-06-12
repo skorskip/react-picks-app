@@ -22,8 +22,8 @@
 	border-radius: 8px;
 	margin: 5px;
 	cursor: pointer;
-	border: 1px solid;
 	width: 100%;
+	box-shadow: 0 0 8px rgba(0,0,0,0.2);
 }
 
 .week-header-next {
@@ -33,7 +33,7 @@
 	border-radius: 8px;
 	margin: 5px;
 	cursor: pointer;
-	border: 1px solid !important;
+	box-shadow: 0 0 8px rgba(0,0,0,0.2);
 }
 
 .week-arrow-next-icon {

@@ -8,6 +8,8 @@
 	float: left;
 	box-shadow: 0 0 8px rgba(0,0,0,0.2);
 	border: none;
+	/* box-shadow: 1px 1px , 2px 2px , 3px 3px ;
+	transform: translateX(-3px); */
 }
 
 .team-card-medium{

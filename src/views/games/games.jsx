@@ -102,11 +102,13 @@ export const Games = ({routes}) => {
             </Subscriber>
             { spectatorView }
             { gamesTab }
-            <div className="week-switcher-container">
-                <WeekSwitcher />
+            <div className="games-week-container">
+                <div className="week-switcher-container">
+                    <WeekSwitcher />
+                </div>
+                { transitionGroup }
             </div>
             <PickPeekModal />
-            { transitionGroup }
         </>
     );
 }

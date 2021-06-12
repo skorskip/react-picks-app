@@ -1,0 +1,175 @@
+.profile-container {
+    width: 100%;
+}
+
+.card {
+	padding: 2px;
+	margin: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid;
+}
+
+.card-title {
+	padding: 2px;
+	border-radius: 8px;
+	margin: 10px;
+    cursor: pointer;
+    border: 1px solid;
+}
+
+.card-bottom {
+	padding: 2px;
+	border-radius: 8px;
+	margin: 10px;
+	cursor: pointer;
+}
+
+.card-header {
+	display: flex;
+	flex-direction: row;
+    justify-content: flex-start;
+    padding: 10px;
+    align-items: center;
+}
+
+.card-header-text {
+	margin-top: 20px;
+	font-size:2em;
+    margin: 10px;
+}
+
+.card-section {
+    padding: 10px;
+}
+
+.info-header {
+    display: flex;
+    font-size: 1.5em;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-subheader {
+    font-size: 1.1em;
+    padding: 15px;
+}
+
+.edit-button {
+    border-radius: 4px;
+	cursor: pointer;
+    border: solid 1px;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.field {
+    font-size: 1.3em;
+    padding: 5px;
+    margin: 5px;
+}
+
+.info-field {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.icon-container {
+    border-radius: 50%;
+    height: 25px;
+    padding: 10px;
+}
+
+.init-header-icon {
+    display: flex;
+    justify-content: center;
+    border: solid 2px;
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+    padding: 10px;
+    font-size: 1.5em;
+    align-items: center;
+}
+
+.toggle-button-profile {
+    border-radius: 4px;
+	cursor: pointer;
+    width: 100px;
+}
+
+.theme-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+
+.theme-button {
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.toggle-container {
+	border-radius: 4px;
+}
+
+.pick-progress-numbers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    font-size: 1em;
+}
+
+.pick-progress-container {
+    padding: 5px;
+}
+
+.large-font {
+    font-size: 2em;
+}
+
+.medium-font {
+    font-size: 1.3em;
+}
+
+.pick-stat-card {
+    border: 1px solid;
+    border-radius: 8px;
+    margin: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.picks-stat-card-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.pick-progress-group {
+    margin: 10px;
+}
+
+.content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+@media only screen and (min-width: 650px) {
+	.content {
+        display: flex;
+        justify-content: center;
+	}
+}

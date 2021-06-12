@@ -1,7 +1,3 @@
-.route-container {
-    padding-bottom: 95px;
-}
-
 .week-switcher-container {
     padding-top: 50px;
 }
@@ -29,4 +25,11 @@
 
 .spectator-icon {
 	padding-right: 10px;
+}
+
+@media only screen and (min-width: 650px) {
+	.header-container  {
+		top: 60px;
+	}
+
 }

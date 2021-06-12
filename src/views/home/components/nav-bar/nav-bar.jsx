@@ -60,6 +60,11 @@ export const NavBar = () => {
 
     return (
         <div className="base-background nav-container">
+            <div className="logo-container-large">
+                <div onClick={() => clickNav("/games/game")}>
+                    <PickLogo sizeParam='xs'/>
+                </div>
+            </div>
             <div className="button-group">
                 <Button icon basic className="nav-button" onClick={goToChat}>
                     <div className="secondary-color" >

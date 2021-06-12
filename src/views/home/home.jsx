@@ -5,6 +5,7 @@ import { NavBar } from './components/nav-bar/nav-bar';
 import { Login } from '../login/login';
 import { useSelector } from 'react-redux';
 import { selectToken } from '../../controller/token/tokenSlice';
+import './home.css';
 
 export const Home = () => {   
     const token = useSelector(selectToken);  
@@ -16,24 +17,28 @@ export const Home = () => {
     }
 
     return (
-        <>
-            <Switch>
-                {
-                    routes.map((route, i) => (
-                        <Route
-                            key={i}
-                            path={route.path}
-                            render={props => (
-                                <route.component 
-                                    key={i} 
-                                    routes={route.routes}
-                                />
-                            )}
-                        />
-                    )
-                )}
-            </Switch>
+        <div className="home-container">
+            <div className="home-content">
+                <div className="home-main">
+                <Switch>
+                    {
+                        routes.map((route, i) => (
+                            <Route
+                                key={i}
+                                path={route.path}
+                                render={props => (
+                                    <route.component 
+                                        key={i} 
+                                        routes={route.routes}
+                                    />
+                                )}
+                            />
+                        )
+                    )}
+                </Switch>
+                </div>
+            </div>
             <NavBar />
-        </>
+        </div>
     );
 }

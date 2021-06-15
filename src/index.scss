@@ -130,15 +130,11 @@ $accent:        $primary;
     fill: $secondary;
 }
 
-.mat-progress-spinner circle, .picks-loader circle {
-    stroke: $base !important;
-}
-
-.mat-progress-bar-fill::after {
+.bar {
     background-color: $primary !important;
 }
 
-.mat-progress-bar-buffer {
+.ui.progress {
     background-color: $tiertary !important;
 }
 

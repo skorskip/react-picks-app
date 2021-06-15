@@ -35,4 +35,6 @@ const userStandingsSlice = createSlice({
 
 export const selectUserStandings = (state) => state.userStandings.userStandings;
 
+export const userStandingById = (state, user_id) => state.userStandings.userStandings.find((standing) => standing.user_id === user_id);
+
 export default userStandingsSlice.reducer

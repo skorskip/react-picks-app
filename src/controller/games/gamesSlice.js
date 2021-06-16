@@ -42,6 +42,8 @@ export const selectGamesById = (state, gameId) => state.games.games.find((game) 
 
 export const selectGameIds = (state) => state.games.games.map((game) => game.game_id);
 
+export const selectGamesPastSubmit = (state) => state.games.games.find((game) => game.pick_submit_by_date < new Date());
+
 export const selectTeams = (state) => state.games.teams
 
 export const selectTeamById = (state, teamId) => state.games.teams.find((team) => team.team_id === teamId); 

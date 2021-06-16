@@ -24,7 +24,7 @@ export const PicksDashboardWrapper = ({
     const homeTeam = useSelector((state) => selectTeamById(state, game?.home_team_id));
     const awayTeam = useSelector((state) => selectTeamById(state, game?.away_team_id));
     const [removeGame, setRemoveGame] = useState(false);
-    const gamePasssedEdit = new Date() > game?.pick_submit_by_date;
+    const gamePassedEdit = new Date() > new Date(game?.pick_submit_by_date);
 
     const showSubmitTime = () => {
         if((index === 0) || previousGame?.pick_submit_by_date !== game?.pick_submit_by_date) {
@@ -46,11 +46,11 @@ export const PicksDashboardWrapper = ({
                 awayTeam={awayTeam}
                 pick={pick}
                 showSubmitTime={showSubmitTime()}
-                disabled={(!showDelete && !gamePasssedEdit)}
+                disabled={(!showDelete && !gamePassedEdit)}
                 remove={removeGame}
                 onTeamSelected={(event) => onTeamSelected(event)}
             />
-            { (showDelete && !removeGame && !gamePasssedEdit) && (
+            { (showDelete && !removeGame && !gamePassedEdit) && (
                 <Button className="delete-button bottom-margin failure-color base-background" onClick={() => deleteClicked()}>
                     <Icon name= "trash alternate outline" />
                     Delete

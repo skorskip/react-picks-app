@@ -45,7 +45,8 @@ export const Game = ({
         let pickOpt = {
             highlight : event.highlight,
             teamId: event.team.team_id,
-            gameId: game.game_id
+            gameId: game.game_id,
+            submitBy: game.pick_submit_by_date
         }
 
         if(event.team.team_id === awayTeam.team_id) {

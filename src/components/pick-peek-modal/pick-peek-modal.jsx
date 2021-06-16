@@ -120,7 +120,7 @@ export const PickPeekModal = () => {
     );
 
     useEffect(() => {
-        if(leagueState === 'complete') {
+        if(leagueState === 'complete' && userData.user_id !== "") {
             dispatch(fetchPicksForUser({userId: userData.user_id, season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
         }
     }, [userData.user_id, leagueState, league]);

@@ -11,13 +11,13 @@ export const UserStats = () => {
     
     const dispatch = useDispatch();
     const league = useSelector(selectLeague);
-    const user = useSelector(selectUser);
-    const pickLimit = useSelector(selectUserPickLimit);
-    const userStandings = useSelector((state) => userStandingById(state, user?.user_id));
-    const userState = useSelector((state) => state.user.status);
-    const pickLimitState = useSelector((state) => state.userPickLimit.status);
-    const userStandingsState = useSelector((state) => state.userStandings.status);
     const leagueState = useSelector((state) => state.league.status);
+    const user = useSelector(selectUser);
+    const userState = useSelector((state) => state.user.status);
+    const pickLimit = useSelector(selectUserPickLimit);
+    const pickLimitState = useSelector((state) => state.userPickLimit.status);
+    const userStandings = useSelector((state) => userStandingById(state, user?.user_id));
+    const userStandingsState = useSelector((state) => state.userStandings.status);
 
     const pickCountProgress = (userStandingsState === 'complete') && (pickLimitState === 'complete') && (
         <div className="pick-progress-group">

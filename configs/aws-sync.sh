@@ -35,14 +35,14 @@ fi
 
 echo -e "Build started with ${BLUE}$environment${NC} ..."
 cd ..
-ng build --configuration=$environment
+npm run build
 
 echo -e "${YELLOW}Start S3 sync to ${BLUE}$bucket${YELLOW} as ${BLUE}$profile${YELLOW}? y/n${NC}"
 read start
 
 if [ $start = "y" ]; then
     echo "Sync started..."
-    cd dist/angular-picks-app/
+    cd build/
     aws s3 sync . s3://$bucket --delete --profile $profile
     echo -e "${GREEN}Process compelete${NC}"
 else 

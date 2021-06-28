@@ -22,7 +22,7 @@ export const GameDashboard = () => {
     const pickLoader = useSelector((state) => state.picks.status);
     const initialStaged = JSON.parse(localStorage.getItem("stagedPicks"));
     const [stagedPicks, setStagedPicks] = useState(
-        (initialStaged === null || Object.values(initialStaged).find((stage) => new Date(stage.submitBy) > new Date()) === null ) ? {} : initialStaged 
+        (initialStaged !== null && Object.values(initialStaged).find((stage) => new Date(stage.submitBy) < new Date()) !== undefined ) ? initialStaged : {}
     );
     const [stagedCount, setStagedCount] = useState(initialStaged === null ? 0 : Object.keys(initialStaged).length);
     const dispatch = useDispatch();

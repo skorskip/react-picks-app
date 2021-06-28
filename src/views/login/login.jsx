@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PickLogo } from '../../components/pick-logo/pick-logo'
 import './login.css'
 import { Form, Input, Button, Message,Icon } from 'semantic-ui-react'
 import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth'
 import { fetchUser } from '../../controller/user/userSlice'
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchToken } from '../../controller/token/tokenSlice';
 
 export const Login = () => {
     const formInfo = {
@@ -24,6 +25,7 @@ export const Login = () => {
     const [emptyUsername, setEmptyUsername] = useState(false);
     const [formData, setFormData] = useState(formInfo);
     const [laoder, setLoader] = useState(false);
+    const tokenState = useSelector((state) => state.token.status)
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -79,8 +81,7 @@ export const Login = () => {
     
     const getUserInfo = () => {
         dispatch(fetchUser(formData.username, formData.passsword));
-        history.push('/games/game');
-        setLoader(false);
+        dispatch(fetchToken());
     }
 
     const attemptLogin = event => {
@@ -120,7 +121,6 @@ export const Login = () => {
             onChange={handleChange} 
             value={formData.username}
             className="loginInput"
-            size="big"
             error={(emptyUsername && {
                 content: 'Must provide username or email',
                 pointing: 'above'
@@ -139,7 +139,6 @@ export const Login = () => {
             className="loginInput"
             onChange={handleChange}
             value={formData.code}
-            size="big"
         />
     );
 
@@ -154,7 +153,6 @@ export const Login = () => {
             className="loginInput"
             onChange={handleChange} 
             value={formData.password}
-            size="big"
             error={passwordIncorrect && {
                 content: 'Username or password incorrect',
                 pointing: 'above'
@@ -173,13 +171,19 @@ export const Login = () => {
             onChange={handleChange} 
             value={formData.confirmPassword}
             className="loginInput"
-            size="big"
             error={passwordMismatch && { 
                 content: 'Passwords do not match.',
                 pointing: 'above'
             }}
         />
     )
+
+    useEffect(() => {
+        if(tokenState === "complete") {
+            history.push('/games/game');
+            setLoader(false);
+        }
+    }, [tokenState]);
 
     return (
 
@@ -203,8 +207,8 @@ export const Login = () => {
                     { passwordConfirmForm }
 
                     {laoder ? 
-                        <Button loading size="massive" className="loginButton primary-background base-color noSelect">Loading</Button>:
-                        <Button content="Login" type="submit" size="massive" className="loginButton primary-background base-color noSelect" />
+                        <Button loading size="huge" className="loginButton primary-background base-color noSelect">Loading</Button>:
+                        <Button content="Login" type="submit" size="huge" className="loginButton primary-background base-color noSelect" />
                     }
                 </Form>
                 { passwordIncorrect && 

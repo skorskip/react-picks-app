@@ -15,19 +15,19 @@ export const Home = () => {
     const [width, setWidth] = useState(window.innerWidth);
 
     useEffect(() => {
+        const updateWidth = () => {
+            setWidth(window.innerWidth);
+        };
         window.addEventListener("resize", updateWidth);
         return () => window.removeEventListener("resize", updateWidth);
     }, []);
     
     if(token === null) {
+        console.log("TOKEN NOT SET");
         return (
             <Login />
         )
     }
-
-    const updateWidth = () => {
-        setWidth(window.innerWidth);
-    };
 
     const switchContent = (
         <Switch>

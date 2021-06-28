@@ -1,9 +1,8 @@
-import React from 'react';
+import React,{ useEffect, useState } from 'react';
 import { gameTimeStatusQuarters, formatDate } from '../../utils/dateFormatter';
 import { Team } from './components/team/team';
 import { PickStatus } from './components/pick-staus/pick-status';
 import './game.css';
-import { useEffect, useState } from 'react/cjs/react.development';
 import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
 import { UsersPickData } from './components/users-pick-data/users-pick-data';
 

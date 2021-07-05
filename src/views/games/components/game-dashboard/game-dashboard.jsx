@@ -21,9 +21,9 @@ export const GameDashboard = () => {
     const gameLoader = useSelector((state) => state.games.status);
     const pickLoader = useSelector((state) => state.picks.status);
     const initialStaged = JSON.parse(localStorage.getItem("stagedPicks"));
-    const [stagedPicks, setStagedPicks] = useState(
-        (initialStaged !== null && Object.values(initialStaged).find((stage) => new Date(stage.submitBy) < new Date()) !== undefined ) ? initialStaged : {}
-    );
+    const initialSubmitDates = JSON.parse(localStorage.getItem("submitDates"));
+    const [submitDates, setSubmitDates] = useState(initialSubmitDates === null ? [] : initialSubmitDates);
+    const [stagedPicks, setStagedPicks] = useState(initialStaged !== null ? initialStaged : {});
     const [stagedCount, setStagedCount] = useState(initialStaged === null ? 0 : Object.keys(initialStaged).length);
     const dispatch = useDispatch();
     const pickLimitState = useSelector((state) => state.userPickLimit.status);
@@ -36,39 +36,47 @@ export const GameDashboard = () => {
 
     const teamSelected = (event) => {
         let updated = stagedPicks;
+        let updatedDates = submitDates;
         if(event.highlight) {
             let newPick = {
                 game_id: event.gameId,
                 team_id: event.teamId,
                 submitted_date: new Date().toISOString(),
-                user_id: user.user_id,
-                submitBy: event.submitBy
+                user_id: user.user_id
             }
 
+            let submitDate  = {
+                game_id: event.gameId,
+                submitBy: event.submitBy
+            }
+            updatedDates = updatedDates.concat(submitDate)
             updated[event.gameId] = newPick;
         } else {
-            delete updated[event.gameId]
+            delete updated[event.gameId];
+            updatedDates = updatedDates.filter((dates) => dates.game_id != event.gameId)
         }
         localStorage.setItem("stagedPicks", JSON.stringify(updated));
+        localStorage.setItem("submitDates", JSON.stringify(updatedDates));
         setStagedCount(Object.keys(updated).length);
         setStagedPicks(updated);
+        setSubmitDates(updatedDates)
     }
 
     const submitPicks = () => {
         let stagedPicksList = Object.values(stagedPicks);
-        if(stagedPicksList.length > 0) {
-
-        } else if(stagedPicksList.find((staged) => new Date(staged.submitBy) < new Date())) {
-
-        } else if(parseInt(stagedPicksList.length) + 
-            parseInt(userStandings.pending_picks) + 
-            parseInt(userStandings.picks) <= parseInt(pickLimit.max_limit)) {
-
-                setStagedPicks({});
-                setStagedCount(0);
-                localStorage.setItem("stagedPicks", null);
-                dispatch(addPicks({ picks: stagedPicksList }));
-                history.push("/games/pick");
+        let totalPicks = parseInt(stagedPicksList.length) + parseInt(userStandings.pending_picks) + parseInt(userStandings.picks);
+        if(stagedPicksList.length === 0) {
+            alert("Going to need more than that!")
+        } else if(submitDates.find((staged) => new Date(staged.submitBy) < new Date())) {
+            alert("Can't Submit Passed the Deadline")
+        } else if(totalPicks <= parseInt(pickLimit.max_picks)) {
+            setStagedPicks({});
+            setStagedCount(0);
+            localStorage.setItem("stagedPicks", null);
+            dispatch(addPicks({ picks: stagedPicksList }));
+            history.push("/games/pick");
+        } else {
+            alert(`You got too many picks, ${totalPicks - pickLimit.max_picks} over ${pickLimit.max_picks}`)
         }
     }
 
@@ -99,13 +107,21 @@ export const GameDashboard = () => {
         if(userStandingsState === 'idle' && leagueState === 'complete') {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
         }
-    }, [userState, leagueState, league, dispatch]);
+    }, [userState, leagueState, userStandingsState, league, dispatch]);
 
     useEffect(() => {
         if(pickLimitState === 'idle' && leagueState === 'complete' && userState === 'complete') {
             dispatch(fetchUserPickLimit({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek, user_id: user.user_id}))
         }
-    }, [pickLimitState, leagueState, userState, league, user]);
+    }, [pickLimitState, leagueState, userState, league, user, dispatch]);
+
+    useEffect(() => {
+        if(submitDates.find((initial) => new Date(initial.submitBy) > new Date()) === undefined) {
+            setStagedCount(0);
+            setStagedPicks({});
+            setSubmitDates([]);
+        }
+    },[]);
 
     if(gameLoader === 'loading' || gamesIds === undefined || pickLoader === 'loading') {
         return (<GameLoader height="110" count="8"/>)
@@ -117,7 +133,7 @@ export const GameDashboard = () => {
             { games }
             <div className={getSubmitClass()}>
                 <Button className="primary-background base-color submit-button" onClick={submitPicks}>
-                    Submit ({stagedCount})
+                👍&nbsp;&nbsp;&nbsp;Submit ({stagedCount})
                 </Button>
             </div>
         </div>

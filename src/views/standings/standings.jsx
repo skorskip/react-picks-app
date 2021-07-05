@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
 import { fetchUserStandings, selectUserStandings } from '../../controller/user-standings/userStandingsSlice';
@@ -104,7 +104,7 @@ export const Standings = () => {
         if(standingsStatus === 'idle' && leagueStatus === 'complete') {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
         }
-    }, [dispatch, standingsStatus, leagueStatus]);
+    }, [dispatch, standingsStatus, leagueStatus, league]);
 
     return (
         <>

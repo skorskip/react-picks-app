@@ -1,27 +1,16 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
-import { Auth } from 'aws-amplify';
+import AmplifyAuth from '../../utils/amplifyAuth';
 
 const tokenAdapter = createEntityAdapter();
 
 const initialState = tokenAdapter.getInitialState({
     status: 'idle',
-    token: {}
+    token: null
 });
 
 export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
-    try {
-        const response = await Auth.currentSession();
-        var expiration = new Date(response.getIdToken().getExpiration() * 1000);
-        if(new Date() > expiration) {
-            return null;
-        } else {
-            localStorage.setItem("token", response.getIdToken().getJwtToken());
-            return response.getIdToken().getJwtToken();
-        }
-    } catch(error) {
-        return null;
-    }
-})
+    return AmplifyAuth.FetchCurrentSession();
+});
 
 const tokenSlice = createSlice({
     name: 'token',
@@ -29,8 +18,13 @@ const tokenSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchToken.fulfilled, (state, action) => {
-                state.token = action.payload
-                state.status = 'complete'
+                if(action.payload !== null) {
+                    state.token = action.payload
+                    state.status = 'complete';
+                } else {
+                    state.status = 'idle'
+                }
+                
             })
             .addCase(fetchToken.pending, (state, action) => {
                 state.status = 'loading'

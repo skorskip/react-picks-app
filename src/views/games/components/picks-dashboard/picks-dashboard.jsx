@@ -5,7 +5,6 @@ import './picks-dashboard.css';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, Subscriber, publish } from '../../../../utils/pubSub';
-import { Icon } from 'semantic-ui-react';
 
 export const PicksDashboard = () => {
 

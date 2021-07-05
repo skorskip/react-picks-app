@@ -1,7 +1,6 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
 import { environment } from '../../configs/environment';
-import { UserStanding } from '../../model/userStanding/userStanding';
 
 const userStandingsUrl = environment.userServiceURL + 'users/standings';
 

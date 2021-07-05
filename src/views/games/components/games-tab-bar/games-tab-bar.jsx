@@ -46,12 +46,16 @@ export const GamesTabBar = ({pickCount}) => {
         setIsEditSelected(false);
     }
 
-    const editButton = (view === "pick" && !isEditSelected && pickCount > 0 && parseInt(week) === currentWeek) && (
+    const editButton = (
+        view === "pick" && 
+        !isEditSelected && 
+        pickCount > 0 && 
+        parseInt(week) === currentWeek) && (
         <Button basic onClick={() => selectEdit()}>Edit</Button>
     )
 
     const doneButton = (view === "pick" && isEditSelected) && (
-        <Button basic onClick={() => selectDone()}>Done</Button>
+        <Button className="primary-background base-color" onClick={() => selectDone()}>Done</Button>
     )
 
     return (

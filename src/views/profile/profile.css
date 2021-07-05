@@ -119,14 +119,6 @@
 	border-radius: 4px;
 }
 
-.pick-progress-numbers {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    font-size: 1em;
-}
-
 .pick-progress-container {
     padding: 5px;
 }
@@ -139,32 +131,23 @@
     font-size: 1.3em;
 }
 
-.pick-stat-card {
-    border: 1px solid;
-    border-radius: 8px;
-    margin: 5px;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-}
-
-.picks-stat-card-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.pick-progress-group {
-    margin: 10px;
-}
-
 .content {
     height: 100%;
     overflow-y: auto;
 }
+
+.change-password-button {
+    border: solid 1px !important;
+    width: 100%;
+}
+
+.change-password-button-container {
+   padding: 10px;
+}
+
+.logout-button-container {
+    padding: 35px;
+ }
 
 @media only screen and (min-width: 650px) {
 	.content {

@@ -22,12 +22,13 @@ function App() {
     if(userState === 'complete' && tokenState === 'complete') {
       dispatch(fetchLeague());
     }
-    if(tokenState === 'idle') {
-      dispatch(fetchToken());
-    }
   }, [userState, tokenState, dispatch]);
 
-  if(userState === 'loading' || leagueState === 'loading' || tokenState === 'loading') {
+  useEffect(() => {
+    dispatch(fetchToken());
+  },[]);
+
+  if(userState === 'loading' || leagueState === 'loading') {
     return (
       <PickLoader />
     )

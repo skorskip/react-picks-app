@@ -28,10 +28,12 @@ export default class AmplifyAuth {
         }
     }
 
-    static async CompletePasswordLogin(newPassword, authUser) {
-        const { requiredAttributes } = authUser.challengeParam;
+    static async CompletePasswordLogin(username, tempPassword, newPassword) {
+
         try {
-            await Auth.completeNewPassword(authUser, newPassword, requiredAttributes);
+            const response = await Auth.signIn({username: username, password: tempPassword});
+            const { requiredAttributes } = response.challengeParam;
+            await Auth.completeNewPassword(response, newPassword, requiredAttributes);
             const signedInUser = await Auth.currentSession();
             localStorage.setItem("token", signedInUser.getIdToken().getJwtToken());
             return {success: AmplifyEnum.success};
@@ -57,6 +59,30 @@ export default class AmplifyAuth {
             return response;
         } catch(error) {
             return {error: AmplifyEnum.emailFail}
+        }
+    }
+
+    static async SignOut() {
+        try {
+            const response = await Auth.signOut({global: true});
+            return response;
+        } catch(error) {
+            return {error: error}
+        }
+    }
+
+    static async FetchCurrentSession () {
+        try {
+            const response = await Auth.currentSession();
+            var expiration = new Date(response.getIdToken().getExpiration() * 1000);
+            if(new Date() > expiration) {
+                return null;
+            } else {
+                localStorage.setItem("token", response.getIdToken().getJwtToken());
+                return response.getIdToken().getJwtToken();
+            }
+        } catch(error) {
+            return null;
         }
     }
 }

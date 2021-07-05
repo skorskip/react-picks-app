@@ -5,16 +5,25 @@ import { environment } from '../../configs/environment';
 const leagueUrl = environment.leagueServiceURL + 'league';
 const leagueAdapter = createEntityAdapter();
 
+const leagueResponse = {
+    error: "ERROR",
+    success: "SUCCESS"
+}
+
 const initialState = leagueAdapter.getInitialState({
     status: localStorage.getItem("settings") === null ? 'idle' : 'complete',
     league: localStorage.getItem("settings") === null ? {} : localStorage.getItem("settings")
 });
 
 export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
-    const url = leagueUrl + '/settings';
-    const response = await client.get(url);
-    localStorage.setItem("league", JSON.stringify(response));
-    return response;
+    try {
+        const url = leagueUrl + '/settings';
+        const response = await client.get(url);
+        localStorage.setItem("league", JSON.stringify(response));
+        return response;
+    } catch(error) {
+        return leagueResponse.error;
+    }
 });
 
 const leagueSlice = createSlice({
@@ -26,6 +35,9 @@ const leagueSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(fetchLeague.fulfilled, (state, action) => {
+                if(action.payload === leagueResponse.error) {
+                    alert("LEAGUE ERROR");
+                }
                 state.league = action.payload;
                 state.status = 'complete';
             });

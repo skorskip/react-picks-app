@@ -25,22 +25,22 @@ export const UserStats = () => {
                 <div>Pick Count</div>
                 <div className="medium-font">{ userStandings?.picks + userStandings?.pending_picks } / { pickLimit?.max_picks }</div>
             </div>
-            <Progress className="progress-bar-stat" percent={ (parseInt(userStandings?.picks + userStandings?.pending_picks) / parseInt(pickLimit?.max_picks )) * 100 } progress />
+            <Progress className="progress-bar-stat" percent={ (parseInt(userStandings?.picks + userStandings?.pending_picks) / parseInt(pickLimit?.max_picks )) * 100 } />
         </div>
     );
 
     const pickStatInfo = (userStandingsState === 'complete') && (
         <div className="picks-stat-card-group">
-            <div class="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">{ userStandings?.ranking }</div>
+            <div className="pick-stat-card tiertary-color">
+                <div className="large-font secondary-color">#️⃣{ userStandings?.ranking }</div>
                 <div className="secondary-color">rank</div>
             </div>
-            <div class="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">{ userStandings?.wins }</div>
+            <div className="pick-stat-card tiertary-color">
+                <div className="large-font secondary-color">🎉{ userStandings?.wins }</div>
                 <div className="secondary-color">wins</div>
             </div>
-            <div class="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">{ userStandings?.win_pct }</div>
+            <div className="pick-stat-card tiertary-color">
+                <div className="large-font secondary-color">{ parseFloat(userStandings?.win_pct).toFixed(2) }</div>
                 <div className="secondary-color">win %</div>
             </div>
         </div>
@@ -50,13 +50,13 @@ export const UserStats = () => {
         if(userStandingsState === 'idle' && leagueState === 'complete') {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
         }
-    }, [userState, leagueState, league, dispatch]);
+    }, [userState, leagueState, userStandingsState, league, dispatch]);
 
     useEffect(() => {
         if(pickLimitState === 'idle' && leagueState === 'complete' && userState === 'complete') {
             dispatch(fetchUserPickLimit({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek, user_id: user.user_id}))
         }
-    }, [pickLimitState, leagueState, userState, league, user]);
+    }, [pickLimitState, leagueState, userState, league, user, dispatch]);
 
     return (
         <div className="user-stat-card base-background tiertary-color">

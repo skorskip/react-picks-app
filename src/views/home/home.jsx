@@ -4,15 +4,17 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { NavBar } from './components/nav-bar/nav-bar';
 import { Login } from '../login/login';
 import { useSelector } from 'react-redux';
-import { selectToken } from '../../controller/token/tokenSlice';
 import { Grid, Sticky } from 'semantic-ui-react';
 import './home.css';
 import { UserStats } from '../../components/user-stats/user-stats';
+import { useLocation } from 'react-router-dom';
 
 export const Home = () => {   
-    const token = useSelector(selectToken);
+    const token = useSelector((state) => state.token.status);
+    const user = useSelector((state) => state.user.status);
     const contextRef = createRef();
     const [width, setWidth] = useState(window.innerWidth);
+    const location = useLocation();
 
     useEffect(() => {
         const updateWidth = () => {
@@ -22,8 +24,7 @@ export const Home = () => {
         return () => window.removeEventListener("resize", updateWidth);
     }, []);
     
-    if(token === null) {
-        console.log("TOKEN NOT SET");
+    if(token === 'idle' || user === 'idle' || location.pathname === "/login") {
         return (
             <Login />
         )
@@ -57,22 +58,26 @@ export const Home = () => {
         </Grid.Row>
     );
 
+    const stickyStats = (location.pathname !== "/profile") && (location.pathname !== "/login") && (
+        <Sticky contextRef={contextRef}>
+            <div className="home-side-content">
+                <div className="info-header-profile secondary-color">
+                    Stats
+                </div>
+                <UserStats />
+            </div>
+        </Sticky>
+    )
+
     const largeView = (
         <Grid.Row columns={3}>
             <Grid.Column width={2}>
             </Grid.Column>
-            <Grid.Column className="home-content" width={10}>
+            <Grid.Column className="home-content" width={9}>
                 { switchContent }
             </Grid.Column>
-            <Grid.Column width={4}>
-                <Sticky contextRef={contextRef}>
-                    <div className="home-side-content">
-                        <div className="info-header-profile secondary-color">
-                            Stats
-                        </div>
-                        <UserStats />
-                    </div>
-                </Sticky>
+            <Grid.Column width={5}>
+                {stickyStats}
             </Grid.Column>
         </Grid.Row>
     );

@@ -28,8 +28,8 @@ export const Announcements = () => {
 
     if(messages.length === 0) {
         return (
-            <div className="no-message-set">
-                No recent announcements
+            <div className="no-messages-set secondary-color">
+                😴&nbsp;No recent announcements
             </div>
         )
     }

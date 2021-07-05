@@ -1,15 +1,23 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
-import { selectUser } from '../../controller/user/userSlice';
+import { selectUser, signOut, resetPassword} from '../../controller/user/userSlice';
 import './profile.css';
 import { UserStats } from '../../components/user-stats/user-stats';
+import { useHistory } from 'react-router-dom';
 
 export const Profile = () => {
     const user = useSelector(selectUser);
-    
-    const editUser = () => {
+    const history = useHistory();
+    const dispatch = useDispatch();
 
+    const signOutUser = () => {
+        dispatch(signOut());
+    }
+
+    const changePassword = () => {
+        resetPassword(user.email);
+        history.push("/login?type=newpassword")
     }
 
     const profileTitle = (
@@ -44,9 +52,6 @@ export const Profile = () => {
             <div className="card-section secondary-color">
                 <div className="info-header-profile">
                     Info
-                    <Button className="edit-button" onClick={editUser()}>
-                        <span className="secondary-color">Edit</span>
-                    </Button>
                 </div>
                 <div className="info-content">
                     <div className="info-field">
@@ -67,6 +72,11 @@ export const Profile = () => {
                             { user.email }
                         </div>
                     </div>
+                    <div className="change-password-button-container">
+                        <Button className="change-password-button secondary-color base-background" onClick={changePassword}>
+                            Change password
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,6 +87,11 @@ export const Profile = () => {
             { profileTitle }
             { profileStats }
             { profileInfo }
+            <div className="logout-button-container">
+                <Button className="change-password-button failure-color base-background" onClick={signOutUser}>
+                    Sign out
+                </Button>
+            </div>
         </div>
     );
 }

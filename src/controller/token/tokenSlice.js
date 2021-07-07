@@ -1,10 +1,11 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
+import { status } from '../../configs/status';
 import AmplifyAuth from '../../utils/amplifyAuth';
 
 const tokenAdapter = createEntityAdapter();
 
 const initialState = tokenAdapter.getInitialState({
-    status: 'idle',
+    status: status.IDLE,
     token: null
 });
 
@@ -20,14 +21,14 @@ const tokenSlice = createSlice({
             .addCase(fetchToken.fulfilled, (state, action) => {
                 if(action.payload !== null) {
                     state.token = action.payload
-                    state.status = 'complete';
+                    state.status = status.COMPLETE;
                 } else {
-                    state.status = 'idle'
+                    state.status = status.IDLE;
                 }
                 
             })
             .addCase(fetchToken.pending, (state, action) => {
-                state.status = 'loading'
+                state.status = status.LOADING;
             })
     }
 });

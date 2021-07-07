@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AmplifyEnum } from '../../utils/amplifyAuth';
 import { fetchToken } from '../../controller/token/tokenSlice';
+import { status } from '../../configs/status'
 
 export const Login = () => {
     const formInfo = {
@@ -46,7 +47,6 @@ export const Login = () => {
             resetPassword(formData.username, formData.password, formData.code).then((result) => {
                 if(result?.error === AmplifyEnum.inValidUser) {
                     setLoader(false);
-                    alert("Something went wrong resetting password.");
                 } else {
                     setToken();
                 }
@@ -58,9 +58,8 @@ export const Login = () => {
         setPasswordMismatch(formData.newPassword !== formData.confirmPassword);
         if(!passwordMismatch) {
             createPassword(formData.username, formData.password, formData.newPassword).then((result) => {
-                if(result?.error === AmplifyEnum.inValidUser) {
+                if(result?.status === AmplifyEnum.inValidUser) {
                     setLoader(false);
-                    alert("Something went wrong completing login.");
                 } else {
                     setToken();
                 }
@@ -201,7 +200,7 @@ export const Login = () => {
     );
 
     useEffect(() => {
-        if(tokenState === 'complete' && username !== '' && password !== '') {
+        if(tokenState === status.COMPLETE && username !== '' && password !== '') {
             dispatch(fetchUser(username, password));
         }
     }, [tokenState, username, password, dispatch]);

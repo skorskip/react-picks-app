@@ -8,6 +8,7 @@ import { PickLoader } from './components/pick-loader/pick-loader';
 import './App.scss';
 import { useEffect } from 'react';
 import { fetchLeague } from './controller/league/leagueSlice';
+import { status } from './configs/status';
 
 Amplify.configure({...awsconfig, ssr: true});
 
@@ -19,7 +20,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(userState === 'complete' && tokenState === 'complete') {
+    if(userState === status.COMPLETE && tokenState === status.COMPLETE) {
       dispatch(fetchLeague());
     }
   }, [userState, tokenState, dispatch]);
@@ -28,7 +29,7 @@ function App() {
     dispatch(fetchToken());
   },[]);
 
-  if(userState === 'loading' || leagueState === 'loading') {
+  if(userState === status.LOADING || leagueState === status.LOADING) {
     return (
       <PickLoader />
     )

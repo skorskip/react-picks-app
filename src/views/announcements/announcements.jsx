@@ -4,13 +4,14 @@ import { selectAnnouncements } from '../../controller/announcements/announcement
 import './announcements.css';
 import { useSelector } from 'react-redux';
 import { Placeholder } from 'semantic-ui-react';
+import { status } from '../../configs/status';
 
 export const Announcements = () => {
     const messagesSelect = useSelector(selectAnnouncements);
     const messages = messagesSelect.messages;
     const announcementsStatus = useSelector((state) => state.announcements.status);
     
-    if(announcementsStatus === 'loading' || announcementsStatus === 'idle') {
+    if(announcementsStatus === status.LOADING || announcementsStatus === status.IDLE) {
         return (
             <>
                 <Placeholder style={{ height: 200, borderRadius: "1em", margin: 10}}>

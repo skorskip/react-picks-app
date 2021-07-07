@@ -6,6 +6,7 @@ import { PickLogo } from '../../../../components/pick-logo/pick-logo';
 import { selectMessageSource } from '../../../../controller/league/leagueSlice';
 import { selectAnnouncements,fetchAnnouncements } from '../../../../controller/announcements/announcementsSlice';
 import './nav-bar.css';
+import { status } from '../../../../configs/status';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
@@ -46,7 +47,7 @@ export const NavBar = () => {
     }
 
     useEffect(() => {
-        if(userState === 'complete' && announcementsStatus === 'idle') {
+        if(userState === status.COMPLETE && announcementsStatus === status.IDLE) {
             const params = { lastCheckDate: localStorage.getItem("announcementCheck") }
             dispatch(fetchAnnouncements(params));
         }

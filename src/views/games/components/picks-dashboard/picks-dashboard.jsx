@@ -5,6 +5,7 @@ import './picks-dashboard.css';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, Subscriber, publish } from '../../../../utils/pubSub';
+import { status } from '../../../../configs/status';
 
 export const PicksDashboard = () => {
 
@@ -18,7 +19,7 @@ export const PicksDashboard = () => {
 
     const dispatch = useDispatch();
 
-    if(loader === 'loading' || pickIds === undefined) {
+    if(loader === status.LOADING || pickIds === undefined) {
         return (
             <GameLoader height="110" count="8"/>
         )

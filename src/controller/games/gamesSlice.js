@@ -1,22 +1,21 @@
 import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
 import { environment } from '../../configs/environment';
+import { status } from '../../configs/status';
 
 const weekUrl = environment.weekServiceURL + 'week';
 
 const gamesAdapter = createEntityAdapter();
 
 const initialState = gamesAdapter.getInitialState({
-    status: 'idle',
+    status: status.IDLE,
     games: [],
     teams: []
 });
 
 export const fetchGames = createAsyncThunk('user/fetchGames',  async (param) => {
-    const url = weekUrl + '?season=' + param.season + '&seasonType=' + param.seasonType + '&week=' + param.week;
+    const url = `${weekUrl}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
     const response = await client.post(url, param.user);
-    localStorage.setItem("games", JSON.stringify(response.games));
-    localStorage.setItem("teams", JSON.stringify(response.teams));
     return response;
 })
 
@@ -28,10 +27,10 @@ const gamesSlice = createSlice({
             .addCase(fetchGames.fulfilled, (state, action) => {
                 state.games = action.payload.games;
                 state.teams = action.payload.teams;
-                state.status = 'complete'
+                state.status = status.COMPLETE
             })
             .addCase(fetchGames.pending, (state, action) => {
-                state.status = 'loading'
+                state.status = status.LOADING
             })
     },
 });

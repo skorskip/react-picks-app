@@ -24,7 +24,7 @@ export default class AmplifyAuth {
                 return {error: AmplifyEnum.inValidUser}
             }
         } catch(error) {
-            return {error: AmplifyEnum.inValidUser}
+            throw new Error(error)
         }
     }
 

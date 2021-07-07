@@ -8,6 +8,8 @@ import { Grid, Sticky } from 'semantic-ui-react';
 import './home.css';
 import { UserStats } from '../../components/user-stats/user-stats';
 import { useLocation } from 'react-router-dom';
+import { status } from '../../configs/status';
+import { MessagePopup } from '../../components/message/messagePopup';
 
 export const Home = () => {   
     const token = useSelector((state) => state.token.status);
@@ -24,7 +26,7 @@ export const Home = () => {
         return () => window.removeEventListener("resize", updateWidth);
     }, []);
     
-    if(token === 'idle' || user === 'idle' || location.pathname === "/login") {
+    if(token === status.IDLE || user === status.IDLE || location.pathname === "/login") {
         return (
             <Login />
         )
@@ -90,6 +92,7 @@ export const Home = () => {
                 }
             </Grid>
             <NavBar />
+            <MessagePopup />
         </div>
     );
 }

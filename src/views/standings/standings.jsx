@@ -7,6 +7,7 @@ import './standings.css';
 import { StandingsLoader } from './components/standings-loader';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { SHOW_MODAL, publish } from '../../utils/pubSub';
+import { status } from '../../configs/status';
 
 export const Standings = () => {
     const standings = useSelector(selectUserStandings);
@@ -84,7 +85,7 @@ export const Standings = () => {
         )
     }
 
-    const standingCards = (standingsStatus === 'complete') && standings.map((standing) => {
+    const standingCards = (standingsStatus === status.COMPLETE) && standings.map((standing) => {
         return (
             <div className={getCardClass(standing.user_id)} onClick={() => viewModal(standing)}>
                 { rank(standing) }
@@ -96,12 +97,12 @@ export const Standings = () => {
         )
     });
 
-    const standingCardsLoading = (standingsStatus === 'loading') && (
+    const standingCardsLoading = (standingsStatus === status.LOADING) && (
         <StandingsLoader />
     ) 
 
     useEffect(() => {
-        if(standingsStatus === 'idle' && leagueStatus === 'complete') {
+        if(standingsStatus === status.IDLE && leagueStatus === status.COMPLETE) {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
         }
     }, [dispatch, standingsStatus, leagueStatus, league]);

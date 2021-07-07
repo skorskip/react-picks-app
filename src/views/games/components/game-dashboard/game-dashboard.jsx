@@ -11,6 +11,7 @@ import { selectUserPickLimit, fetchUserPickLimit } from '../../../../controller/
 import { userStandingById, fetchUserStandings } from '../../../../controller/user-standings/userStandingsSlice';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
 import './game-dashboard.css';
+import { status } from '../../../../configs/status';
 
 export const GameDashboard = () => {
     const user = useSelector(selectUser);
@@ -53,7 +54,7 @@ export const GameDashboard = () => {
             updated[event.gameId] = newPick;
         } else {
             delete updated[event.gameId];
-            updatedDates = updatedDates.filter((dates) => dates.game_id != event.gameId)
+            updatedDates = updatedDates.filter((dates) => dates.game_id !== event.gameId)
         }
         localStorage.setItem("stagedPicks", JSON.stringify(updated));
         localStorage.setItem("submitDates", JSON.stringify(updatedDates));
@@ -104,13 +105,13 @@ export const GameDashboard = () => {
     });
 
     useEffect(() => {
-        if(userStandingsState === 'idle' && leagueState === 'complete') {
+        if(userStandingsState === status.IDLE && leagueState === status.COMPLETE) {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
         }
     }, [userState, leagueState, userStandingsState, league, dispatch]);
 
     useEffect(() => {
-        if(pickLimitState === 'idle' && leagueState === 'complete' && userState === 'complete') {
+        if(pickLimitState === status.IDLE && leagueState === status.COMPLETE && userState === status.COMPLETE) {
             dispatch(fetchUserPickLimit({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek, user_id: user.user_id}))
         }
     }, [pickLimitState, leagueState, userState, league, user, dispatch]);
@@ -123,7 +124,7 @@ export const GameDashboard = () => {
         }
     },[]);
 
-    if(gameLoader === 'loading' || gamesIds === undefined || pickLoader === 'loading') {
+    if(gameLoader === status.LOADING || gamesIds === undefined || pickLoader === status.LOADING) {
         return (<GameLoader height="110" count="8"/>)
     }
 

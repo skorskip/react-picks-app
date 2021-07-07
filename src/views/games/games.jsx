@@ -14,6 +14,7 @@ import "./games.css";
 import "../../utils/slideTransition.scss";
 import { fetchUserPickData } from '../../controller/user-pick-data/userPickDataSlice';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
+import { status } from '../../configs/status';
 
 export const Games = ({routes}) => {
     const user = useSelector(selectUser);
@@ -80,7 +81,7 @@ export const Games = ({routes}) => {
     );
 
     useEffect(() => {
-        if(gamesState === 'idle' && leagueState === 'complete') {
+        if(gamesState === status.IDLE && leagueState === status.COMPLETE) {
             dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
             dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
             dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }))

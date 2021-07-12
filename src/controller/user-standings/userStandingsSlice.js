@@ -1,21 +1,28 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
 import { environment } from '../../configs/environment';
-import { UserStanding } from '../../model/userStanding/userStanding';
+import { status } from '../../configs/status';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const userStandingsUrl = environment.userServiceURL + 'users/standings';
 
 const userStandingsAdapter = createEntityAdapter();
 
 const initialState = userStandingsAdapter.getInitialState({
-    status: 'idle',
+    status: status.IDLE,
     userStandings: []
 });
 
 export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStandings', async (params) => {
     const url = `${userStandingsUrl}?season=${params.season}&seasonType=${params.seasonType}`;
-    const response = await client.get(url);
-    return response;
+    try {
+        const response = await client.get(url);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error};
+    }
 })
 
 const userStandingsSlice = createSlice({
@@ -24,11 +31,16 @@ const userStandingsSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchUserStandings.fulfilled, (state, action) => {
-                state.userStandings = action.payload
-                state.status = 'complete'
+                if(action.payload?.status === status.ERROR) {
+                    state.userStandings = [];
+                    state.status = status.ERROR;
+                } else {
+                    state.userStandings = action.payload;
+                    state.status = status.COMPLETE;
+                }
             })
             .addCase(fetchUserStandings.pending, (state, action) => {
-                state.status = 'loading'
+                state.status = status.LOADING;
             })
     }
 });

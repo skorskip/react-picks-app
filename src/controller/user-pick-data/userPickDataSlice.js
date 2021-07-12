@@ -1,20 +1,27 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { environment } from '../../configs/environment';
+import { status } from '../../configs/status';
 import { client } from '../../utils/client';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const picksUrl = environment.picksServiceURL + 'picks';
 const userPickDataAdapter = createEntityAdapter();
 
 const initialState = userPickDataAdapter.getInitialState({
-    status: 'idle',
+    status: status.IDLE,
     userPickData: {}
 });
 
 export const fetchUserPickData = createAsyncThunk('userPickData/fetchUserPickData', async (params) => {
     const url = `${picksUrl}/games?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}`;
-    const response = await client.get(url);
-    localStorage.setItem("userPicksData", JSON.stringify(response));
-    return response;
+    try {
+        const response = await client.get(url);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC})
+        return {status: status.ERROR, message: error}
+    }
 });
 
 const userPickDataSlice = createSlice({
@@ -23,11 +30,16 @@ const userPickDataSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchUserPickData.pending, (state, action) => {
-                state.status = 'loading';
+                state.status = status.LOADING;
             })
             .addCase(fetchUserPickData.fulfilled, (state, action) => {
-                state.userPickData = action.payload;
-                state.status = 'complete';
+                if(action.payload?.status === status.ERROR) {
+                    state.userPickData = {};
+                    state.status = status.ERROR;
+                } else {
+                    state.userPickData = action.payload;
+                    state.status = status.COMPLETE;
+                }
             })
     }
 });

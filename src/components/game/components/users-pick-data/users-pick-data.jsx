@@ -13,7 +13,7 @@ export const UsersPickData = ({ game }) => {
     const [showPickers, setShowPickers] = useState(false);
 
     const picksDataClick = () => {
-        setShowPickers(true);
+        setShowPickers(!showPickers);
     }
 
     const closePicksData = () => {
@@ -24,25 +24,9 @@ export const UsersPickData = ({ game }) => {
         publish(SHOW_MODAL, pick);
     }
 
-    const picksDataButton = (!showPickers) && (
+    const picksDataButton = (
         <div className="picks-data-overview accent base-background">
             <div className="pick-data-button-group">
-                {/* <div className="pick-data" name="away">
-                    <div className="pick-data-icon">
-                        <Icon size='large' name="users" />
-                    </div>
-                    <div class="pick-data-icon">
-                        { awayPicks.length }
-                    </div>
-                </div>
-                <div className="pick-data" name="home">
-                    <div className="pick-data-icon">
-                        <Icon size='large' name="users" />
-                    </div>
-                    <div className="pick-data-icon">
-                        { homePicks.length }
-                    </div>
-                </div> */}
                 <Button as= 'div' labelPosition='right'>
                     <Button basic onClick={picksDataClick}>
                         <Icon className="accent" size='large' name='users' />

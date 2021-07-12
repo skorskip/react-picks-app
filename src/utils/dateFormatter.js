@@ -22,7 +22,7 @@ export const formatDate = (date) => {
 export const gameTimeStatusQuarters = (game) => {
     if(game.game_status === GameStatusEnum.unplayed || game.game_status === null) {
         if(new Date(game.pick_submit_by_date) < new Date()){
-          return "Start time: " + this.formatDate(new Date(game.start_time));
+          return "Start time: " + formatDate(new Date(game.start_time));
         }
       } else {
         if(game.game_status === GameStatusEnum.completed) {

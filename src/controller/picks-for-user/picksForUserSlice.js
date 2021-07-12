@@ -1,20 +1,28 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
 import { environment } from '../../configs/environment';
+import { status } from '../../configs/status';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const picksForUserUrl = environment.picksServiceURL + 'picks/others';
 
 const picksForUserAdapter = createEntityAdapter();
 
 const initialState = picksForUserAdapter.getInitialState({
-    status: 'idle',
+    status: status.IDLE,
     picksForUser: []
 });
 
 export const fetchPicksForUser = createAsyncThunk('picksForUser/fetchPicksForUser', async (params) => {
     const url = `${picksForUserUrl}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&user=${params.userId}`;
-    const response = await client.get(url);
-    return response;
+    try {
+        const response = await client.get(url);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type:status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error}
+    }
 })
 
 const gameSort = (a, b) => {
@@ -29,33 +37,38 @@ const picksForUserSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchPicksForUser.fulfilled, (state, action) => {
-                const picks = action.payload.picks;
-                const teams = action.payload.teams;
-                const games = action.payload.games;
+                if(action.payload?.status === status.ERROR) {
+                    state.picksForUser = [];
+                    state.status = status.ERROR;
+                } else {
+                    const picks = action.payload.picks;
+                    const teams = action.payload.teams;
+                    const games = action.payload.games;
 
-                picks.sort(gameSort);
-                games.sort(gameSort);
+                    picks.sort(gameSort);
+                    games.sort(gameSort);
 
-                const picksList = [];
+                    const picksList = [];
 
-                for(var i = 0; i < games.length; i++) {
-                    const game = games[i];
+                    for(var i = 0; i < games.length; i++) {
+                        const game = games[i];
 
-                    const gameObject = {
-                      game: game,
-                      awayTeam: teams.find(team => team.team_id === game.away_team_id),
-                      homeTeam: teams.find(team => team.team_id === game.home_team_id),
-                      pick: picks[i]
+                        const gameObject = {
+                        game: game,
+                        awayTeam: teams.find(team => team.team_id === game.away_team_id),
+                        homeTeam: teams.find(team => team.team_id === game.home_team_id),
+                        pick: picks[i]
+                        }
+                
+                        picksList.push(gameObject);
                     }
-              
-                    picksList.push(gameObject);
-                }
 
-                state.picksForUser = picksList;
-                state.status = 'complete'
+                    state.picksForUser = picksList;
+                    state.status = status.COMPLETE;
+                }
             })
             .addCase(fetchPicksForUser.pending, (state, action) => {
-                state.status = 'loading'
+                state.status = status.LOADING;
             })
     }
 });

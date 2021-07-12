@@ -1,20 +1,27 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
 import { environment } from '../../configs/environment';
+import { status } from '../../configs/status';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const leagueUrl = environment.leagueServiceURL + 'league';
 const leagueAdapter = createEntityAdapter();
 
 const initialState = leagueAdapter.getInitialState({
-    status: localStorage.getItem("settings") === null ? 'idle' : 'complete',
-    league: localStorage.getItem("settings") === null ? {} : localStorage.getItem("settings")
+    status: status.IDLE,
+    league: {}
 });
 
 export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
-    const url = leagueUrl + '/settings';
-    const response = await client.get(url);
-    localStorage.setItem("league", JSON.stringify(response));
-    return response;
+    try {
+        const url = `${leagueUrl}/settings`;
+        const response = await client.get(url);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
+        return {status: status.ERROR, message: error}
+    }
 });
 
 const leagueSlice = createSlice({
@@ -23,11 +30,16 @@ const leagueSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchLeague.pending, (state, action) => {
-                state.status = 'loading';
+                state.status = status.LOADING;
             })
             .addCase(fetchLeague.fulfilled, (state, action) => {
-                state.league = action.payload;
-                state.status = 'complete';
+                if(action.payload?.status === status.ERROR) {
+                    state.league = {};
+                    state.status = status.ERROR;
+                } else {
+                    state.league = action.payload;
+                    state.status = status.COMPLETE;
+                }
             });
     }
 });

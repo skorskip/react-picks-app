@@ -1,20 +1,27 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { environment } from '../../configs/environment';
+import { status } from '../../configs/status';
 import { client } from '../../utils/client';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const usersUrl = environment.userServiceURL + 'users';
 const userPickLimitAdapter = createEntityAdapter();
 
 const initialState = userPickLimitAdapter.getInitialState({
-    status: 'idle',
+    status: status.IDLE,
     userPickLimit: {}
 });
 
 export const fetchUserPickLimit = createAsyncThunk('userPickData/fetchUserPickLimit', async (params) => {
     const url = `${usersUrl}/userPicksLimit?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&userId=${params.user_id}`;
-    const response = await client.get(url);
-    localStorage.setItem("userPickLimit", JSON.stringify(response));
-    return response[0];
+    try{
+        const response = await client.get(url);
+        return response[0];
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error};
+    }
 });
 
 const userPickLimitSlice = createSlice({
@@ -23,11 +30,16 @@ const userPickLimitSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchUserPickLimit.pending, (state, action) => {
-                state.status = 'loading';
+                state.status = status.LOADING;
             })
             .addCase(fetchUserPickLimit.fulfilled, (state, action) => {
-                state.userPickLimit = action.payload;
-                state.status = 'complete';
+                if(action.payload?.status === status.ERROR) {
+                    state.userPickLimit = {};
+                    state.status = status.ERROR;
+                } else {
+                    state.userPickLimit = action.payload;
+                    state.status = status.COMPLETE;
+                }
             })
     }
 });

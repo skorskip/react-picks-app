@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
-import { selectUser, signOut, resetPassword} from '../../controller/user/userSlice';
+import { selectUser, signOut, forgotPassword} from '../../controller/user/userSlice';
 import './profile.css';
 import { UserStats } from '../../components/user-stats/user-stats';
 import { useHistory } from 'react-router-dom';
@@ -16,7 +16,7 @@ export const Profile = () => {
     }
 
     const changePassword = () => {
-        resetPassword(user.email);
+        forgotPassword(user.email);
         history.push("/login?type=newpassword")
     }
 

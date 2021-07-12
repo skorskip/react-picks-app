@@ -18,6 +18,8 @@ export const fetchUserPickLimit = createAsyncThunk('userPickData/fetchUserPickLi
         const response = await client.get(url);
         return response[0];
     } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error};
     }
 });
@@ -34,8 +36,6 @@ const userPickLimitSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.userPickLimit = {};
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
                 } else {
                     state.userPickLimit = action.payload;
                     state.status = status.COMPLETE;

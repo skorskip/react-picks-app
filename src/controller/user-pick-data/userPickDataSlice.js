@@ -18,6 +18,8 @@ export const fetchUserPickData = createAsyncThunk('userPickData/fetchUserPickDat
         const response = await client.get(url);
         return response;
     } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC})
         return {status: status.ERROR, message: error}
     }
 });
@@ -34,8 +36,6 @@ const userPickDataSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.userPickData = {};
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC})
                 } else {
                     state.userPickData = action.payload;
                     state.status = status.COMPLETE;

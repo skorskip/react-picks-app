@@ -9,6 +9,7 @@ import './App.scss';
 import { useEffect } from 'react';
 import { fetchLeague } from './controller/league/leagueSlice';
 import { status } from './configs/status';
+import { MessagePopup } from './components/message/messagePopup';
 
 Amplify.configure({...awsconfig, ssr: true});
 
@@ -31,7 +32,9 @@ function App() {
 
   if(userState === status.LOADING || leagueState === status.LOADING) {
     return (
-      <PickLoader />
+      <div className="loader-container">
+        <PickLoader />
+      </div>
     )
   }
 
@@ -39,6 +42,7 @@ function App() {
     <div className="App">
       <Router>
         <Home />
+        <MessagePopup />
       </Router>
     </div>
   );

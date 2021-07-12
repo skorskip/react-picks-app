@@ -10,4 +10,8 @@ export class User {
         this.type = type;
         this.last_login_date = last_login_date;
     }
+
+    static createUser(user_name, password) {
+        return new User(0, user_name, password, '','','','','', '', '');
+    }
 }

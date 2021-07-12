@@ -15,40 +15,70 @@ const initialState = userAdapter.getInitialState({
     user: localStorage.getItem("user") === null ? {} : JSON.parse(localStorage.getItem("user"))
 });
 
-export const login = (username, password) => {
+export const login = async (username, password) => {
     try {
-        return AmplifyAuth.AmplifyLogin(username, password);
+        let response = await AmplifyAuth.AmplifyLogin(username, password);
+        return response;
     } catch(error) {
         console.error(error)
         publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.LOGIN_ERROR});
     }
 };
 
-export const forgotPassword = (username) => {
-    return AmplifyAuth.SendForgotPasswordCode(username);
+export const forgotPassword = async (username) => {
+    try {
+        let response = await AmplifyAuth.SendForgotPasswordCode(username);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSCODE_SUCCESS})
+        return response
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR})
+    }
 }
 
-export const resetPassword = (username, password, code) => {
-    return AmplifyAuth.ForgotPassword(username, password, code);
+export const resetPassword = async (username, password, code) => {
+    try {
+       let response = await AmplifyAuth.ForgotPassword(username, password, code);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS})
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR});
+    }
 }
 
-export const createPassword = (username, tempPassword, newPassword) => {
-    return AmplifyAuth.CompletePasswordLogin(username, tempPassword, newPassword);
+export const createPassword = async (username, tempPassword, newPassword) => {
+    try {
+        let response = await AmplifyAuth.CompletePasswordLogin(username, tempPassword, newPassword);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS});
+        return response;
+    } catch(error) {
+        console.error(error)
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR});
+    }
 }
 
 export const signOut = createAsyncThunk('user/signOut', async () => {
-    localStorage.clear();
-    return AmplifyAuth.SignOut();
+    try {
+        let response = await AmplifyAuth.SignOut();
+        localStorage.clear();
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+    }
 })
 
 export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password, token) => {
     const url = usersUrl + '/login';
     try {
-        const newUser = new User(0, username, password, '', '', '', '', '', '', '');
+        const newUser = User.createUser(username, password);
         const response = await client.post(url, newUser, {Authorization: token});
         localStorage.setItem("user", JSON.stringify(response[0]));
         return response[0];
     } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type:status.ERROR, message:status.MESSAGE.USER.LOGIN_ERROR});
         return {status: status.ERROR, message: error}
     }
 })   
@@ -62,8 +92,6 @@ const userSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.user = {}
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type:status.ERROR, message:status.MESSAGE.USER.LOGIN_ERROR});
                 } else {
                     state.user = action.payload;
                     state.status = status.COMPLETE;

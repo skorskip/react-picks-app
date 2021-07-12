@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import { client } from '../../utils/client';
 import { environment } from '../../configs/environment';
 import { status } from '../../configs/status';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const announcementsUrl = environment.messageServiceURL + 'message';
 const announcementsAdapter = createEntityAdapter();
@@ -12,9 +13,15 @@ const initialState = announcementsAdapter.getInitialState({
 });
 
 export const fetchAnnouncements = createAsyncThunk('announcemnets/fetchAnnouncements', async (params) => {
-    const url = announcementsUrl + '/announcements';
-    const response = await client.post(url, params);
-    return response;
+    try {
+        const url = announcementsUrl + '/announcements';
+        const response = await client.post(url, params);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
+        return {status: status.ERROR, message: error}
+    }
 });
 
 const announcementsSlice = createSlice({
@@ -26,8 +33,13 @@ const announcementsSlice = createSlice({
                 state.status = status.LOADING;
             })
             .addCase(fetchAnnouncements.fulfilled, (state, action) => {
-                state.announcements = action.payload;
-                state.status = status.COMPLETE;
+                if(action.payload?.status === status.ERROR) {
+                    state.announcements = {messages:[]};
+                    state.status = status.ERROR;
+                } else {
+                    state.announcements = action.payload;
+                    state.status = status.COMPLETE;
+                }
             });
     }
 });

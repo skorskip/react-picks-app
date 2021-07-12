@@ -98,7 +98,7 @@ export const GameDashboard = () => {
                 id={gameId} 
                 previousId={gamesIds[index - 1]}
                 index={index}
-                picked={initialStaged === null ? null : initialStaged[gameId]}
+                picked={stagedPicks === {} ? null : stagedPicks[gameId]}
                 onTeamSelected={teamSelected}
             />
         )

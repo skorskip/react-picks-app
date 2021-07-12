@@ -19,6 +19,8 @@ export const fetchPicksForUser = createAsyncThunk('picksForUser/fetchPicksForUse
         const response = await client.get(url);
         return response;
     } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type:status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
 })
@@ -38,8 +40,6 @@ const picksForUserSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.picksForUser = [];
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type:status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
                 } else {
                     const picks = action.payload.picks;
                     const teams = action.payload.teams;

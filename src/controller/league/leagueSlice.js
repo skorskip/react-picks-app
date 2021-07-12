@@ -18,6 +18,8 @@ export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
         const response = await client.get(url);
         return response;
     } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
         return {status: status.ERROR, message: error}
     }
 });
@@ -32,8 +34,7 @@ const leagueSlice = createSlice({
             })
             .addCase(fetchLeague.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
+                    state.league = {};
                     state.status = status.ERROR;
                 } else {
                     state.league = action.payload;

@@ -14,9 +14,15 @@ const initialState = picksAdapter.getInitialState({
 });
 
 export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) => {
-    const url = `${pickUrl}/week?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`;
-    const response = await client.post(url, param.user);
-    return response;
+    try {
+        const url = `${pickUrl}/week?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`;
+        const response = await client.post(url, param.user);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error}
+    }
 });
 
 export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
@@ -29,8 +35,11 @@ export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
             newPick.pick_id = parseInt(response.result) + index;
             updated.push(newPick);
         });
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.ADD_SUCCESS});
         return updated;
     } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
 });
@@ -41,9 +50,12 @@ export const updatePicks = createAsyncThunk('picks/updatePicks', async (param) =
         try {
             await client.put(url, pick);
         } catch(error) {
+            console.error(error);
+            publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
             return {status: status.ERROR, message: error};
         }
     }
+    publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
     return param.picks;
 });
 
@@ -53,9 +65,12 @@ export const deletePicks = createAsyncThunk('picks/deletePicks', async (param) =
         try{
             await client.delete(url);
         } catch(error) {
+            console.error(error);
+            publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
             return {status: status.ERROR, message: error};
         }
     };
+    publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
     return param.picks;
  });
 
@@ -71,8 +86,6 @@ const picksSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.picks = [];
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
                 } else {
                     state.picks = action.payload.picks;
                     state.status = status.COMPLETE;
@@ -85,13 +98,9 @@ const picksSlice = createSlice({
                 if(action.payload?.status !== status.ERROR) {
                     state.picks = state.picks.concat(action.payload);
                     state.status = status.COMPLETE;
-                    publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.ADD_SUCCESS});
-
                 } else {
                     state.picks = [];
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
                 }
             })
             .addCase(updatePicks.pending, (state, action) => {
@@ -108,12 +117,9 @@ const picksSlice = createSlice({
                         }
                     }
                     state.status = status.COMPLETE;
-                    publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
                 } else {
                     state.picks = [];
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
                 }
             })
             .addCase(deletePicks.pending, (state, action) => {
@@ -124,12 +130,9 @@ const picksSlice = createSlice({
                     const filtered = state.picks.filter(pick => !action.payload.includes(pick.pick_id));
                     state.picks = filtered;
                     state.status = status.COMPLETE;
-                    publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
                 } else {
                     state.picks = [];
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
                 }
             })
     },

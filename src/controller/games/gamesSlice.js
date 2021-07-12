@@ -2,6 +2,7 @@ import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/to
 import { client } from '../../utils/client'
 import { environment } from '../../configs/environment';
 import { status } from '../../configs/status';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const weekUrl = environment.weekServiceURL + 'week';
 
@@ -14,9 +15,15 @@ const initialState = gamesAdapter.getInitialState({
 });
 
 export const fetchGames = createAsyncThunk('user/fetchGames',  async (param) => {
-    const url = `${weekUrl}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
-    const response = await client.post(url, param.user);
-    return response;
+    try {
+        const url = `${weekUrl}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
+        const response = await client.post(url, param.user);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
+        return {status: status.ERROR, message: error}
+    }
 })
 
 const gamesSlice = createSlice({
@@ -25,9 +32,15 @@ const gamesSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchGames.fulfilled, (state, action) => {
-                state.games = action.payload.games;
-                state.teams = action.payload.teams;
-                state.status = status.COMPLETE
+                if(action.payload?.status === status.ERROR) {
+                    state.games = [];
+                    state.teams = [];
+                    state.status = status.ERROR;
+                } else {
+                    state.games = action.payload.games;
+                    state.teams = action.payload.teams;
+                    state.status = status.COMPLETE;
+                }
             })
             .addCase(fetchGames.pending, (state, action) => {
                 state.status = status.LOADING

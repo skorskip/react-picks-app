@@ -19,6 +19,8 @@ export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStand
         const response = await client.get(url);
         return response;
     } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error};
     }
 })
@@ -32,8 +34,6 @@ const userStandingsSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.userStandings = [];
                     state.status = status.ERROR;
-                    console.error(action.payload.message);
-                    publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
                 } else {
                     state.userStandings = action.payload;
                     state.status = status.COMPLETE;

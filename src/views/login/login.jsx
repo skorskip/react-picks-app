@@ -3,7 +3,7 @@ import { PickLogo } from '../../components/pick-logo/pick-logo'
 import './login.css'
 import { Form, Input, Button, Message,Icon } from 'semantic-ui-react'
 import { fetchUser, login, createPassword, resetPassword, forgotPassword } from '../../controller/user/userSlice'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AmplifyEnum } from '../../utils/amplifyAuth';
 import { fetchToken } from '../../controller/token/tokenSlice';
@@ -19,6 +19,7 @@ export const Login = () => {
     }
 
     let { search } = useLocation();
+    let history = useHistory();
     const query = new URLSearchParams(search);
     const loginType = query.get("type");
     const [title, setTitle] = useState('pickem');
@@ -43,26 +44,20 @@ export const Login = () => {
 
     const completeForgotPassword = () => {
         setPasswordMismatch(formData.password !== formData.confirmPassword);
-        if(!passwordMismatch) {
+        if(formData.password !== '' && formData.password === formData.confirmPassword) {
             resetPassword(formData.username, formData.password, formData.code).then((result) => {
-                if(result?.error === AmplifyEnum.inValidUser) {
-                    setLoader(false);
-                } else {
-                    setToken();
-                }
+                setLoader(false);
+                setToken();
             });
         }
     }
 
     const completeLogin = () => {
         setPasswordMismatch(formData.newPassword !== formData.confirmPassword);
-        if(!passwordMismatch) {
+        if(formData.password !== '' && formData.newPassword === formData.confirmPassword) {
             createPassword(formData.username, formData.password, formData.newPassword).then((result) => {
-                if(result?.status === AmplifyEnum.inValidUser) {
-                    setLoader(false);
-                } else {
-                    setToken();
-                }
+                setLoader(false);
+                setToken();
             });
         }
     }
@@ -105,12 +100,16 @@ export const Login = () => {
     }
 
     const showForgotPassword = () => {
-        setPasswordIncorrect(false);
-        setEmptyUsername(false);
-        setFormData({...formData, password: ''});
-        setForgotPasswordForm(true);
-        setTitle('Whoops...');
-        forgotPassword(formData.username);
+        if(formData.username !== '') {
+            setPasswordIncorrect(false);
+            setEmptyUsername(false);
+            setFormData({...formData, password: ''});
+            setForgotPasswordForm(true);
+            setTitle('Whoops...');
+            forgotPassword(formData.username);
+        } else {
+            setEmptyUsername(true);
+        }
     }
 
     const usernameForm = !completeLoginForm && (
@@ -202,6 +201,7 @@ export const Login = () => {
     useEffect(() => {
         if(tokenState === status.COMPLETE && username !== '' && password !== '') {
             dispatch(fetchUser(username, password));
+            history.push("/");
         }
     }, [tokenState, username, password, dispatch]);
 
@@ -219,6 +219,11 @@ export const Login = () => {
                     <Icon name='info circle'/>
                     Check your email for a code.
                 </Message> }
+                { completeLoginForm && 
+                <Message warning>
+                    <Icon name='info circle'/>
+                    Create a new password.
+                </Message> }
                 <Form onSubmit={attemptLogin} className="loginForm" size='big'>
                     { usernameForm }
                     { codeForm }
@@ -231,11 +236,10 @@ export const Login = () => {
                         <Button content="Login" type="submit" size="huge" className="loginButton primary-background base-color noSelect" />
                     }
                 </Form>
-                { passwordIncorrect && 
-                <Message warning>
-                    <Icon name='help circle'/>
-                    Forgot Password?&nbsp;<div onClick={showForgotPassword}>Reset here.</div>
-                </Message> }
+                <br></br>
+                <p className="forgot-password-link secondary-color">
+                    Forgot Password? &nbsp;<div className="link" onClick={showForgotPassword}>Reset here.</div>
+                </p>
             </div>
         </div>  
     );

@@ -67,25 +67,25 @@ export const NavBar = () => {
                 </div>
             </div>
             <div className="button-group">
-                <Button icon basic className="nav-button" onClick={goToChat}>
-                    <div className="secondary-color" >
-                        <Icon size='large' name='slack'/>
-                    </div>
-                </Button>
-                <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
-                    <div className={getIconClass("standings")}>
-                        <Icon size='large' name='list'/>
-                    </div>
-                </Button>
                 <div className="logo-container">
                     <div onClick={() => clickNav("/games/game")}>
                         <PickLogo sizeParam='xs'/>
                     </div>
                 </div>
+                <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
+                    <div className={getIconClass("standings")}>
+                        <Icon size='large' name='list'/>
+                    </div>
+                </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/announcements")}>
                     <div className={getIconClass("announcements")}>
                         <Icon size='large' name='bullhorn'/>
                         { messageNotif }
+                    </div>
+                </Button>
+                <Button icon basic className="nav-button" onClick={goToChat}>
+                    <div className="secondary-color" >
+                        <Icon size='large' name='comments'/>
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/profile")}>

@@ -2,6 +2,7 @@ import React,{ useEffect, useState } from 'react';
 import { gameTimeStatusQuarters, formatDate } from '../../utils/dateFormatter';
 import { Team } from './components/team/team';
 import { PickStatus } from './components/pick-staus/pick-status';
+import { Icon, Button } from 'semantic-ui-react';
 import './game.css';
 import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
 import { UsersPickData } from './components/users-pick-data/users-pick-data';
@@ -14,8 +15,10 @@ export const Game = ({
     showSubmitTime, 
     disabled,
     editMode,
+    showDeleteButton,
     remove,
-    onTeamSelected }) => {
+    onTeamSelected,
+    onDeleteClicked }) => {
 
     const [highlightHome, setHighlightHome] = useState(false);
     const [highlightAway, setHighlightAway] = useState(false);
@@ -72,6 +75,7 @@ export const Game = ({
         <div className='full-row'>
             <div className="game-card-date">
                 <div className="date-text primary-color">
+                    <Icon name="calendar alternate outline"/>
                     Submit by: { formatDate(new Date(game.pick_submit_by_date)) }
                 </div>
             </div>
@@ -81,6 +85,7 @@ export const Game = ({
     const timeStatus = gameLocked && (
         <div className="game-card-date">
             <div className="date-text accent">
+                <Icon name="stopwatch"/>
                 { gameTimeStatusQuarters(game) }
             </div>
         </div>
@@ -93,6 +98,13 @@ export const Game = ({
     const getGameContainerClass = (isRemoved) => {
         return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
     }
+
+    const deleteButton = (showDeleteButton) && (
+        <Button className="delete-button bottom-margin failure-color base-background" onClick={() => onDeleteClicked()}>
+        <Icon name= "trash alternate outline" />
+            Delete
+        </Button>
+    )
 
     const gameItem =  game !== undefined && (
         <div className={ getGameContainerClass(remove) }>
@@ -123,6 +135,7 @@ export const Game = ({
                 />
             </div>
             { pickData }
+            { deleteButton }
         </div>
     );
 

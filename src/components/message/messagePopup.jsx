@@ -26,11 +26,11 @@ export const MessagePopup = ({}) => {
     const messageDisplay = (showMessage) && (
         type === status.ERROR ? (
             <Message negative className="message-content">
-                <p>🤕 &nbsp; {message}</p>
+                🤕 &nbsp; {message}
             </Message>
         ) : (
             <Message success className="message-content">
-                <p>👌 &nbsp; {message}</p>
+                👌 &nbsp; {message}
             </Message>
         ) 
     );

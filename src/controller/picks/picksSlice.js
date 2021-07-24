@@ -10,6 +10,7 @@ const picksAdapter = createEntityAdapter();
 
 const initialState = picksAdapter.getInitialState({
     status: status.IDLE,
+    weekSet: "",
     picks: []
 });
 
@@ -17,7 +18,7 @@ export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) =>
     try {
         const url = `${pickUrl}/week?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`;
         const response = await client.post(url, param.user);
-        return response;
+        return {week: param.week, response: response};
     } catch(error) {
         console.error(error);
         publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
@@ -30,7 +31,7 @@ export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async 
     try {
         const url = `${pickUrl}/others?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}&user=${param.user}`;
         const response = await client.get(url);
-        return response;
+        return {week: param.week, response: response};
     } catch(error) {
         console.error(error);
         publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
@@ -100,7 +101,8 @@ const picksSlice = createSlice({
                     state.picks = [];
                     state.status = status.ERROR;
                 } else {
-                    state.picks = action.payload.picks;
+                    state.picks = action.payload.response.picks;
+                    state.weekSet = action.payload.week;
                     state.status = status.COMPLETE;
                 }
             })
@@ -112,7 +114,8 @@ const picksSlice = createSlice({
                     state.picks = [];
                     state.status = status.ERROR;
                 } else {
-                    state.picks = action.payload.picks;
+                    state.picks = action.payload.response.picks;
+                    state.weekSet = action.payload.week;
                     state.status = status.COMPLETE;
                 }
             })
@@ -164,6 +167,8 @@ const picksSlice = createSlice({
 });
 
 export const selectPicks = (state) => state.picks.picks;
+
+export const getPicksSetWeek = (state) => state.picks.weekSet;
 
 export const selectPicksById = (state, pickId) => state.picks.picks.find((pick) => pick.pick_id === pickId);
 

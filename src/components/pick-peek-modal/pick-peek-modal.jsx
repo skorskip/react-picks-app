@@ -35,6 +35,7 @@ export const PickPeekModal = () => {
 
     const viewPicks = () => {
         history.push(`/games/others?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}&user=${userData.user_id}`);
+        closeClick();
     }
 
     const modalHeader = (

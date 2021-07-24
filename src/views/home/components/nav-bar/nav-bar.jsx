@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { PickLogo } from '../../../../components/pick-logo/pick-logo';
-import { selectMessageSource } from '../../../../controller/league/leagueSlice';
+import { selectMessageSource,selectLeague } from '../../../../controller/league/leagueSlice';
 import { selectAnnouncements,fetchAnnouncements } from '../../../../controller/announcements/announcementsSlice';
 import './nav-bar.css';
 import { status } from '../../../../configs/status';
@@ -17,6 +17,7 @@ export const NavBar = () => {
     const [messages, setMessages] = useState(messagesSelect.announcements);
     const announcementsStatus = useSelector((state) => state.announcements.status);
     const userState = useSelector((state) => state.user.status);
+    const league = useSelector(selectLeague);
     const dispatch = useDispatch();
     
     const getIconClass = (link) => {
@@ -62,13 +63,13 @@ export const NavBar = () => {
     return (
         <div className="base-background nav-container">
             <div className="logo-container-large">
-                <div onClick={() => clickNav("/games/game")}>
+                <div onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
                     <PickLogo sizeParam='xs'/>
                 </div>
             </div>
             <div className="button-group">
                 <div className="logo-container">
-                    <div onClick={() => clickNav("/games/game")}>
+                    <div onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
                         <PickLogo sizeParam='xs'/>
                     </div>
                 </div>

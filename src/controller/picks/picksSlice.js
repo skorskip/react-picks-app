@@ -25,6 +25,19 @@ export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) =>
     }
 });
 
+
+export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async (param) => {
+    try {
+        const url = `${pickUrl}/others?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}&user=${param.user}`;
+        const response = await client.get(url);
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error}
+    }
+});
+
 export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
     const url = pickUrl + '/create';
     const response = await client.post(url, param.picks);
@@ -79,6 +92,18 @@ const picksSlice = createSlice({
     initialState,
     extraReducers : (builder) => {
         builder
+            .addCase(fetchUsersPicks.pending, (state, action) => {
+                state.status = status.LOADING;
+            })
+            .addCase(fetchUsersPicks.fulfilled, (state, action) => {
+                if(action.payload?.status === status.ERROR) {
+                    state.picks = [];
+                    state.status = status.ERROR;
+                } else {
+                    state.picks = action.payload.picks;
+                    state.status = status.COMPLETE;
+                }
+            })
             .addCase(fetchPicks.pending, (state, action) => {
                 state.status = status.LOADING;
             })

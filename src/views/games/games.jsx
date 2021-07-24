@@ -31,6 +31,7 @@ export const Games = ({routes}) => {
     const season = query.get("season")
     const week = query.get("week")
     const seasonType = query.get("seasonType")
+    const other = query.get("user");
     const currSeason = league.currentSeason
     const currWeek = league.currentWeek 
     const currSeasonType = league.currentSeasonType
@@ -53,7 +54,7 @@ export const Games = ({routes}) => {
         </div>
     );
 
-    const gamesTab = (user.type === 'participant') && (
+    const gamesTab = (user.type === 'participant' && (other === null || other === "null")) && (
         <GamesTabBar pickCount={pickIds.length}/>
     )
 
@@ -83,16 +84,20 @@ export const Games = ({routes}) => {
     useEffect(() => {
         if(gamesState === status.IDLE && leagueState === status.COMPLETE) {
             dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
-            dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
-            dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }))
+            dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }));
+            if(other === null || other === "null") {
+                dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+            }
         }
     }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user])
 
     useEffect(() => {
         if(season && week && seasonType){
             dispatch(fetchGames({ season: season, seasonType: seasonType, week: week, user: user }));
-            dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
-            dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }))
+            dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }));
+            if(other === null || other === "null") {
+                dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
+            }
         }
     }, [dispatch, user, season, week, seasonType])
 

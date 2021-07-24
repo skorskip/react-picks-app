@@ -17,19 +17,20 @@ export const WeekSwitcher = () => {
     const season = query.get("season") === null ? league.currentSeason : parseInt(query.get("season"));
     const week = query.get("week") === null ? league.currentWeek : parseInt(query.get("week"));
     const seasonType = query.get("seasonType") === null ? league.currentSeasonType : parseInt(query.get("seasonType"));
+    const user = query.get("user");
     const [weeksShown, setWeeksShown] = useState(false);
 
     const weekPrev = () => {
-        history.push(`/games/${view}?season=${season}&seasonType=${seasonType}&week=${parseInt(week) - 1}`);
+        history.push(`/games/${view}?season=${season}&seasonType=${seasonType}&week=${parseInt(week) - 1}&user=${user}`);
     }
 
     const weekNext = () => {
-        history.push(`/games/${view}?season=${season}&seasonType=${seasonType}&week=${parseInt(week) + 1}`);
+        history.push(`/games/${view}?season=${season}&seasonType=${seasonType}&week=${parseInt(week) + 1}&user=${user}`);
     }
 
     const showWeeks = (weekNum) => {
         if(weeksShown) {
-            history.push(`/games/${view}?season=${season}&seasonType=${seasonType}&week=${weekNum}`);
+            history.push(`/games/${view}?season=${season}&seasonType=${seasonType}&week=${weekNum}&user=${user}`);
             setWeeksShown(false);
             publish(WEEK_SHOW_WEEKS, false);
         } else {

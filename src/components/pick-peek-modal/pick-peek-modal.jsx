@@ -8,6 +8,7 @@ import { fetchPicksForUser } from '../../controller/picks-for-user/picksForUserS
 import { SHOW_MODAL, Subscriber, publish } from '../../utils/pubSub';
 import "./pick-peek-modal.css";
 import { GameLoader } from '../game-loader/game-loader';
+import { useHistory } from 'react-router-dom';
 
 export const PickPeekModal = () => {
     
@@ -18,6 +19,7 @@ export const PickPeekModal = () => {
     const userPicksState = useSelector((state) => state.picksForUser.status);
     const [userData, setUserData] = useState({user_id: '', first_name: '', last_name: '', user_inits: ''});
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const showModalSub = (data) => {
         setShowModal(data !== null);
@@ -32,7 +34,7 @@ export const PickPeekModal = () => {
     }
 
     const viewPicks = () => {
-        console.log("VIEW PICKS")
+        history.push(`/games/others?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}&user=${userData.user_id}`);
     }
 
     const modalHeader = (

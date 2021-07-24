@@ -29,24 +29,42 @@ export const Standings = () => {
         publish(SHOW_MODAL, standing);
     }
 
+    const rankingSymbol = (rank) => {
+        switch (rank) {
+            case 1:
+                return (
+                    <div className="leader-icon">
+                        👑
+                    </div>
+                )
+            case 2:
+                return (
+                    <div className="leader-icon">
+                        💰
+                    </div>
+                )
+            case 3:
+                return (
+                    <div className="leader-icon">
+                        🤑
+                    </div>
+                )
+            default:
+                return (
+                    <div className="rank-font">
+                        { rank }
+                    </div>
+                )
+        }
+
+    }
+
     const rank = (standing) => {
         return (
             <div className="rank tiertary-color">
-                {
-                    (parseInt(standing.ranking) !== 1) ? (
-                        <div className={getItemClass(standing.user_id, "")}>
-                            <div className="rank-font">
-                                { standing.ranking }
-                            </div>
-                        </div>
-                    ) : (
-                        <div className={getItemClass(standing.user_id, "")}>
-                            <div className="leader-icon">
-                                👑
-                            </div>
-                        </div>
-                    )
-                }
+                <div className={getItemClass(standing.user_id, "")}>
+                    {rankingSymbol(standing.ranking)}
+                </div>
             </div>
         )
     }

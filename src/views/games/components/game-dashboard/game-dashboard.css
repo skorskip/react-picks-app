@@ -74,4 +74,16 @@
 		justify-content: center;
 		align-items: flex-start;
 	}
+
+	.show-submit-button {
+		bottom: 20px;
+	}
+	
+	.submit-button {
+		width: 500px;
+	}
+
+	.submit-container {
+		justify-content: center;
+	}
 }

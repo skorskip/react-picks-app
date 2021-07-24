@@ -6,7 +6,7 @@ import { selectGameIds } from '../../../../controller/games/gamesSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { GameDashboardWrapper } from './game-dashboard-wrapper';
 import { Button } from 'semantic-ui-react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { selectUserPickLimit, fetchUserPickLimit } from '../../../../controller/user-pick-limit/userPickLimitSlice';
 import { userStandingById, fetchUserStandings } from '../../../../controller/user-standings/userStandingsSlice';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
@@ -34,6 +34,9 @@ export const GameDashboard = () => {
     const league = useSelector(selectLeague);
     const leagueState = useSelector((state) => state.league.status);
     const history = useHistory();
+    let { search } = useLocation();
+    const query = new URLSearchParams(search);
+    const week = query.get("week")
 
     const teamSelected = (event) => {
         let updated = stagedPicks;
@@ -88,7 +91,7 @@ export const GameDashboard = () => {
     );
     
     const getSubmitClass = () => {
-        return (stagedCount > 0) ? "submit-container show-submit-button" : "submit-container hide-submit-button"
+        return (stagedCount > 0 && (parseInt(week) === parseInt(league.currentWeek) || week === null)) ? "submit-container show-submit-button" : "submit-container hide-submit-button"
     };
 
     const games = gamesIds.map((gameId, index) => {
@@ -134,7 +137,7 @@ export const GameDashboard = () => {
             { games }
             <div className={getSubmitClass()}>
                 <Button className="primary-background base-color submit-button" onClick={submitPicks}>
-                👍&nbsp;&nbsp;&nbsp;Submit ({stagedCount})
+                    👍&nbsp;&nbsp;&nbsp;Submit ({stagedCount})
                 </Button>
             </div>
         </div>

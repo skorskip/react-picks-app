@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Icon, Label } from 'semantic-ui-react';
+import { Button, Icon, Label, Segment } from 'semantic-ui-react';
 import { selectUserPickDataByGame } from '../../../../controller/user-pick-data/userPickDataSlice';
 import { publish, SHOW_MODAL } from '../../../../utils/pubSub';
 import './users-pick-data.css';
@@ -25,24 +25,24 @@ export const UsersPickData = ({ game }) => {
     }
 
     const picksDataButton = (
-        <div className="picks-data-overview accent base-background">
-            <div className="pick-data-button-group">
-                <Button as= 'div' labelPosition='right'>
-                    <Button basic onClick={picksDataClick}>
-                        <Icon className="accent" size='large' name='users' />
-                    </Button>
-                    <Label as='a' className="accent" basic pointing='left'>
-                        { awayPicks.length }
-                    </Label>
-                </Button>
-                <Button as= 'div' labelPosition='right'>
-                    <Button basic onClick={picksDataClick}>
-                        <Icon className="accent" size='large' name='users' />
-                    </Button>
-                    <Label className="accent" as='a' basic pointing='left'>
-                        { homePicks.length }
-                    </Label>
-                </Button>
+        <div className="picks-data-container">
+            <div className="picks-data-group">
+                <div className="floating-users-pick-button" onClick={picksDataClick}>
+                    <div className="user-pick-label-container">
+                        <Label className="base-background tiertary-color user-pick-label">
+                            <Icon name='thumbs up' className="accent"/>
+                            <div className="accent">{awayPicks.length}</div>
+                        </Label>
+                    </div>
+                </div>
+                <div className="floating-users-pick-button" onClick={picksDataClick}>
+                    <div className="user-pick-label-container">
+                        <Label className="base-background tiertary-color user-pick-label">
+                            <Icon name='thumbs up' className="accent"/>
+                            <div className="accent">{homePicks.length}</div>
+                        </Label>
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -64,7 +64,7 @@ export const UsersPickData = ({ game }) => {
     })
 
     const picksDataList = (showPickers) && (
-        <>
+        <div className="users-pick-list">
             <div className="picks-data-users">
                 <div className="users-column">
                     { buttonListAway }
@@ -81,13 +81,13 @@ export const UsersPickData = ({ game }) => {
                     Show Less
                 </div>
             </Button>
-        </>
+        </div>
     )
 
     return (
-        <div className="picks-data-container">
-            { picksDataButton }
+        <>
             { picksDataList }
-        </div>
+            { picksDataButton }
+        </>
     );
 }

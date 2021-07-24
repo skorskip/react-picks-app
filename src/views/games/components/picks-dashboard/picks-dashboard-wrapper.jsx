@@ -38,24 +38,18 @@ export const PicksDashboardWrapper = ({
     }
 
     return(
-        <>
-            <Game
-                key={"game-" + id}
-                game={game}
-                homeTeam={homeTeam}
-                awayTeam={awayTeam}
-                pick={pick}
-                showSubmitTime={showSubmitTime()}
-                disabled={(!showDelete && !gamePassedEdit)}
-                remove={removeGame}
-                onTeamSelected={(event) => onTeamSelected(event)}
-            />
-            { (showDelete && !removeGame && !gamePassedEdit) && (
-                <Button className="delete-button bottom-margin failure-color base-background" onClick={() => deleteClicked()}>
-                    <Icon name= "trash alternate outline" />
-                    Delete
-                </Button>
-            )}
-        </>
+        <Game
+            key={"game-" + id}
+            game={game}
+            homeTeam={homeTeam}
+            awayTeam={awayTeam}
+            pick={pick}
+            showSubmitTime={showSubmitTime()}
+            disabled={(!showDelete && !gamePassedEdit)}
+            remove={removeGame}
+            showDeleteButton={(showDelete && !removeGame && !gamePassedEdit)}
+            onTeamSelected={(event) => onTeamSelected(event)}
+            onDeleteClicked={(event) => deleteClicked()}
+        />
     )
 }

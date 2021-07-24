@@ -100,7 +100,7 @@
 .leader-icon {
 	display: flex;
 	align-items: center;
-	transform: scale(1);
+	transform: scale(2);
 }
 
 .input-container {

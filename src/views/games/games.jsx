@@ -15,6 +15,7 @@ import "../../utils/slideTransition.scss";
 import { fetchUserPickData } from '../../controller/user-pick-data/userPickDataSlice';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { status } from '../../configs/status';
+import { User, UserTypeEnum } from '../../model/user/user';
 
 export const Games = ({routes}) => {
     const user = useSelector(selectUser);
@@ -41,7 +42,7 @@ export const Games = ({routes}) => {
         setWeeksShown(show);
     }
 
-    const spectatorView = (user.type !== 'participant') && (
+    const spectatorView = (user.type !== UserTypeEnum.PARTICIPANT) && (
         <div className="header-container">
             <div className="spectator-container warn-background">
                 <div class="base-color spectator-icon">
@@ -54,7 +55,7 @@ export const Games = ({routes}) => {
         </div>
     );
 
-    const gamesTab = (user.type === 'participant' && (other === null || other === "null")) && (
+    const gamesTab = (user.type === UserTypeEnum.PARTICIPANT && (other === null || other === "null")) && (
         <GamesTabBar pickCount={pickIds.length}/>
     )
 
@@ -100,6 +101,14 @@ export const Games = ({routes}) => {
             }
         }
     }, [dispatch, user, season, week, seasonType])
+
+    // useEffect(() => {
+    //     if(week === null && gamesState === status.COMPLETE) {
+    //         dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+    //         dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+    //         dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }))
+    //     }
+    // }, [gamesState, currSeason, currWeek, currSeasonType, dispatch, user, week])
 
     return (
         <>

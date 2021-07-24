@@ -120,4 +120,9 @@
 	.team-info:hover {
 		border: solid 2px;
 	}
+
+	.game-card-spread {
+		margin-left: 120px;
+    	margin-top: -70px;
+	}
 }

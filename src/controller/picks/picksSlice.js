@@ -102,7 +102,7 @@ const picksSlice = createSlice({
                     state.status = status.ERROR;
                 } else {
                     state.picks = action.payload.response.picks;
-                    state.weekSet = action.payload.week;
+                    state.weekSet = 0;
                     state.status = status.COMPLETE;
                 }
             })

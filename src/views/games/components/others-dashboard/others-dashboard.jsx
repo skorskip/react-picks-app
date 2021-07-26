@@ -47,7 +47,8 @@ export const OthersDashboard = ({}) => {
                         <div className="other-user-info-container" onClick={goBack}>
                             <div className="other-user-info tiertary-color base-background">
                                 <Icon name="chevron left" className="secondary-color"/>
-                                <div className="secondary-color">
+                                <div className="secondary-color other-user-name">
+                                    <Icon name="user" className="secondary-color"/>
                                     {userInfo.first_name}&nbsp;{userInfo.last_name}
                                 </div>
                             </div>

@@ -82,7 +82,7 @@ export const Game = ({
         </div>
     );
 
-    const timeStatus = gameLocked && (
+    const timeStatus = (gameLocked && game.game_status !== GameStatusEnum.completed) && (
         <div className="game-card-date">
             <div className="date-text accent">
                 <Icon name="stopwatch"/>
@@ -122,6 +122,7 @@ export const Game = ({
                 <PickStatus
                     submitTime={game?.pick_submit_by_date}
                     pickSuccess={pickResult()}
+                    gameStatus={game?.game_status}
                 />
                 <Team 
                     team={homeTeam}

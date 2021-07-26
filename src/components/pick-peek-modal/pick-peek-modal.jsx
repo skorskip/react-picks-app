@@ -57,10 +57,11 @@ export const PickPeekModal = () => {
 
     const modalTitle = (
         <div class="modal-title">
-            <Button className="view-picks-button secondary-color" onClick={() => viewPicks()}>
+            <Button icon labelPosition='right' className="view-picks-button secondary-color" onClick={() => viewPicks()}>
                 <div class="card-header-text">
                     {userData.first_name} {userData.last_name}
-                </div>            
+                </div>
+                <Icon name="chevron right" className="secondary-color"/>      
             </Button>
         </div>
     )

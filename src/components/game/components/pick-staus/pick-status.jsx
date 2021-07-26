@@ -1,24 +1,24 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
-import { GameWinStatusEnum } from '../../../../model/game/game';
+import { GameStatusEnum, GameWinStatusEnum } from '../../../../model/game/game';
 import './pick-status.css';
 
-export const PickStatus = ({ submitTime, pickSuccess }) => {
+export const PickStatus = ({ submitTime, pickSuccess, gameStatus }) => {
     const status = () => {
         switch(pickSuccess) {
             case GameWinStatusEnum.win : 
-                // return <div className="pick-status-icon">🎉</div>
                 return <Icon className="pick-status-icon success-color" name="check" size="big"/>;
             case GameWinStatusEnum.lose : 
-                // return <div className="pick-status-icon">😢</div>
                 return <Icon className="pick-status-icon failure-color" name="times" size="big"/>;
             case GameWinStatusEnum.push : 
                 return <Icon className="pick-status-icon secondary-color" name="exchange" size="big"/>;
             default :
                 if(new Date(submitTime) >  new Date()){
                     return <Icon className="pick-status-icon tiertary-color" name="at" size="big"/>;
+                } 
+                else if(gameStatus === GameStatusEnum.completed) {
+                    return <Icon className="pick-status-icon secondary-color" name="flag checkered" size="big"/>;
                 } else {
-                    // return <div className="pick-status-icon">🔐</div>;
                     return <Icon className="pick-status-icon warn-color" name="lock" size="big"/>;
                 }
         }

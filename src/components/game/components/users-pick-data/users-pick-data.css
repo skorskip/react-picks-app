@@ -7,12 +7,29 @@
 	padding: 10px;
 }
 
+.picks-data-container-final {
+	position: absolute;
+	right: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 .picks-data-group {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
 	margin-top: 20px;
+}
+
+.picks-data-group-final {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
 }
 
 .pick-data {
@@ -102,5 +119,12 @@
 		right: auto;
 		padding: 5px;
 		padding-top: 10px;
+	}
+
+	.picks-data-container-final {
+		width: auto;
+		right: auto;
+		padding-left: 0px;
+		padding-right: 0px;
 	}
 }

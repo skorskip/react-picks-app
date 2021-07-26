@@ -113,7 +113,7 @@ export const Games = ({routes}) => {
                 dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
             }
         }
-    }, [dispatch, user, season, week, seasonType])
+    }, [dispatch, user, season, week, seasonType, view])
 
     return (
         <>

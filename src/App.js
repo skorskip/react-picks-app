@@ -37,6 +37,7 @@ function App() {
     leagueState === status.IDLE) {
     return (
       <div className="loader-container">
+        <ThemeSwitcher />
         <PickLoader />
       </div>
     )

@@ -31,7 +31,7 @@ export const GamesTabBar = ({pickCount}) => {
         if(view === selectedView) {
             return "toggle-button primary-background base-color";
         } else {
-            return "toggle-button tiertary-light-background";
+            return "toggle-button tiertary-light-background secondary-color";
         }
     }
 
@@ -51,7 +51,7 @@ export const GamesTabBar = ({pickCount}) => {
         !isEditSelected && 
         pickCount > 0 && 
         parseInt(week) === currentWeek) && (
-        <Button basic onClick={() => selectEdit()}>Edit</Button>
+        <Button className="tiertary-light-background secondary-color" onClick={() => selectEdit()}>Edit</Button>
     )
 
     const doneButton = (view === "pick" && isEditSelected) && (

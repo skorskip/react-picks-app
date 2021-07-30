@@ -66,7 +66,7 @@ export const UsersPickData = ({ game }) => {
 
     const buttonListAway = awayPicks.map((pick) => {
         return (
-            <Button className="user-item tiertary-color base-background" onClick={() => setUserModal(pick)}>
+            <Button className="user-item tiertary-color tiertary-light-background" onClick={() => setUserModal(pick)}>
                 <div className="accent">{ pick.first_name } {pick.last_name.substring(0,1)}.</div>
             </Button>
         );
@@ -74,7 +74,7 @@ export const UsersPickData = ({ game }) => {
 
     const buttonListHome = homePicks.map((pick) => {
         return (
-            <Button className="user-item tiertary-color base-background" onClick={() => setUserModal(pick)}>
+            <Button className="user-item tiertary-color tiertary-light-background" onClick={() => setUserModal(pick)}>
                 <div className="accent">{ pick.first_name } {pick.last_name.substring(0,1)}.</div>
             </Button>
         ); 

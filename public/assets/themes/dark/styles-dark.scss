@@ -1,0 +1,163 @@
+
+/*<-------DARK COLORS-------->*/
+
+$primary:       #3ece7a;
+$secondary:     #adbbc9;
+$tiertary:      rgb(53, 53, 53);
+$quaternary:    #151515;
+$base:          black;
+$accent:        $primary;
+
+.primary-color {
+    color:  $primary !important;
+}
+
+.secondary-color {
+    color: $secondary !important;
+}
+
+.tiertary-color {
+    color: $tiertary !important;
+}
+
+.tiertary-light-color {
+    color: $quaternary !important;
+}
+
+.quaternary-color {
+    color: $quaternary !important;
+}
+
+.base-color {
+    color: $base !important;
+}
+
+.accent {
+    color: $accent !important;
+}
+
+.primary-background {
+    background-color:  $primary !important;
+}
+
+.secondary-background {
+    background-color: $secondary !important;
+}
+
+.tiertary-background {
+    background-color: $tiertary !important;
+}
+
+.tiertary-light-background {
+    background-color: $quaternary !important;
+}
+
+.quaternary-background {
+    background-color: $quaternary !important;
+}
+
+.base-background {
+    background-color: $base !important;
+}
+
+.accent-background {
+    background-color: $accent !important;
+}
+
+.primary-fill {
+    fill: $primary;
+}
+
+.secondary-fill {
+    fill: $secondary;
+}
+
+.bar {
+    background-color: $primary !important;
+}
+
+.ui.progress {
+    background-color: $tiertary !important;
+}
+
+body {
+    background: $base !important;
+}
+/*-----------TEAM COLORS----------*/
+$red:               #DB2828 !important;
+$ruby:              #97233f !important;
+$burgundy:          #a71931 !important;
+$amaranth-red:      #cf2233 !important;
+$orange:            #fb4f14 !important;
+$brown:             #A5673F !important;
+$teal:              #006678 !important;
+$star-command-blue: #0076b6 !important;
+$carolina-blue:     #0087CA !important;
+$blue:              #2185D0 !important;
+$air-force-blue:    #00348d !important;
+$navy:              #1a2f5f !important;
+$midnight-blue:     #211e98 !important;
+$violet:            #4f2683 !important;
+$purple:            #A333C8 !important;
+$eerie-black:       #0b162a !important;
+$tan:               #d3bc8d !important;
+$gold:              #ffb612 !important;
+$yellow:            #FBBD08 !important;
+$olive:             #B5CC18 !important;
+$lime-green:        #69be28 !important;
+$green:             #027202 !important;
+$midnight-green:    #004c54 !important;
+$jungle-green:      #2a5446 !important;
+$grey:              #767676 !important;
+
+.ruby               { color: $ruby; }
+.burgundy           { color: $burgundy; }
+.teal               { color: $teal; }
+.carolina-blue      { color: $carolina-blue; }
+.star-command-blue  { color: $star-command-blue; }
+.air-force-blue     { color: $air-force-blue; }
+.midnight-blue      { color: $midnight-blue; }
+.eerie-black        { color: $eerie-black; }
+.jungle-green       { color: $jungle-green; }
+.orange             { color: $orange; }
+.brown              { color: $brown; }
+.amaranth-red       { color: $amaranth-red; }
+.violet             { color: $violet; }
+.red                { color: $red; }
+.blue               { color: $blue; }
+.navy               { color: $navy; }
+.tan                { color: $tan; }
+.midnight-green     { color: $midnight-green; }
+.gold               { color: $gold; }
+.lime-green         { color: $lime-green; }
+.grey               { color: $grey; }
+.olive              { color: $olive; }
+.green              { color: $green; }
+.yellow             { color: $yellow; }
+.purple             { color: $purple; }
+
+.ruby-background                { background-color: $ruby; }
+.burgundy-background            { background-color: $burgundy; }
+.teal-background                { background-color: $teal; }
+.carolina-blue-background       { background-color: $carolina-blue; }
+.star-command-blue-background   { background-color: $star-command-blue; }
+.air-force-blue-background      { background-color: $air-force-blue; }
+.midnight-blue-background       { background-color: $midnight-blue; }
+.eerie-black-background         { background-color: $eerie-black; }
+.jungle-green-background        { background-color: $jungle-green; }
+.orange-background              { background-color: $orange; }
+.brown-background               { background-color: $brown; }
+.amaranth-red-background        { background-color: $amaranth-red; }
+.violet-background              { background-color: $violet; }
+.red-background                 { background-color: $red; }
+.blue-background                { background-color: $blue; }
+.navy-background                { background-color: $navy; }
+.tan-background                 { background-color: $tan; }
+.midnight-green-background      { background-color: $midnight-green; }
+.gold-background                { background-color: $gold; }
+.lime-green-background          { background-color: $lime-green; }
+.grey-background                { background-color: $grey; }
+.olive-background               { background-color: $olive; }
+.green-background               { background-color: $green; }
+.yellow-background              { background-color: $yellow; }
+.purple-background              { background-color: $purple; }

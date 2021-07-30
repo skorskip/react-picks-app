@@ -7,10 +7,10 @@ export const GameLoader = ({height, count}) => {
     const game = (
         <div className="game-card">
             <div className="team-group">
-                <Placeholder style={{ height: parseInt(height), width: 150, borderRadius: "1em", margin: 0}}>
+                <Placeholder className="tiertary-light-background" style={{ height: parseInt(height), width: 150, borderRadius: "1em", margin: 0}}>
                     <Placeholder.Image />
                 </Placeholder>
-                <Placeholder style={{ height: parseInt(height), width: 150, borderRadius: "1em", margin: 0}}>
+                <Placeholder className="tiertary-light-background" style={{ height: parseInt(height), width: 150, borderRadius: "1em", margin: 0}}>
                     <Placeholder.Image />
                 </Placeholder>
             </div>

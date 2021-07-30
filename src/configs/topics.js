@@ -3,3 +3,4 @@ export const NAV_DONE_BUTTON = 'nav_done_button';
 export const WEEK_SHOW_WEEKS = 'week_show_weeks';
 export const SHOW_MODAL = 'show_modal';
 export const SHOW_MESSAGE = 'show_message';
+export const SET_THEME = 'set_theme';

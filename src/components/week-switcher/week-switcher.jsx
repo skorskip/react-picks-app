@@ -40,7 +40,7 @@ export const WeekSwitcher = () => {
     }
 
     const prevButton = (week !== 1) && (
-        <div className="week-header-next base-background tiertary-color" onClick={weekPrev}>
+        <div className="week-header-next tiertary-light-background" onClick={weekPrev}>
             <div className="week-arrow-next-icon secondary-color">
                 <Icon name="chevron left" />
             </div>
@@ -48,7 +48,7 @@ export const WeekSwitcher = () => {
     );
 
     const nextButton = (currentWeek !== week) && (
-        <div className="week-header-next base-background tiertary-color" onClick={weekNext}>
+        <div className="week-header-next tiertary-light-background" onClick={weekNext}>
             <div className="week-arrow-next-icon secondary-color">
                 <Icon name="chevron right" />
             </div>
@@ -57,7 +57,7 @@ export const WeekSwitcher = () => {
 
     const weekButton = (weekNum) => {
         return (
-            <div className="week-header base-background tiertary-color" onClick={() => showWeeks(weekNum)}>
+            <div className="week-header tiertary-light-background" onClick={() => showWeeks(weekNum)}>
                 <div className="week-title secondary-color">
                     Week {weekNum}
                 </div>

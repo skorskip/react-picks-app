@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
-import { selectPicksIds, fetchPicks } from '../../controller/picks/picksSlice';
+import { selectPicksIds, fetchPicks, getPicksSetWeek } from '../../controller/picks/picksSlice';
 import { fetchGames } from '../../controller/games/gamesSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { Switch, Route, useLocation, useParams } from "react-router-dom";
@@ -15,7 +15,7 @@ import "../../utils/slideTransition.scss";
 import { fetchUserPickData } from '../../controller/user-pick-data/userPickDataSlice';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { status } from '../../configs/status';
-import { User, UserTypeEnum } from '../../model/user/user';
+import { UserTypeEnum } from '../../model/user/user';
 
 export const Games = ({routes}) => {
     const user = useSelector(selectUser);
@@ -32,10 +32,12 @@ export const Games = ({routes}) => {
     const season = query.get("season")
     const week = query.get("week")
     const seasonType = query.get("seasonType")
+    const other = query.get("user");
     const currSeason = league.currentSeason
     const currWeek = league.currentWeek 
     const currSeasonType = league.currentSeasonType
     const [weeksShown, setWeeksShown] = useState(false);
+    const setWeek = useSelector(getPicksSetWeek);
 
     const showWeeks = (show) => {
         setWeeksShown(show);
@@ -54,7 +56,7 @@ export const Games = ({routes}) => {
         </div>
     );
 
-    const gamesTab = (user.type === UserTypeEnum.PARTICIPANT) && (
+    const gamesTab = (user.type === UserTypeEnum.PARTICIPANT && (other === null || other === "null")) && (
         <GamesTabBar pickCount={pickIds.length}/>
     )
 
@@ -84,26 +86,34 @@ export const Games = ({routes}) => {
     useEffect(() => {
         if(gamesState === status.IDLE && leagueState === status.COMPLETE) {
             dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
-            dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
-            dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }))
+            dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }));
+            if(other === null || other === "null") {
+                dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+            }
         }
     }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user])
 
     useEffect(() => {
-        if(season && week && seasonType){
-            dispatch(fetchGames({ season: season, seasonType: seasonType, week: week, user: user }));
-            dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
-            dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }))
+        const shouldRefresh = () => {
+            if(season && week && seasonType) {
+                if(parseInt(week) === parseInt(currWeek)) {
+                    if(parseInt(setWeek) !== parseInt(currWeek)) {
+                        return true;
+                    } else return false;
+                } else return true;
+            } else {
+                return false;
+            }
         }
-    }, [dispatch, user, season, week, seasonType])
 
-    // useEffect(() => {
-    //     if(week === null && gamesState === status.COMPLETE) {
-    //         dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
-    //         dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
-    //         dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }))
-    //     }
-    // }, [gamesState, currSeason, currWeek, currSeasonType, dispatch, user, week])
+        if(shouldRefresh()){
+            dispatch(fetchGames({ season: season, seasonType: seasonType, week: week, user: user }));
+            dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }));
+            if(other === null || other === "null") {
+                dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
+            }
+        }
+    }, [dispatch, user, season, week, seasonType, view])
 
     return (
         <>

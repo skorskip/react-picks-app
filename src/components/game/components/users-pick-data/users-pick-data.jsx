@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Icon, Label, Segment } from 'semantic-ui-react';
 import { selectUserPickDataByGame } from '../../../../controller/user-pick-data/userPickDataSlice';
+import { GameStatusEnum } from '../../../../model/game/game';
 import { publish, SHOW_MODAL } from '../../../../utils/pubSub';
 import './users-pick-data.css';
 
@@ -24,9 +25,25 @@ export const UsersPickData = ({ game }) => {
         publish(SHOW_MODAL, pick);
     }
 
+    const containerClass = () => {
+        if(game.game_status === GameStatusEnum.completed) {
+            return "picks-data-container-final";
+        } else {
+            return "picks-data-container";
+        }
+    }
+
+    const groupClass = () => {
+        if(game.game_status === GameStatusEnum.completed) {
+            return "picks-data-group-final";
+        } else {
+            return "picks-data-group";
+        }
+    }
+
     const picksDataButton = (
-        <div className="picks-data-container">
-            <div className="picks-data-group">
+        <div className={containerClass()}>
+            <div className={groupClass()}>
                 <div className="floating-users-pick-button" onClick={picksDataClick}>
                     <div className="user-pick-label-container">
                         <Label className="base-background tiertary-color user-pick-label">

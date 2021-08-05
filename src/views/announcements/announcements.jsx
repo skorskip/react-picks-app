@@ -30,27 +30,29 @@ export const Announcements = () => {
     if(messages.length === 0) {
         return (
             <div className="no-messages-set secondary-color">
-                😴&nbsp;No recent announcements
+                😴
+                <br></br>
+                <div className="no-messages-content">No recent announcements</div>
             </div>
         )
     }
 
     const messagesList = messages.map((message) => {
         return (
-            <div className="card base-background tiertary-color">
+            <div className="announcement-card base-background tiertary-color">
                 <div className="date-title tiertary-color">
                     <span className="date-text primary-color">
                         { formatDate(new Date(message.date)) }
                     </span>
                 </div>
-                <div className="content secondary-color">{ message.message }</div>
+                <div className="announcement-content secondary-color">{ message.message }</div>
             </div>
         );
     });
 
     return (
-        <div className="content">
-            <div className="message-container">
+        <div className="announcement-content">
+            <div>
                 { messagesList }
             </div>
         </div>

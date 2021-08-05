@@ -42,8 +42,8 @@
 }
 
 .week-arrow-icon {
-	transform: scale(1.5);
 	margin:15px;
+	transform: scale(1);
 }
 
 .week-title {

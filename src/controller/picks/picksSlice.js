@@ -124,7 +124,8 @@ const picksSlice = createSlice({
             })
             .addCase(addPicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
-                    state.picks = state.picks.concat(action.payload);
+                    let newPicks = state.picks.concat(action.payload);
+                    state.picks = newPicks.sort((a,b) => new Date(a.pick_submit_by_date) - new Date(b.pick_submit_by_date));
                     state.status = status.COMPLETE;
                 } else {
                     state.picks = [];

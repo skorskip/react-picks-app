@@ -22,19 +22,20 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(userState === status.COMPLETE && tokenState === status.COMPLETE) {
+    if(userState === status.COMPLETE && 
+      tokenState === status.COMPLETE && 
+      leagueState === status.IDLE) {
+
       dispatch(fetchLeague());
     }
-  }, [userState, tokenState, dispatch]);
+  }, [userState, tokenState, dispatch, leagueState]);
 
   useEffect(() => {
     dispatch(fetchToken());
   },[]);
 
   if(userState === status.LOADING || 
-    leagueState === status.LOADING || 
-    userState === status.IDLE ||
-    leagueState === status.IDLE) {
+    leagueState === status.LOADING) {
     return (
       <div className="loader-container">
         <ThemeSwitcher />

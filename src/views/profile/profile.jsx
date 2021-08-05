@@ -32,7 +32,7 @@ export const Profile = () => {
 
     const getThemeClass = (value) => {
         if(theme === value) {
-            return "theme-button primary-background";
+            return "theme-button primary-background base-color";
         } else {
             return "theme-button secondary-color tiertary-light-background";
         }
@@ -91,7 +91,7 @@ export const Profile = () => {
                         </div>
                     </div>
                     <div className="change-password-button-container">
-                        <Button className="change-password-button secondary-color base-background" onClick={changePassword}>
+                        <Button className="change-password-button secondary-color tiertary-light-background" onClick={changePassword}>
                             Change password
                         </Button>
                     </div>
@@ -132,7 +132,7 @@ export const Profile = () => {
             { profileInfo }
             { themes }
             <div className="logout-button-container">
-                <Button className="change-password-button failure-color base-background" onClick={signOutUser}>
+                <Button className="change-password-button failure-color failure-light-background" onClick={signOutUser}>
                     Sign out
                 </Button>
             </div>

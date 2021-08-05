@@ -109,3 +109,7 @@
 .progress-bar-stat {
     padding: 5px;
 }
+
+.stat-title {
+    padding-top: 5px;
+}

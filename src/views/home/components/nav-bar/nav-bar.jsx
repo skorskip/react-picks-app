@@ -17,6 +17,7 @@ export const NavBar = () => {
     const [messages, setMessages] = useState(messagesSelect.announcements);
     const announcementsStatus = useSelector((state) => state.announcements.status);
     const userState = useSelector((state) => state.user.status);
+    const leagueState = useSelector((state) => state.league.status);
     const league = useSelector(selectLeague);
     const dispatch = useDispatch();
     
@@ -48,7 +49,10 @@ export const NavBar = () => {
     }
 
     useEffect(() => {
-        if(userState === status.COMPLETE && announcementsStatus === status.IDLE) {
+        if(userState === status.COMPLETE && 
+            announcementsStatus === status.IDLE && 
+            leagueState === status.COMPLETE ) {
+                
             const params = { lastCheckDate: localStorage.getItem("announcementCheck") }
             dispatch(fetchAnnouncements(params));
         }

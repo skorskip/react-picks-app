@@ -9,6 +9,7 @@ import { SHOW_MODAL, Subscriber, publish } from '../../utils/pubSub';
 import "./pick-peek-modal.css";
 import { GameLoader } from '../game-loader/game-loader';
 import { useHistory } from 'react-router-dom';
+import { status } from '../../configs/status';
 
 export const PickPeekModal = () => {
     
@@ -71,7 +72,7 @@ export const PickPeekModal = () => {
     )
 
     const userPicksNone = (userPicksState === 'complete' && userPicks.length === 0) && (
-        <div className="picks-none-container ">   
+        <div className="picks-none-container">   
             No Picks
         </div>
     ) 
@@ -124,7 +125,7 @@ export const PickPeekModal = () => {
     );
 
     useEffect(() => {
-        if(leagueState === 'complete' && userData.user_id !== "") {
+        if(leagueState === status.COMPLETE && userData.user_id !== "") {
             dispatch(fetchPicksForUser({userId: userData.user_id, season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
         }
     }, [userData.user_id, leagueState, league, dispatch]);

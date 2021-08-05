@@ -6,7 +6,7 @@ import { fetchGames } from '../../controller/games/gamesSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { Switch, Route, useLocation, useParams } from "react-router-dom";
 import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
-import { WeekSwitcher } from '../../components/week-switcher/week-switcher';
+import { WeekSwitcher } from './components/week-switcher/week-switcher';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Icon } from 'semantic-ui-react';
 import { WEEK_SHOW_WEEKS, Subscriber } from '../../utils/pubSub';
@@ -23,7 +23,9 @@ export const Games = ({routes}) => {
     const pickIds = useSelector(selectPicksIds);
     const gamesState = useSelector((state) => state.games.status);
     const leagueState = useSelector((state) => state.league.status);
+    const setWeek = useSelector(getPicksSetWeek);
     const dispatch = useDispatch();
+
     let location = useLocation();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
@@ -33,11 +35,12 @@ export const Games = ({routes}) => {
     const week = query.get("week")
     const seasonType = query.get("seasonType")
     const other = query.get("user");
+
     const currSeason = league.currentSeason
     const currWeek = league.currentWeek 
     const currSeasonType = league.currentSeasonType
     const [weeksShown, setWeeksShown] = useState(false);
-    const setWeek = useSelector(getPicksSetWeek);
+    
 
     const showWeeks = (show) => {
         setWeeksShown(show);
@@ -84,7 +87,8 @@ export const Games = ({routes}) => {
     );
 
     useEffect(() => {
-        if(gamesState === status.IDLE && leagueState === status.COMPLETE) {
+        if(gamesState === status.IDLE && 
+            leagueState === status.COMPLETE) {
             dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
             dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }));
             if(other === null || other === "null") {

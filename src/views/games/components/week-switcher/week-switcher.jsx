@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { selectLeague } from '../../controller/league/leagueSlice';
-import { WEEK_SHOW_WEEKS, publish } from '../../utils/pubSub';
+import { selectLeague } from '../../../../controller/league/leagueSlice';
+import { WEEK_SHOW_WEEKS, publish } from '../../../../utils/pubSub';
 import './week-switcher.css';
 
 export const WeekSwitcher = () => {

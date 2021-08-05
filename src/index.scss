@@ -36,8 +36,9 @@ body,html,span,div {
 }
 
 $success: 			rgb(27, 136, 52);
-$failure:			rgb(211, 71, 71);
+$failure:			#d02020;
 $warn:				#ca7220;
+$failure-light:		#f15d5d63;
 
 .success-color    					{ color: $success !important; }
 .failure-color    					{ color: $failure !important; }
@@ -46,6 +47,7 @@ $warn:				#ca7220;
 .success-background 			{ background-color: $success !important; }
 .failure-background  			{ background-color: $failure !important; }
 .warn-background  				{ background-color: $warn !important; }
+.failure-light-background		{ background-color: $failure-light !important; }
 
 
 .failure-snack {

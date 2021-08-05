@@ -1,0 +1,279 @@
+/*<-------DARK COLORS-------->*/
+.primary-color {
+  color: #0076B6 !important;
+}
+
+.secondary-color {
+  color: #6d7275 !important;
+}
+
+.tiertary-color {
+  color: #d6d6d6 !important;
+}
+
+.tiertary-light-color {
+  color: #f5f3f3 !important;
+}
+
+.quaternary-color {
+  color: white !important;
+}
+
+.base-color {
+  color: white !important;
+}
+
+.accent {
+  color: #0076B6 !important;
+}
+
+.primary-background {
+  background-color: #0076B6 !important;
+}
+
+.secondary-background {
+  background-color: #6d7275 !important;
+}
+
+.tiertary-background {
+  background-color: #d6d6d6 !important;
+}
+
+.tiertary-light-background {
+  background-color: #f5f3f3 !important;
+}
+
+.quaternary-background {
+  background-color: white !important;
+}
+
+.base-background {
+  background-color: white !important;
+}
+
+.accent-background {
+  background-color: #0076B6 !important;
+}
+
+.primary-fill {
+  fill: #0076B6;
+}
+
+.secondary-fill {
+  fill: #6d7275;
+}
+
+.bar {
+  background-color: #0076B6 !important;
+}
+
+.ui.progress {
+  background-color: #d6d6d6 !important;
+}
+
+body {
+  background: white !important;
+}
+
+/*-----------TEAM COLORS----------*/
+.ruby {
+  color: #0076B6 !important;
+}
+
+.burgundy {
+  color: #0076B6 !important;
+}
+
+.teal {
+  color: #0076B6 !important;
+}
+
+.carolina-blue {
+  color: #0076B6 !important;
+}
+
+.star-command-blue {
+  color: #0076B6 !important;
+}
+
+.air-force-blue {
+  color: #0076B6 !important;
+}
+
+.midnight-blue {
+  color: #0076B6 !important;
+}
+
+.eerie-black {
+  color: #0076B6 !important;
+}
+
+.jungle-green {
+  color: #0076B6 !important;
+}
+
+.orange {
+  color: #0076B6 !important;
+}
+
+.brown {
+  color: #0076B6 !important;
+}
+
+.amaranth-red {
+  color: #0076B6 !important;
+}
+
+.violet {
+  color: #0076B6 !important;
+}
+
+.red {
+  color: #0076B6 !important;
+}
+
+.blue {
+  color: #0076B6 !important;
+}
+
+.navy {
+  color: #0076B6 !important;
+}
+
+.tan {
+  color: #0076B6 !important;
+}
+
+.midnight-green {
+  color: #0076B6 !important;
+}
+
+.gold {
+  color: #0076B6 !important;
+}
+
+.lime-green {
+  color: #0076B6 !important;
+}
+
+.grey {
+  color: #0076B6 !important;
+}
+
+.olive {
+  color: #0076B6 !important;
+}
+
+.green {
+  color: #0076B6 !important;
+}
+
+.yellow {
+  color: #0076B6 !important;
+}
+
+.purple {
+  color: #0076B6 !important;
+}
+
+.ruby-background {
+  background-color: #0076B6 !important;
+}
+
+.burgundy-background {
+  background-color: #0076B6 !important;
+}
+
+.teal-background {
+  background-color: #0076B6 !important;
+}
+
+.carolina-blue-background {
+  background-color: #0076B6 !important;
+}
+
+.star-command-blue-background {
+  background-color: #0076B6 !important;
+}
+
+.air-force-blue-background {
+  background-color: #0076B6 !important;
+}
+
+.midnight-blue-background {
+  background-color: #0076B6 !important;
+}
+
+.eerie-black-background {
+  background-color: #0076B6 !important;
+}
+
+.jungle-green-background {
+  background-color: #0076B6 !important;
+}
+
+.orange-background {
+  background-color: #0076B6 !important;
+}
+
+.brown-background {
+  background-color: #0076B6 !important;
+}
+
+.amaranth-red-background {
+  background-color: #0076B6 !important;
+}
+
+.violet-background {
+  background-color: #0076B6 !important;
+}
+
+.red-background {
+  background-color: #0076B6 !important;
+}
+
+.blue-background {
+  background-color: #0076B6 !important;
+}
+
+.navy-background {
+  background-color: #0076B6 !important;
+}
+
+.tan-background {
+  background-color: #0076B6 !important;
+}
+
+.midnight-green-background {
+  background-color: #0076B6 !important;
+}
+
+.gold-background {
+  background-color: #0076B6 !important;
+}
+
+.lime-green-background {
+  background-color: #0076B6 !important;
+}
+
+.grey-background {
+  background-color: #0076B6 !important;
+}
+
+.olive-background {
+  background-color: #0076B6 !important;
+}
+
+.green-background {
+  background-color: #0076B6 !important;
+}
+
+.yellow-background {
+  background-color: #0076B6 !important;
+}
+
+.purple-background {
+  background-color: #0076B6 !important;
+}
+
+/*# sourceMappingURL=styles-lions.css.map */

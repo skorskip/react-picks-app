@@ -1,7 +1,7 @@
 .nav-container {
     position: fixed;
     height: 90px;
-    z-index: 3;
+    z-index: 5;
     bottom: 0;
     width: 100%;
     padding-bottom: 30px;
@@ -58,6 +58,7 @@
 	transform: scale(1.5);
 }
 .notif-icon {
+    border-radius: 50% !important;
     right: auto !important;
 }
 .edit-button {

@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { fetchLeague } from './controller/league/leagueSlice';
 import { status } from './configs/status';
 import { MessagePopup } from './components/message/messagePopup';
+import { ThemeSwitcher } from './components/theme-switcher/theme-switcher';
 
 Amplify.configure({...awsconfig, ssr: true});
 
@@ -21,18 +22,23 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(userState === status.COMPLETE && tokenState === status.COMPLETE) {
+    if(userState === status.COMPLETE && 
+      tokenState === status.COMPLETE && 
+      leagueState === status.IDLE) {
+
       dispatch(fetchLeague());
     }
-  }, [userState, tokenState, dispatch]);
+  }, [userState, tokenState, dispatch, leagueState]);
 
   useEffect(() => {
     dispatch(fetchToken());
   },[]);
 
-  if(userState === status.LOADING || leagueState === status.LOADING) {
+  if(userState === status.LOADING || 
+    leagueState === status.LOADING) {
     return (
       <div className="loader-container">
+        <ThemeSwitcher />
         <PickLoader />
       </div>
     )
@@ -40,6 +46,7 @@ function App() {
 
   return (
     <div className="App">
+      <ThemeSwitcher />
       <Router>
         <Home />
         <MessagePopup />

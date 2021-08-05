@@ -2,7 +2,7 @@ import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/to
 import { client } from '../../utils/client'
 import { environment } from '../../configs/environment';
 import { User } from '../../model/user/user';
-import AmplifyAuth from '../../utils/amplifyAuth';
+import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
@@ -20,7 +20,8 @@ export const login = async (username, password) => {
         let response = await AmplifyAuth.AmplifyLogin(username, password);
         return response;
     } catch(error) {
-        console.error(error)
+        console.error(error);
+        return {error: AmplifyEnum.inValidUser}
         publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.LOGIN_ERROR});
     }
 };

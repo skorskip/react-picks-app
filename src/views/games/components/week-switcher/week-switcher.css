@@ -23,7 +23,7 @@
 	margin: 5px;
 	cursor: pointer;
 	width: 100%;
-	box-shadow: 0 0 8px rgba(0,0,0,0.2);
+	/* box-shadow: 0 0 8px rgba(0,0,0,0.2); */
 }
 
 .week-header-next {
@@ -33,7 +33,7 @@
 	border-radius: 8px;
 	margin: 5px;
 	cursor: pointer;
-	box-shadow: 0 0 8px rgba(0,0,0,0.2);
+	/* box-shadow: 0 0 8px rgba(0,0,0,0.2); */
 }
 
 .week-arrow-next-icon {
@@ -42,8 +42,8 @@
 }
 
 .week-arrow-icon {
-	transform: scale(1.5);
 	margin:15px;
+	transform: scale(1);
 }
 
 .week-title {

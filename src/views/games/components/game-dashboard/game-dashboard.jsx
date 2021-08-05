@@ -14,6 +14,7 @@ import './game-dashboard.css';
 import { status } from '../../../../configs/status';
 
 export const GameDashboard = () => {
+    const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const userState = useSelector((state) => state.user.status);
     const selectedGames = useSelector(selectGameIds);
@@ -21,49 +22,39 @@ export const GameDashboard = () => {
     const gamesIds = selectedGames.filter(gameId => !selectedPicksGames.includes(gameId));
     const gameLoader = useSelector((state) => state.games.status);
     const pickLoader = useSelector((state) => state.picks.status);
-    const initialStaged = JSON.parse(localStorage.getItem("stagedPicks"));
-    const initialSubmitDates = JSON.parse(localStorage.getItem("submitDates"));
-    const [submitDates, setSubmitDates] = useState(initialSubmitDates === null ? [] : initialSubmitDates);
-    const [stagedPicks, setStagedPicks] = useState(initialStaged !== null ? initialStaged : {});
-    const [stagedCount, setStagedCount] = useState(initialStaged === null ? 0 : Object.keys(initialStaged).length);
-    const dispatch = useDispatch();
     const pickLimitState = useSelector((state) => state.userPickLimit.status);
     const pickLimit = useSelector(selectUserPickLimit);
     const userStandings = useSelector((state) => userStandingById(state, user?.user_id));
     const userStandingsState = useSelector((state) => state.userStandings.status);
     const league = useSelector(selectLeague);
     const leagueState = useSelector((state) => state.league.status);
+    
     const history = useHistory();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
-    const week = query.get("week")
+    const week = query.get("week");
+
+    const initialStaged = JSON.parse(localStorage.getItem("stagedPicks"));
+    const [stagedPicks, setStagedPicks] = useState(initialStaged !== null ? initialStaged : {});
+    const [stagedCount, setStagedCount] = useState(initialStaged === null ? 0 : Object.keys(initialStaged).length);
 
     const teamSelected = (event) => {
         let updated = stagedPicks;
-        let updatedDates = submitDates;
         if(event.highlight) {
             let newPick = {
                 game_id: event.gameId,
                 team_id: event.teamId,
                 submitted_date: new Date().toISOString(),
-                user_id: user.user_id
+                user_id: user.user_id,
+                pick_submit_by_date: event.submitBy
             }
-
-            let submitDate  = {
-                game_id: event.gameId,
-                submitBy: event.submitBy
-            }
-            updatedDates = updatedDates.concat(submitDate)
             updated[event.gameId] = newPick;
         } else {
             delete updated[event.gameId];
-            updatedDates = updatedDates.filter((dates) => dates.game_id !== event.gameId)
         }
         localStorage.setItem("stagedPicks", JSON.stringify(updated));
-        localStorage.setItem("submitDates", JSON.stringify(updatedDates));
         setStagedCount(Object.keys(updated).length);
         setStagedPicks(updated);
-        setSubmitDates(updatedDates)
     }
 
     const submitPicks = () => {
@@ -71,7 +62,7 @@ export const GameDashboard = () => {
         let totalPicks = parseInt(stagedPicksList.length) + parseInt(userStandings.pending_picks) + parseInt(userStandings.picks);
         if(stagedPicksList.length === 0) {
             alert("Going to need more than that!")
-        } else if(submitDates.find((staged) => new Date(staged.submitBy) < new Date())) {
+        } else if(stagedPicksList.find((staged) => new Date(staged.pick_submit_by_date) < new Date())) {
             alert("Can't Submit Passed the Deadline")
         } else if(totalPicks <= parseInt(pickLimit.max_picks)) {
             setStagedPicks({});
@@ -120,10 +111,9 @@ export const GameDashboard = () => {
     }, [pickLimitState, leagueState, userState, league, user, dispatch]);
 
     useEffect(() => {
-        if(submitDates.find((initial) => new Date(initial.submitBy) > new Date()) === undefined) {
+        if(Object.values(stagedPicks).find((initial) => new Date(initial.pick_submit_by_date) > new Date()) === undefined) {
             setStagedCount(0);
             setStagedPicks({});
-            setSubmitDates([]);
         }
     },[]);
 

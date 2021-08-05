@@ -10,7 +10,7 @@ export const MessagePopup = ({}) => {
     const [showMessage, setShowMessage] = useState(false);
     
     const showMessageSub = (data) => {
-        if(data !== null) {
+        if(data !== null && data.message !== "") {
             setType(data.type);
             setMessage(data.message);
             setShowMessage(true);
@@ -25,12 +25,12 @@ export const MessagePopup = ({}) => {
 
     const messageDisplay = (showMessage) && (
         type === status.ERROR ? (
-            <Message negative className="message-content">
-                🤕 &nbsp; {message}
+            <Message negative className="message-content base-background">
+                🤕 &nbsp; <div className="secondary-color">{message}</div>
             </Message>
         ) : (
-            <Message success className="message-content">
-                👌 &nbsp; {message}
+            <Message success className="message-content base-background">
+                👌 &nbsp; <div className="secondary-color">{message}</div>
             </Message>
         ) 
     );

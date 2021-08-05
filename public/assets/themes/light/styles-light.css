@@ -1,0 +1,275 @@
+/*<-------COLORS-------->*/
+.primary-color {
+  color: #3e5dce !important;
+}
+
+.secondary-color {
+  color: #455564 !important;
+}
+
+.tiertary-color {
+  color: #d6d6d6 !important;
+}
+
+.tiertary-light-color {
+  color: #f5f3f3 !important;
+}
+
+.quaternary-color {
+  color: white !important;
+}
+
+.base-color {
+  color: white !important;
+}
+
+.accent {
+  color: #3e5dce !important;
+}
+
+.primary-background {
+  background-color: #3e5dce !important;
+}
+
+.secondary-background {
+  background-color: #455564 !important;
+}
+
+.tiertary-background {
+  background-color: #d6d6d6 !important;
+}
+
+.tiertary-light-background {
+  background-color: #f5f3f3 !important;
+}
+
+.quaternary-background {
+  background-color: white !important;
+}
+
+.base-background {
+  background-color: white !important;
+}
+
+.accent-background {
+  background-color: #3e5dce !important;
+}
+
+.primary-fill {
+  fill: #3e5dce;
+}
+
+.secondary-fill {
+  fill: #455564;
+}
+
+.bar {
+  background-color: #3e5dce !important;
+}
+
+.ui.progress {
+  background-color: #d6d6d6 !important;
+}
+
+/*-----------TEAM COLORS----------*/
+.ruby {
+  color: #97233f !important;
+}
+
+.burgundy {
+  color: #a71931 !important;
+}
+
+.teal {
+  color: #006678 !important;
+}
+
+.carolina-blue {
+  color: #0087CA !important;
+}
+
+.star-command-blue {
+  color: #0076b6 !important;
+}
+
+.air-force-blue {
+  color: #00348d !important;
+}
+
+.midnight-blue {
+  color: #211e98 !important;
+}
+
+.eerie-black {
+  color: #0b162a !important;
+}
+
+.jungle-green {
+  color: #2a5446 !important;
+}
+
+.orange {
+  color: #fb4f14 !important;
+}
+
+.brown {
+  color: #A5673F !important;
+}
+
+.amaranth-red {
+  color: #cf2233 !important;
+}
+
+.violet {
+  color: #4f2683 !important;
+}
+
+.red {
+  color: #DB2828 !important;
+}
+
+.blue {
+  color: #2185D0 !important;
+}
+
+.navy {
+  color: #1a2f5f !important;
+}
+
+.tan {
+  color: #d3bc8d !important;
+}
+
+.midnight-green {
+  color: #004c54 !important;
+}
+
+.gold {
+  color: #ffb612 !important;
+}
+
+.lime-green {
+  color: #69be28 !important;
+}
+
+.grey {
+  color: #767676 !important;
+}
+
+.olive {
+  color: #B5CC18 !important;
+}
+
+.green {
+  color: #027202 !important;
+}
+
+.yellow {
+  color: #FBBD08 !important;
+}
+
+.purple {
+  color: #A333C8 !important;
+}
+
+.ruby-background {
+  background-color: #97233f !important;
+}
+
+.burgundy-background {
+  background-color: #a71931 !important;
+}
+
+.teal-background {
+  background-color: #006678 !important;
+}
+
+.carolina-blue-background {
+  background-color: #0087CA !important;
+}
+
+.star-command-blue-background {
+  background-color: #0076b6 !important;
+}
+
+.air-force-blue-background {
+  background-color: #00348d !important;
+}
+
+.midnight-blue-background {
+  background-color: #211e98 !important;
+}
+
+.eerie-black-background {
+  background-color: #0b162a !important;
+}
+
+.jungle-green-background {
+  background-color: #2a5446 !important;
+}
+
+.orange-background {
+  background-color: #fb4f14 !important;
+}
+
+.brown-background {
+  background-color: #A5673F !important;
+}
+
+.amaranth-red-background {
+  background-color: #cf2233 !important;
+}
+
+.violet-background {
+  background-color: #4f2683 !important;
+}
+
+.red-background {
+  background-color: #DB2828 !important;
+}
+
+.blue-background {
+  background-color: #2185D0 !important;
+}
+
+.navy-background {
+  background-color: #1a2f5f !important;
+}
+
+.tan-background {
+  background-color: #d3bc8d !important;
+}
+
+.midnight-green-background {
+  background-color: #004c54 !important;
+}
+
+.gold-background {
+  background-color: #ffb612 !important;
+}
+
+.lime-green-background {
+  background-color: #69be28 !important;
+}
+
+.grey-background {
+  background-color: #767676 !important;
+}
+
+.olive-background {
+  background-color: #B5CC18 !important;
+}
+
+.green-background {
+  background-color: #027202 !important;
+}
+
+.yellow-background {
+  background-color: #FBBD08 !important;
+}
+
+.purple-background {
+  background-color: #A333C8 !important;
+}
+
+/*# sourceMappingURL=light.css.map */

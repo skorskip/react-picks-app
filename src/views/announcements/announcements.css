@@ -11,14 +11,14 @@
     font-size: 1em;
 }
 
-.card {
+.announcement-card {
     padding: 2px;
 	border-radius: 1em;
     margin: 10px;
     border: 1px solid;
 }
 
-.content {
+.announcement-content {
     padding: 15px;
 }
 
@@ -32,6 +32,11 @@
 	height: 250px;
 	margin-top:20%;
 	padding: 10px;
+}
+
+.no-messages-content {
+    opacity: .4;
+    padding: 10px;
 }
 
 @media only screen and (min-width: 650px) {

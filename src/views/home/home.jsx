@@ -26,11 +26,7 @@ export const Home = () => {
     }, []);
     
     if(token === status.IDLE || user === status.IDLE || location.pathname === "/login") {
-        return (
-            <>
-                <Login />
-            </>
-        )
+        return (<Login />)
     }
 
     const switchContent = (

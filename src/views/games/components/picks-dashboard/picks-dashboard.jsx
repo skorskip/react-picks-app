@@ -72,8 +72,8 @@ export const PicksDashboard = () => {
     }
 
     const noPicks = pickIds.length === 0 && (
-        <div className="no-games-set secondary-color">
-            <div className="no-games-set-content">No picks made</div>
+        <div className="no-picks-set secondary-color">
+            <div className="no-picks-set-content">No picks made</div>
             <br></br>
             <div className="secondary-color empty-icon">
                 👈

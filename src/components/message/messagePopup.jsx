@@ -4,7 +4,7 @@ import { Message } from 'semantic-ui-react';
 import { status } from '../../configs/status';
 import './messagePopup.css';
 
-export const MessagePopup = ({}) => {
+export const MessagePopup = () => {
     const [type, setType] = useState("");
     const [message, setMessage] = useState("");
     const [showMessage, setShowMessage] = useState(false);

@@ -22,7 +22,6 @@ export const login = async (username, password) => {
     } catch(error) {
         console.error(error);
         return {error: AmplifyEnum.inValidUser}
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.LOGIN_ERROR});
     }
 };
 

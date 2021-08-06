@@ -41,7 +41,7 @@ export const Announcements = () => {
         return (
             <div className="announcement-card base-background tiertary-color">
                 <div className="date-title tiertary-color">
-                    <span className="date-text primary-color">
+                    <span className="announcement-date-text primary-color">
                         { formatDate(new Date(message.date)) }
                     </span>
                 </div>

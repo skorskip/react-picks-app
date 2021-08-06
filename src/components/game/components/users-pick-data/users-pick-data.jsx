@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Icon, Label, Segment } from 'semantic-ui-react';
+import { Button, Icon, Label } from 'semantic-ui-react';
 import { selectUserPickDataByGame } from '../../../../controller/user-pick-data/userPickDataSlice';
 import { GameStatusEnum } from '../../../../model/game/game';
 import { publish, SHOW_MODAL } from '../../../../utils/pubSub';

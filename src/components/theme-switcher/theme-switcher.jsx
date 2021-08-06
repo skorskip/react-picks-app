@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { of } from 'rxjs';
 import { SET_THEME } from '../../configs/topics';
 import { Subscriber } from '../../utils/pubSub';
 

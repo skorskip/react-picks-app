@@ -48,6 +48,7 @@ export const Login = () => {
             resetPassword(formData.username, formData.password, formData.code).then((result) => {
                 setLoader(false);
                 setToken();
+                setForgotPasswordForm(false);
             });
         }
     }
@@ -58,6 +59,7 @@ export const Login = () => {
             createPassword(formData.username, formData.password, formData.newPassword).then((result) => {
                 setLoader(false);
                 setToken();
+                setCompleteLoginForm(false);
             });
         }
     }
@@ -203,7 +205,7 @@ export const Login = () => {
             dispatch(fetchUser(username, password));
             history.push("/");
         }
-    }, [tokenState, username, password, dispatch]);
+    }, [tokenState, username, password, dispatch, history]);
 
     return (
         <div className="loginContainer">
@@ -211,7 +213,7 @@ export const Login = () => {
                 <div>
                     <PickLogo sizeParam="'m'"></PickLogo>
                 </div>
-                <div className="loginTitle">
+                <div className="loginTitle secondary-color">
                     {title}
                 </div>
                 { forgotPasswordForm && 
@@ -237,9 +239,9 @@ export const Login = () => {
                     }
                 </Form>
                 <br></br>
-                <p className="forgot-password-link secondary-color">
+                <div className="forgot-password-link secondary-color">
                     Forgot Password? &nbsp;<div className="link" onClick={showForgotPassword}>Reset here.</div>
-                </p>
+                </div>
             </div>
         </div>  
     );

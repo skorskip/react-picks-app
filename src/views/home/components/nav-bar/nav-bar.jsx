@@ -56,7 +56,7 @@ export const NavBar = () => {
             const params = { lastCheckDate: localStorage.getItem("announcementCheck") }
             dispatch(fetchAnnouncements(params));
         }
-    }, [announcementsStatus, userState, dispatch]);
+    }, [announcementsStatus, userState, dispatch, leagueState]);
 
     useEffect(() => {
         if(messagesSelect.announcements > 0) {

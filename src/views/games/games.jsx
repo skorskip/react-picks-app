@@ -49,10 +49,10 @@ export const Games = ({routes}) => {
     const spectatorView = (user.type !== UserTypeEnum.PARTICIPANT) && (
         <div className="header-container">
             <div className="spectator-container warn-background">
-                <div class="base-color spectator-icon">
+                <div className="base-color spectator-icon">
                     <Icon name="binoculars" />
                 </div>
-                <span class="base-color">
+                <span className="base-color">
                     Spectator Mode
                 </span>
             </div>
@@ -95,16 +95,12 @@ export const Games = ({routes}) => {
                 dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
             }
         }
-    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user])
+    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user, other])
 
     useEffect(() => {
         const shouldRefresh = () => {
             if(season && week && seasonType) {
-                if(parseInt(week) === parseInt(currWeek)) {
-                    if(parseInt(setWeek) !== parseInt(currWeek)) {
-                        return true;
-                    } else return false;
-                } else return true;
+                return parseInt(week) !== parseInt(setWeek);
             } else {
                 return false;
             }
@@ -117,7 +113,7 @@ export const Games = ({routes}) => {
                 dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
             }
         }
-    }, [dispatch, user, season, week, seasonType, view])
+    }, [dispatch, user, season, week, seasonType, view, currWeek, other, setWeek])
 
     return (
         <>

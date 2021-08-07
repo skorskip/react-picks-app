@@ -26,7 +26,7 @@ export const NavBar = () => {
     }
 
     const goToChat = () => {
-        let url = `https://slack.com/app_redirect?channel=${messageSource.chatChannel}`;
+        let url = `https://picks-league.slack.com/channels/${messageSource.chatChannel}`;
         window.open(url, '_blank');
     }
 
@@ -72,11 +72,11 @@ export const NavBar = () => {
                 </div>
             </div>
             <div className="button-group">
-                <div className="logo-container">
-                    <div onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
-                        <PickLogo sizeParam='xs'/>
+                <Button icon basic className="nav-button" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
+                    <div className={getIconClass("games")}>
+                        <Icon size='large' name='football ball'/>
                     </div>
-                </div>
+                </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
                     <div className={getIconClass("standings")}>
                         <Icon size='large' name='list'/>
@@ -95,7 +95,7 @@ export const NavBar = () => {
                 </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/profile")}>
                     <div className={getIconClass("profile")}>
-                        <Icon size='large' name='address card outline' />
+                        <Icon size='large' name='user' />
                     </div>
                 </Button>
             </div>

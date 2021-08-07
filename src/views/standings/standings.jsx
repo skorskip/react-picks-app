@@ -37,18 +37,6 @@ export const Standings = () => {
                         👑
                     </div>
                 )
-            case 2:
-                return (
-                    <div className="leader-icon">
-                        💰
-                    </div>
-                )
-            case 3:
-                return (
-                    <div className="leader-icon">
-                        🤑
-                    </div>
-                )
             default:
                 return (
                     <div className="rank-font">

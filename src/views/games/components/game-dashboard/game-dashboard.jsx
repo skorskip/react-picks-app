@@ -5,7 +5,7 @@ import { addPicks, selectPicksGamesIds } from '../../../../controller/picks/pick
 import { selectGameIds } from '../../../../controller/games/gamesSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { GameDashboardWrapper } from './game-dashboard-wrapper';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { selectUserPickLimit, fetchUserPickLimit } from '../../../../controller/user-pick-limit/userPickLimitSlice';
 import { userStandingById, fetchUserStandings } from '../../../../controller/user-standings/userStandingsSlice';
@@ -127,7 +127,7 @@ export const GameDashboard = () => {
             { games }
             <div className={getSubmitClass()}>
                 <Button className="primary-background base-color submit-button" onClick={submitPicks}>
-                    👍&nbsp;&nbsp;&nbsp;Submit ({stagedCount})
+                    <Icon name='send'/> Submit ({stagedCount})
                 </Button>
             </div>
         </div>

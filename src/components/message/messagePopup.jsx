@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { SHOW_MESSAGE, Subscriber, publish } from '../../utils/pubSub';
-import { Message } from 'semantic-ui-react';
+import { Message, Icon } from 'semantic-ui-react';
 import { status } from '../../configs/status';
 import './messagePopup.css';
 
@@ -26,11 +26,11 @@ export const MessagePopup = () => {
     const messageDisplay = (showMessage) && (
         type === status.ERROR ? (
             <Message negative className="message-content base-background">
-                🤕 &nbsp; <div className="secondary-color">{message}</div>
+                <Icon name='times'/><div className="secondary-color">{message}</div>
             </Message>
         ) : (
             <Message success className="message-content base-background">
-                👌 &nbsp; <div className="secondary-color">{message}</div>
+                <Icon name='thumbs up'/><div className="secondary-color">{message}</div>
             </Message>
         ) 
     );

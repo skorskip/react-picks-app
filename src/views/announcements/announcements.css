@@ -8,18 +8,24 @@
 }
 
 .announcement-date-text {
-    font-size: 1.5em;
+    font-size: 1.4em;
 }
 
 .announcement-card {
     padding: 2px;
-	border-radius: .5em;
     margin: 10px;
-    border: 1px solid;
 }
 
 .announcement-content {
-    padding: 15px;
+    text-align: left;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
+
+.announcement-container {
+    padding: 10px;
 }
 
 .no-messages-set {

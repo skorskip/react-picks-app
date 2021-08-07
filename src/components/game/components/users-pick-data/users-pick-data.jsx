@@ -41,23 +41,41 @@ export const UsersPickData = ({ game }) => {
         }
     }
 
+    const getIconColor = (teamType) => {
+        if(game.game_status === GameStatusEnum.completed) {
+            if(game.winning_team_id === null) {
+                return "accent";
+            } else if(teamType === 'away' && game.winning_team_id === game.away_team_id) {
+                return "base-color"
+            } else if(teamType === 'home' && game.winning_team_id === game.home_team_id) {
+                return "base-color"
+            } else {
+                return "accent";
+            }
+        } else {
+            return "accent";
+        }
+        
+    }
+
     const picksDataButton = (
         <div className={containerClass()}>
             <div className={groupClass()}>
                 <div className="floating-users-pick-button" onClick={picksDataClick}>
                     <div className="user-pick-label-container">
-                        <Label className="base-background tiertary-color user-pick-label">
-                            <Icon name='thumbs up' className="accent"/>
-                            <div className="accent">{awayPicks.length}</div>
-                        </Label>
+                        <div className="tiertary-color user-pick-label">
+                            <div className={getIconColor('away')  + " user-pick-font" }>{awayPicks.length}</div>
+                            <Icon name='user' className={getIconColor('away')}/>
+
+                        </div>
                     </div>
                 </div>
                 <div className="floating-users-pick-button" onClick={picksDataClick}>
                     <div className="user-pick-label-container">
-                        <Label className="base-background tiertary-color user-pick-label">
-                            <Icon name='thumbs up' className="accent"/>
-                            <div className="accent">{homePicks.length}</div>
-                        </Label>
+                        <div className="tiertary-color user-pick-label">
+                            <div className={getIconColor('home')  + " user-pick-font"}>{homePicks.length}</div>
+                            <Icon name='user' className={getIconColor('home')}/>
+                        </div>
                     </div>
                 </div>
             </div>

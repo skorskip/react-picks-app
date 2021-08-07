@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Progress } from 'semantic-ui-react'
+import { Progress, Icon } from 'semantic-ui-react'
 import { userStandingById, fetchUserStandings } from '../../controller/user-standings/userStandingsSlice';
 import { selectUserPickLimit, fetchUserPickLimit } from '../../controller/user-pick-limit/userPickLimitSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
@@ -48,11 +48,17 @@ export const UserStats = () => {
     const pickStatInfo = (userStandingsState === status.COMPLETE) && (
         <div className="picks-stat-card-group">
             <div className="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">#️⃣&nbsp;{ userStandings?.ranking }</div>
+                <div className='secondary-color pick-stat-icon'>
+                    <Icon name='hashtag' size='large' />
+                    <div className="large-font">{ userStandings?.ranking }</div>
+                </div>
                 <div className="secondary-color stat-title">rank</div>
             </div>
             <div className="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">🎉&nbsp;{ userStandings?.wins }</div>
+                <div className='secondary-color pick-stat-icon'>
+                    <Icon name='trophy' size='large' />
+                    <div className="large-font">{ userStandings?.wins }</div>
+                </div>
                 <div className="secondary-color stat-title">wins</div>
             </div>
             <div className="pick-stat-card tiertary-color">

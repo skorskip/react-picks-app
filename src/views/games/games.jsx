@@ -27,10 +27,10 @@ export const Games = ({routes}) => {
     const dispatch = useDispatch();
 
     let location = useLocation();
-    let { search } = useLocation();
-    const query = new URLSearchParams(search);
     const animationTime = { enter: 200, exit: 200};
     let { view } = useParams();
+    let { search } = useLocation();
+    const query = new URLSearchParams(search);
     const season = query.get("season")
     const week = query.get("week")
     const seasonType = query.get("seasonType")

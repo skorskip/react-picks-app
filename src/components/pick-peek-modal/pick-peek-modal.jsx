@@ -8,7 +8,7 @@ import { fetchPicksForUser } from '../../controller/picks-for-user/picksForUserS
 import { SHOW_MODAL, Subscriber, publish } from '../../utils/pubSub';
 import "./pick-peek-modal.css";
 import { GameLoader } from '../game-loader/game-loader';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { status } from '../../configs/status';
 
 export const PickPeekModal = () => {
@@ -21,6 +21,11 @@ export const PickPeekModal = () => {
     const [userData, setUserData] = useState({user_id: '', first_name: '', last_name: '', user_inits: ''});
     const dispatch = useDispatch();
     const history = useHistory();
+    let { search } = useLocation();
+    const query = new URLSearchParams(search);
+    const season = query.get("season") === null ? league.currentSeason : query.get("season");
+    const week = query.get("week") === null ? league.currentWeek : query.get("week")
+    const seasonType = query.get("seasonType") === null ? league.currentSeasonType : query.get("seasonType");
 
     const showModalSub = (data) => {
         setShowModal(data !== null);
@@ -35,16 +40,16 @@ export const PickPeekModal = () => {
     }
 
     const viewPicks = () => {
-        history.push(`/games/others?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}&user=${userData.user_id}`);
+        history.push(`/games/others?season=${season}&seasonType=${seasonType}&week=${week}&user=${userData.user_id}`);
         closeClick();
     }
 
     const modalHeader = (
-        <div className="modal-header primary-background" onClick={() => closeClick()}>
-            <div className="close-modal-icon base-color">
+        <div className="modal-header tiertary-background" onClick={() => closeClick()}>
+            <div className="close-modal-icon secondary-color">
                 <Icon name="times"/>
             </div>
-            <div className="base-color week-title">Week {league.currentWeek} Picks</div>
+            <div className="secondary-color week-modal-title"><b>Week {week} Picks</b></div>
         </div>
     );
 
@@ -86,9 +91,10 @@ export const PickPeekModal = () => {
                         locked={false}
                         size="medium"
                         highlight={pick.awayTeam.team_id === pick.pick.team_id}
+                        disabled={true}
                     />
                     <div className="quaternary-background game-icon-container">
-                        <div className="secondary-color game-icon">
+                        <div className="tiertary-color game-icon">
                             @
                         </div>
                     </div>
@@ -97,6 +103,7 @@ export const PickPeekModal = () => {
                         locked={false}
                         size="medium"
                         highlight={pick.homeTeam.team_id === pick.pick.team_id}
+                        disabled={true}
                     />
                 </div>
             </div>
@@ -126,7 +133,7 @@ export const PickPeekModal = () => {
 
     useEffect(() => {
         if(leagueState === status.COMPLETE && userData.user_id !== "") {
-            dispatch(fetchPicksForUser({userId: userData.user_id, season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
+            dispatch(fetchPicksForUser({userId: userData.user_id, season: season, seasonType: seasonType, week: week}));
         }
     }, [userData.user_id, leagueState, league, dispatch]);
 

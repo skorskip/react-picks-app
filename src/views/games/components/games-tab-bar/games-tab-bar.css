@@ -43,6 +43,10 @@
 	align-items: center;
 }
 
+.game-toggle-icon {
+	margin: 0px !important;
+}
+
 @media only screen and (min-width: 650px) {
 	.toggle-picks-container {
 		top: 60px;

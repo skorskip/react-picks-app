@@ -10,7 +10,13 @@ const initialState = tokenAdapter.getInitialState({
 });
 
 export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
-    return AmplifyAuth.FetchCurrentSession();
+    try {
+        return AmplifyAuth.FetchCurrentSession();
+    } catch(error) {
+        console.error(error);
+        return {status: status.ERROR, message: error}
+    }
+
 });
 
 const tokenSlice = createSlice({
@@ -19,7 +25,7 @@ const tokenSlice = createSlice({
     extraReducers : (builder) => {
         builder
             .addCase(fetchToken.fulfilled, (state, action) => {
-                if(action.payload !== null) {
+                if(action.payload?.status !== status.ERROR) {
                     state.token = action.payload
                     state.status = status.COMPLETE;
                 } else {

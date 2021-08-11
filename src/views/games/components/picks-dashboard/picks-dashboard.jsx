@@ -6,6 +6,7 @@ import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, Subscriber, publish } from '../../../../utils/pubSub';
 import { status } from '../../../../configs/status';
+import { Icon } from 'semantic-ui-react';
 
 export const PicksDashboard = () => {
 
@@ -72,11 +73,11 @@ export const PicksDashboard = () => {
     }
 
     const noPicks = pickIds.length === 0 && (
-        <div className="no-games-set secondary-color">
-            <div className="no-games-set-content">No picks made</div>
+        <div className="no-picks-set secondary-color">
+            <div className="no-picks-set-content">No picks made</div>
             <br></br>
             <div className="secondary-color empty-icon">
-                👈
+                <Icon name='hand point left'/>
             </div>
         </div>
     );

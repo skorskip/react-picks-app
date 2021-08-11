@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Progress } from 'semantic-ui-react'
+import { Progress, Icon } from 'semantic-ui-react'
 import { userStandingById, fetchUserStandings } from '../../controller/user-standings/userStandingsSlice';
 import { selectUserPickLimit, fetchUserPickLimit } from '../../controller/user-pick-limit/userPickLimitSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
@@ -19,6 +19,8 @@ export const UserStats = () => {
     const pickLimitState = useSelector((state) => state.userPickLimit.status);
     const userStandings = useSelector((state) => userStandingById(state, user?.user_id));
     const userStandingsState = useSelector((state) => state.userStandings.status);
+    const pickCount = parseInt(userStandings?.picks) || 0;
+    const pendingCount = parseInt(userStandings?.pending_picks) || 0;
 
     const picksStatLoading = (userStandingsState === status.LOADING) && (
         <>
@@ -39,24 +41,30 @@ export const UserStats = () => {
         <div className="pick-progress-group">
             <div className="pick-progress-numbers">
                 <div>Pick Count</div>
-                <div className="medium-font">{ userStandings?.picks + userStandings?.pending_picks } / { pickLimit?.max_picks }</div>
+                <div className="medium-font">{ pendingCount + pickCount } / { pickLimit?.max_picks }</div>
             </div>
-            <Progress className="progress-bar-stat" percent={ (parseInt(userStandings?.picks + userStandings?.pending_picks) / parseInt(pickLimit?.max_picks )) * 100 } />
+            <Progress className="progress-bar-stat" percent={ ((pendingCount + pickCount) / parseInt(pickLimit?.max_picks )) * 100 } />
         </div>
     );
 
     const pickStatInfo = (userStandingsState === status.COMPLETE) && (
         <div className="picks-stat-card-group">
             <div className="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">#️⃣&nbsp;{ userStandings?.ranking }</div>
+                <div className='secondary-color pick-stat-icon'>
+                    <Icon name='hashtag' size='large' />
+                    <div className="large-font">{ userStandings?.ranking || 0}</div>
+                </div>
                 <div className="secondary-color stat-title">rank</div>
             </div>
             <div className="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">🎉&nbsp;{ userStandings?.wins }</div>
+                <div className='secondary-color pick-stat-icon'>
+                    <Icon name='trophy' size='large' />
+                    <div className="large-font">{ userStandings?.wins }</div>
+                </div>
                 <div className="secondary-color stat-title">wins</div>
             </div>
             <div className="pick-stat-card tiertary-color">
-                <div className="large-font secondary-color">{ parseFloat(userStandings?.win_pct).toFixed(2) }</div>
+                <div className="large-font secondary-color">{ parseFloat(userStandings?.win_pct || 0).toFixed(2) }</div>
                 <div className="secondary-color stat-title">win %</div>
             </div>
         </div>

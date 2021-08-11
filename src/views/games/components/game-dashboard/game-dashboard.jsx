@@ -5,7 +5,7 @@ import { addPicks, selectPicksGamesIds } from '../../../../controller/picks/pick
 import { selectGameIds } from '../../../../controller/games/gamesSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { GameDashboardWrapper } from './game-dashboard-wrapper';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { selectUserPickLimit, fetchUserPickLimit } from '../../../../controller/user-pick-limit/userPickLimitSlice';
 import { userStandingById, fetchUserStandings } from '../../../../controller/user-standings/userStandingsSlice';
@@ -59,7 +59,10 @@ export const GameDashboard = () => {
 
     const submitPicks = () => {
         let stagedPicksList = Object.values(stagedPicks);
-        let totalPicks = parseInt(stagedPicksList.length) + parseInt(userStandings.pending_picks) + parseInt(userStandings.picks);
+        let totalPicks = parseInt(stagedPicksList.length) + 
+            parseInt(userStandings?.pending_picks || 0) + 
+            parseInt(userStandings?.picks || 0);
+        
         if(stagedPicksList.length === 0) {
             alert("Going to need more than that!")
         } else if(stagedPicksList.find((staged) => new Date(staged.pick_submit_by_date) < new Date())) {
@@ -127,7 +130,7 @@ export const GameDashboard = () => {
             { games }
             <div className={getSubmitClass()}>
                 <Button className="primary-background base-color submit-button" onClick={submitPicks}>
-                    👍&nbsp;&nbsp;&nbsp;Submit ({stagedCount})
+                    <Icon name='send'/> Submit ({stagedCount})
                 </Button>
             </div>
         </div>

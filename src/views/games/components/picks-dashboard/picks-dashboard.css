@@ -15,7 +15,7 @@
 	margin-bottom: 5px;
 }
 
-.no-games-set {
+.no-picks-set {
 	font-size: 2em;
 	display: flex;
 	flex-direction: column;
@@ -27,13 +27,13 @@
 	padding: 10px;
 }
 
-.no-games-set-content {
+.no-picks-set-content {
 	opacity: .4;
 }
 
 .empty-icon {
 	padding: 15px;
-	font-size: 300%;
+	font-size: 200%;
 }
 
 @media only screen and (min-width: 650px) {

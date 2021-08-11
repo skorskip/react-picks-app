@@ -17,7 +17,7 @@ export const PickStatus = ({ submitTime, pickSuccess, gameStatus }) => {
                     return <Icon className="pick-status-icon tiertary-color" name="at" size="big"/>;
                 } 
                 else if(gameStatus === GameStatusEnum.completed) {
-                    return <Icon className="pick-status-icon secondary-color" name="flag checkered" size="big"/>;
+                    return <Icon className="pick-status-icon tiertary-color" name="flag checkered" size="big"/>;
                 } else {
                     return <Icon className="pick-status-icon warn-color" name="lock" size="big"/>;
                 }

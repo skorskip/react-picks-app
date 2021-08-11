@@ -9,7 +9,7 @@ import { status } from '../../../../configs/status';
 import "./others-dashboard.css";
 import { Icon } from "semantic-ui-react";
 
-export const OthersDashboard = ({}) => {
+export const OthersDashboard = () => {
     const dispatch = useDispatch();
     let { search } = useLocation();
     const history = useHistory();

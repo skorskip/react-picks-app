@@ -92,7 +92,7 @@ export const Profile = () => {
                     </div>
                     <div className="change-password-button-container">
                         <Button className="change-password-button secondary-color tiertary-light-background" onClick={changePassword}>
-                            Change password
+                            Reset password
                         </Button>
                     </div>
                 </div>

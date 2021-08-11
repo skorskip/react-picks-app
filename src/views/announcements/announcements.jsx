@@ -41,17 +41,17 @@ export const Announcements = () => {
         return (
             <div className="announcement-card base-background tiertary-color">
                 <div className="date-title tiertary-color">
-                    <span className="date-text primary-color">
+                    <span className="announcement-date-text primary-color">
                         { formatDate(new Date(message.date)) }
                     </span>
                 </div>
-                <div className="announcement-content secondary-color">{ message.message }</div>
+                <div className="announcement-content secondary-color">{message.message}</div>
             </div>
         );
     });
 
     return (
-        <div className="announcement-content">
+        <div className="announcement-container">
             <div>
                 { messagesList }
             </div>

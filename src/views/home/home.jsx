@@ -13,6 +13,7 @@ import { status } from '../../configs/status';
 export const Home = () => {   
     const token = useSelector((state) => state.token.status);
     const user = useSelector((state) => state.user.status);
+    const league = useSelector((state) => state.league.status);
     const contextRef = createRef();
     const [width, setWidth] = useState(window.innerWidth);
     const location = useLocation();
@@ -25,7 +26,7 @@ export const Home = () => {
         return () => window.removeEventListener("resize", updateWidth);
     }, []);
     
-    if(token === status.IDLE || user === status.IDLE || location.pathname === "/login") {
+    if(token === status.IDLE || user === status.IDLE || league === status.IDLE || location.pathname === "/login") {
         return (<Login />)
     }
 
@@ -58,7 +59,7 @@ export const Home = () => {
     );
 
     const stickyStats = (location.pathname !== "/profile") && (location.pathname !== "/login") && (
-        <Sticky contextRef={contextRef}>
+        <Sticky contextref={contextRef}>
             <div className="home-side-content">
                 <div className="info-header-profile secondary-color">
                     Stats

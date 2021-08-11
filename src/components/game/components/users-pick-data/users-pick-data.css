@@ -106,10 +106,15 @@
 }
 
 .user-pick-label {
-	border: solid 1px !important;
 	display: flex !important;
 	flex-direction: row;
 	width: auto;
+	background-color: transparent !important;
+	margin: 5px;
+}
+
+.user-pick-font {
+	margin-right: 5px;
 }
 
 @media only screen and (min-width: 650px) {

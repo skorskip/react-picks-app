@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { selectPicksById } from '../../../../controller/picks/picksSlice';
 import { selectGamesById, selectTeamById } from '../../../../controller/games/gamesSlice';
 import { Game } from '../../../../components/game/game';
-import { Button, Icon } from 'semantic-ui-react';
 
 export const PicksDashboardWrapper = ({ 
     id, 

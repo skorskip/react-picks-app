@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import { publish, NAV_EDIT_BUTTON, NAV_DONE_BUTTON } from '../../../../utils/pubSub';
 import { useSelector } from 'react-redux';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
@@ -62,10 +62,10 @@ export const GamesTabBar = ({pickCount}) => {
         <div className="toggle-picks-container base-background">
             <div className="toggle-container tiertary-light-background">
                 <Button className={getButtonClass("game")} onClick={() => clickView("game")}>
-                    🏈 &nbsp;Games 
+                    <Icon name='football ball' className='game-toggle-icon'/>Games 
                 </Button>
                 <Button className={getButtonClass("pick")} onClick={() =>clickView("pick")}>
-                    👇 Picks ({pickCount})
+                    <Icon name='hand point down' className='game-toggle-icon'/> Picks ({pickCount})
                 </Button>
             </div>
             <div className="edit-button-container">

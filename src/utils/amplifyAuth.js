@@ -29,8 +29,6 @@ export default class AmplifyAuth {
             const response = await Auth.signIn({username: username, password: tempPassword});
             const { requiredAttributes } = response.challengeParam;
             await Auth.completeNewPassword(response, newPassword, requiredAttributes);
-            const signedInUser = await Auth.currentSession();
-            localStorage.setItem("token", signedInUser.getIdToken().getJwtToken());
             return {success: AmplifyEnum.success};
         } catch(error) {
             throw error;
@@ -40,8 +38,6 @@ export default class AmplifyAuth {
     static async ForgotPassword(username, password, code) {
         try {
             const response = await Auth.forgotPasswordSubmit(username, code, password);
-            const signedInUser = await Auth.currentSession();
-            localStorage.setItem("token", signedInUser.getIdToken().getJwtToken());
             return response;
         } catch(error) {
             throw error;

@@ -121,6 +121,19 @@ input:focus {
 	outline: none;
 }
 
+.no-standings-set {
+	font-size: 2em;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	height: 250px;
+	margin-top:20%;
+	padding: 10px;
+	opacity: .4;
+}
+
 @media only screen and (min-width: 650px) {
 	.standings-container {
         height: 100%;

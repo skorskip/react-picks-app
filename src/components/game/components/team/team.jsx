@@ -1,7 +1,16 @@
 import React from 'react';
 import './team.css'
 
-export const Team = ({ team, score, highlight, locked, disabled, fill, size, spread, onTeamSelected }) => {
+export const Team = ({ 
+    team, 
+    score, 
+    highlight, 
+    locked, 
+    disabled, 
+    fill, 
+    size, 
+    spread, 
+    onTeamSelected }) => {
 
     const getClass = (context) => {
         switch(context) {
@@ -59,7 +68,7 @@ export const Team = ({ team, score, highlight, locked, disabled, fill, size, spr
         </div>
     );
 
-    const spreadIcon = (spread != null) && (
+    const spreadIcon = (spread != null && spread !== 0) && (
         <div className="game-card-spread tiertary-color base-background">
             <div className="game-card-spread-icon accent base-background">
                 <b>

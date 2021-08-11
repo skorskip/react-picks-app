@@ -10,7 +10,7 @@ export const MessagePopup = () => {
     const [showMessage, setShowMessage] = useState(false);
     
     const showMessageSub = (data) => {
-        if(data !== null && data.message !== "") {
+        if(data != null && data.message !== "" && data.message != null) {
             setType(data.type);
             setMessage(data.message);
             setShowMessage(true);

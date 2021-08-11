@@ -59,7 +59,10 @@ export const GameDashboard = () => {
 
     const submitPicks = () => {
         let stagedPicksList = Object.values(stagedPicks);
-        let totalPicks = parseInt(stagedPicksList.length) + parseInt(userStandings.pending_picks) + parseInt(userStandings.picks);
+        let totalPicks = parseInt(stagedPicksList.length) + 
+            parseInt(userStandings?.pending_picks || 0) + 
+            parseInt(userStandings?.picks || 0);
+        
         if(stagedPicksList.length === 0) {
             alert("Going to need more than that!")
         } else if(stagedPicksList.find((staged) => new Date(staged.pick_submit_by_date) < new Date())) {

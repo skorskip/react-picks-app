@@ -91,6 +91,12 @@ export const Standings = () => {
         )
     }
 
+    const noStandings = (standings.length === 0) && (
+        <div className="no-standings-set">
+            No standings yet
+        </div>
+    )
+
     const standingCards = (standingsStatus === status.COMPLETE) && standings.map((standing) => {
         return (
             <div className={getCardClass(standing.user_id)} onClick={() => viewModal(standing)}>
@@ -116,6 +122,7 @@ export const Standings = () => {
     return (
         <>
             <div className="standings-container">
+                { noStandings }
                 { standingCardsLoading }
                 { standingCards }
             </div>

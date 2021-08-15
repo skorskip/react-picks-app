@@ -40,11 +40,10 @@ export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async 
 });
 
 export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
-    const url = pickUrl + '/create';
-    const response = await client.post(url, param.picks);
-
     try {
         var updated = [];
+        const url = pickUrl + '/create';
+        const response = await client.post(url, param.picks);
         param.picks.forEach((newPick, index) => {
             newPick.pick_id = parseInt(response.result) + index;
             updated.push(newPick);

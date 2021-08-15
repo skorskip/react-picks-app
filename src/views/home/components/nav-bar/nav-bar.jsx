@@ -7,6 +7,8 @@ import { selectMessageSource,selectLeague } from '../../../../controller/league/
 import { selectAnnouncements,fetchAnnouncements } from '../../../../controller/announcements/announcementsSlice';
 import './nav-bar.css';
 import { status } from '../../../../configs/status';
+import { client } from '../../../../utils/client';
+import { environment } from '../../../../configs/environment';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
@@ -19,6 +21,8 @@ export const NavBar = () => {
     const userState = useSelector((state) => state.user.status);
     const leagueState = useSelector((state) => state.league.status);
     const league = useSelector(selectLeague);
+    const [isActiveThread, setIsActiveThread] = useState(false);
+    const announcementsUrl = environment.messageServiceURL + 'message/active-thread';
     const dispatch = useDispatch();
     
     const getIconClass = (link) => {
@@ -48,6 +52,12 @@ export const NavBar = () => {
         localStorage.setItem("announcementCheck", new Date().toUTCString())
     }
 
+    const pulseNotify = (isActiveThread) && (
+        <div className="circle-notify-container">
+            <div className="circle-notify pulse secondary-background"></div>
+        </div>
+    )
+
     useEffect(() => {
         if(userState === status.COMPLETE && 
             announcementsStatus === status.IDLE && 
@@ -64,6 +74,22 @@ export const NavBar = () => {
         }
     }, [messagesSelect]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {   
+                var response = await client.post(announcementsUrl, {lastCheckDate: localStorage.getItem('liveThreadCheck')});
+                setIsActiveThread(response);
+                localStorage.setItem('liveThreadCheck', new Date().toUTCString());
+            } catch(error) {
+                console.error(error);
+            }
+        }
+
+        if(userState === status.COMPLETE && leagueState === status.COMPLETE ) {
+            fetchData();
+        }
+    }, [userState, leagueState, announcementsUrl])
+
     return (
         <div className="base-background nav-container">
             <div className="logo-container-large">
@@ -74,7 +100,7 @@ export const NavBar = () => {
             <div className="button-group">
                 <Button icon basic className="nav-button" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
                     <div className={getIconClass("games")}>
-                        <Icon size='large' name='football ball'/>
+                        <Icon size='large' name='football ball' className="nav-icon"/>
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
@@ -84,18 +110,19 @@ export const NavBar = () => {
                 </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/announcements")}>
                     <div className={getIconClass("announcements")}>
-                        <Icon size='large' name='bullhorn'/>
+                        <Icon size='large' name='bullhorn' className="nav-icon"/>
                         { messageNotif }
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={goToChat}>
                     <div className="secondary-color" >
-                        <Icon size='large' name='comments'/>
+                        <Icon size='large' name='comments' className="nav-icon"/>
                     </div>
+                    { pulseNotify }
                 </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/profile")}>
                     <div className={getIconClass("profile")}>
-                        <Icon size='large' name='user' />
+                        <Icon size='large' name='user' className="nav-icon"/>
                     </div>
                 </Button>
             </div>

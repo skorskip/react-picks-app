@@ -25,6 +25,88 @@
     display: none;
 }
 
+.nav-icon {
+    z-index: 2;
+}
+
+.circle-notify-container {
+    position: absolute;
+    z-index: 1;
+    padding-left: 5%;
+    margin-top: -15px;
+}
+
+.circle-notify {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.pulse {
+    animation: heart-pulse 8s;
+}
+
+
+@keyframes heart-pulse {
+    0% {
+      transform: scale(1); /* scaling to 0 */
+      opacity: .5;
+    }
+    15% {
+        transform: scale(6); /* increasing the size */
+        opacity: 0;
+    }
+    25% {
+      transform: scale(1); /* increasing the size */
+      opacity: 0;
+    }
+    26% {
+        transform: scale(1); /* increasing the size */
+        opacity: .5;
+      }
+    35% {
+        transform: scale(6); /* increasing the size */
+        opacity: 0;
+      }
+    45% {
+      transform: scale(1); /* decreasing the size */
+      opacity: 0;
+    }
+    46% {
+        transform: scale(1); /* decreasing the size */
+        opacity: .5;
+      }
+    55% {
+        transform: scale(6); /* increasing the size */
+        opacity: 0;
+      }
+    65% {
+        transform: scale(1); /* decreasing the size */
+        opacity: 0;
+    }
+    66% {
+        transform: scale(1); /* decreasing the size */
+        opacity: .5;
+    }
+    75% {
+        transform: scale(6); /* decreasing the size */
+        opacity: 0;
+    }
+    85% {
+        transform: scale(1); /* decreasing the size */
+        opacity: 0;
+    }
+    86% {
+        transform: scale(1); /* decreasing the size */
+        opacity: .5;
+    }
+    100% {
+        transform: scale(6); /* decreasing the size */
+        opacity: 0;
+    }
+  }
+
 @media only screen and (min-width: 650px) {
 	.nav-container {
         top: 0;
@@ -42,6 +124,10 @@
 
     .logo-container-large {
         display: flex;
+    }
+
+    .circle-notify-container {
+        padding-left: 30px;
     }
 }
 

@@ -37,6 +37,7 @@ export const GameDashboard = () => {
     const initialStaged = JSON.parse(localStorage.getItem("stagedPicks"));
     const [stagedPicks, setStagedPicks] = useState(initialStaged !== null ? initialStaged : {});
     const [stagedCount, setStagedCount] = useState(initialStaged === null ? 0 : Object.keys(initialStaged).length);
+    const [safetyStage, setSafteyStage] = useState({});
 
     const teamSelected = (event) => {
         let updated = stagedPicks;
@@ -68,6 +69,7 @@ export const GameDashboard = () => {
         } else if(stagedPicksList.find((staged) => new Date(staged.pick_submit_by_date) < new Date())) {
             alert("Can't Submit Passed the Deadline")
         } else if(totalPicks <= parseInt(pickLimit.max_picks)) {
+            setSafteyStage(stagedPicks);
             setStagedPicks({});
             setStagedCount(0);
             localStorage.setItem("stagedPicks", null);
@@ -119,6 +121,14 @@ export const GameDashboard = () => {
             setStagedPicks({});
         }
     },[]);
+
+    useEffect(() => {
+        if(pickLoader === status.ERROR) {
+            setStagedCount(Object.values(safetyStage).length);
+            setStagedPicks(safetyStage);
+            localStorage.setItem("stagedPicks", safetyStage);
+        }
+    },[pickLoader, safetyStage]);
 
     if(gameLoader === status.LOADING || gamesIds === undefined || pickLoader === status.LOADING) {
         return (<GameLoader height="110" count="8"/>)

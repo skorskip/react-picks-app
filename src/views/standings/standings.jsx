@@ -92,7 +92,7 @@ export const Standings = () => {
     }
 
     const noStandings = (standings.length === 0) && (
-        <div className="no-standings-set">
+        <div className="no-standings-set secondary-color">
             No standings yet
         </div>
     )

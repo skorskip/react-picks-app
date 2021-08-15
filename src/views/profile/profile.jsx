@@ -73,7 +73,7 @@ export const Profile = () => {
                 </div>
                 <div className="info-content">
                     <div className="info-field">
-                        <div className="icon-container primary-color">
+                        <div className="profile-icon-container primary-color">
                             <div className="primary-color">
                                 <Icon name="user"/>
                             </div>
@@ -83,7 +83,7 @@ export const Profile = () => {
                         </div>
                     </div>
                     <div className="info-field">
-                        <div className="icon-container primary-color">
+                        <div className="profile-icon-container primary-color">
                             <Icon name="mail"/>
                         </div>
                         <div className="field">

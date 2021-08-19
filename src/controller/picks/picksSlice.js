@@ -1,10 +1,8 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
-
-const pickUrl = environment.picksServiceURL + 'picks';
 
 const picksAdapter = createEntityAdapter();
 
@@ -16,7 +14,7 @@ const initialState = picksAdapter.getInitialState({
 
 export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) => {
     try {
-        const url = `${pickUrl}/week?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`;
+        const url = `${endpoints.PICKS.BY_WEEK}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`;
         const response = await client.post(url, param.user);
         return {week: param.week, response: response};
     } catch(error) {
@@ -29,7 +27,7 @@ export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) =>
 
 export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async (param) => {
     try {
-        const url = `${pickUrl}/others?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}&user=${param.user}`;
+        const url = `${endpoints.PICKS.OTHERS_BY_WEEK}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}&user=${param.user}`;
         const response = await client.get(url);
         return {week: param.week, response: response};
     } catch(error) {
@@ -42,7 +40,7 @@ export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async 
 export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
     try {
         var updated = [];
-        const url = pickUrl + '/create';
+        const url = endpoints.PICKS.ADD;
         const response = await client.post(url, param.picks);
         param.picks.forEach((newPick, index) => {
             newPick.pick_id = parseInt(response.result) + index;
@@ -59,7 +57,7 @@ export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
 
 export const updatePicks = createAsyncThunk('picks/updatePicks', async (param) => {
     for(const pick of param.picks) {
-        const url = pickUrl + '/' + pick.pick_id;
+        const url = endpoints.PICKS.BASE + pick.pick_id;
         try {
             await client.put(url, pick);
         } catch(error) {
@@ -74,7 +72,7 @@ export const updatePicks = createAsyncThunk('picks/updatePicks', async (param) =
 
 export const deletePicks = createAsyncThunk('picks/deletePicks', async (param) => {
     for(const pick_id of param.picks){
-        const url = pickUrl + '/' + pick_id;
+        const url = endpoints.PICKS.BASE + pick_id;
         try{
             await client.delete(url);
         } catch(error) {

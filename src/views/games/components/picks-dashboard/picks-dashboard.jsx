@@ -16,7 +16,7 @@ export const PicksDashboard = () => {
 
     const [updatePicksArray, setUpdatePicks] = useState([]);
     const [deletePicksArray, setDeletePicks] = useState([]); 
-    const [showDelete, setShowDelete] = useState(false);
+    const [inEditMode, setInEditMode] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -41,8 +41,8 @@ export const PicksDashboard = () => {
         }
     }   
 
-    const showDeleteButton = (show) => {
-        setShowDelete(show);
+    const editMode = (show) => {
+        setInEditMode(show);
         return null;
     }
 
@@ -90,7 +90,7 @@ export const PicksDashboard = () => {
                 previousId={pickIds[index - 1]}
                 index={index}
                 onTeamSelected={teamSelected}
-                showDelete={showDelete}
+                inEditMode={inEditMode}
                 onDelete={onDelete}
             />
         )
@@ -100,7 +100,7 @@ export const PicksDashboard = () => {
         <div className="games-container page">
             { noPicks }
             <Subscriber topic={NAV_EDIT_BUTTON}>
-                { data => (<>{showDeleteButton(data)}</>)}
+                { data => (<>{editMode(data)}</>)}
             </Subscriber>
             <Subscriber topic={NAV_DONE_BUTTON}>
                 { data => (<>{submitDelete(data)}</>) }

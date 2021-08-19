@@ -51,7 +51,14 @@ export const Game = ({
             submitBy: game.pick_submit_by_date
         }
 
-        if(event.team.team_id === awayTeam.team_id) {
+        if(editMode) {
+            setHighlightAway(!highlightAway);
+            setHighlightHome(!highlightHome);
+            if(!event.highlight) {
+                pickOpt.teamId = (event.team.team_id === awayTeam.team_id) ? homeTeam.team_id : awayTeam.team_id;
+                pickOpt.highlight = true;
+            }
+        } else if(event.team.team_id === awayTeam.team_id) {
             if(event.highlight) setHighlightHome(false);
             setHighlightAway(event.highlight)
         } else {
@@ -59,15 +66,6 @@ export const Game = ({
             setHighlightHome(event.highlight)
         }
 
-        if(editMode) {
-            setHighlightAway(highlightHome);
-            setHighlightHome(highlightAway);
-            if(!event.highlight) {
-                pickOpt.teamId = (event.team.team_id === awayTeam.team_id) ? homeTeam.team_id : awayTeam.team_id;
-                pickOpt.highlight = true;
-            }
-        }
-        
         onTeamSelected(pickOpt);
     }
 
@@ -141,15 +139,10 @@ export const Game = ({
     );
 
     useEffect(() => {
-        const highlightPicks = () => {
-            setHighlightAway(false);
-            setHighlightHome(false);
-            if(pick !== null && pick !== undefined) {
-                (game?.home_team_id === pick.team_id) ? setHighlightHome(true) : setHighlightAway(true)
-            }
-        };
-
-        highlightPicks();
+        if(pick != null && game != null) {
+            setHighlightHome(game.home_team_id === pick.team_id)
+            setHighlightAway(game.away_team_id === pick.team_id)
+        }
     }, [pick, game]);
 
     return (

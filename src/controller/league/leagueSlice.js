@@ -1,10 +1,9 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
-const leagueUrl = environment.leagueServiceURL + 'league';
 const leagueAdapter = createEntityAdapter();
 
 const initialState = leagueAdapter.getInitialState({
@@ -14,7 +13,7 @@ const initialState = leagueAdapter.getInitialState({
 
 export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
     try {
-        const url = `${leagueUrl}/settings`;
+        const url = endpoints.LEAGUE.SETTINGS;
         const response = await client.get(url);
         return response;
     } catch(error) {

@@ -12,6 +12,7 @@ import { userStandingById, fetchUserStandings } from '../../../../controller/use
 import { selectLeague } from '../../../../controller/league/leagueSlice';
 import './game-dashboard.css';
 import { status } from '../../../../configs/status';
+import {PicksPolicy } from '../../../../services/picksPolicy/picksPolicy'
 
 export const GameDashboard = () => {
     const dispatch = useDispatch();
@@ -59,25 +60,33 @@ export const GameDashboard = () => {
     }
 
     const submitPicks = () => {
+        PicksPolicy.submit(stagedPicks);
         let stagedPicksList = Object.values(stagedPicks);
-        let totalPicks = parseInt(stagedPicksList.length) + 
-            parseInt(userStandings?.pending_picks || 0) + 
-            parseInt(userStandings?.picks || 0);
+        // let totalPicks = parseInt(stagedPicksList.length) + 
+        //     parseInt(userStandings?.pending_picks || 0) + 
+        //     parseInt(userStandings?.picks || 0);
         
-        if(stagedPicksList.length === 0) {
-            alert("Going to need more than that!")
-        } else if(stagedPicksList.find((staged) => new Date(staged.pick_submit_by_date) < new Date())) {
-            alert("Can't Submit Passed the Deadline")
-        } else if(totalPicks <= parseInt(pickLimit.max_picks)) {
-            setSafteyStage(stagedPicks);
-            setStagedPicks({});
-            setStagedCount(0);
-            localStorage.setItem("stagedPicks", null);
-            dispatch(addPicks({ picks: stagedPicksList }));
-            history.push("/games/pick");
-        } else {
-            alert(`You got too many picks, ${totalPicks - pickLimit.max_picks} over ${pickLimit.max_picks}`)
-        }
+        // if(stagedPicksList.length === 0) {
+        //     alert("Going to need more than that!")
+        // } else if(stagedPicksList.find((staged) => new Date(staged.pick_submit_by_date) < new Date())) {
+        //     alert("Can't Submit Passed the Deadline")
+        // } else if(totalPicks >= parseInt(pickLimit.max_picks)) {
+        //     alert(`You got too many picks, ${totalPicks - pickLimit.max_picks} over ${pickLimit.max_picks}`)
+        // } else {
+        //     setSafteyStage(stagedPicks);
+        //     setStagedPicks({});
+        //     setStagedCount(0);
+        //     localStorage.setItem("stagedPicks", null);
+        //     dispatch(addPicks({ picks: stagedPicksList }));
+        //     history.push("/games/pick");
+        // }
+
+        setSafteyStage(stagedPicks);
+        setStagedPicks({});
+        setStagedCount(0);
+        localStorage.setItem("stagedPicks", null);
+        dispatch(addPicks({ picks: stagedPicksList }));
+        history.push("/games/pick");
     }
 
     const noGames = gamesIds.length === 0 && (
@@ -103,17 +112,17 @@ export const GameDashboard = () => {
         )
     });
 
-    useEffect(() => {
-        if(userStandingsState === status.IDLE && leagueState === status.COMPLETE) {
-            dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
-        }
-    }, [userState, leagueState, userStandingsState, league, dispatch]);
+    // useEffect(() => {
+    //     if(userStandingsState === status.IDLE && leagueState === status.COMPLETE) {
+    //         dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
+    //     }
+    // }, [userState, leagueState, userStandingsState, league, dispatch]);
 
-    useEffect(() => {
-        if(pickLimitState === status.IDLE && leagueState === status.COMPLETE && userState === status.COMPLETE) {
-            dispatch(fetchUserPickLimit({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek, user_id: user.user_id}))
-        }
-    }, [pickLimitState, leagueState, userState, league, user, dispatch]);
+    // useEffect(() => {
+    //     if(pickLimitState === status.IDLE && leagueState === status.COMPLETE && userState === status.COMPLETE) {
+    //         dispatch(fetchUserPickLimit({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek, user_id: user.user_id}))
+    //     }
+    // }, [pickLimitState, leagueState, userState, league, user, dispatch]);
 
     useEffect(() => {
         if(Object.values(stagedPicks).find((initial) => new Date(initial.pick_submit_by_date) > new Date()) === undefined) {

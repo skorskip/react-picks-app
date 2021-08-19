@@ -9,7 +9,7 @@ export const PicksDashboardWrapper = ({
     previousId, 
     index, 
     onTeamSelected,
-    showDelete,
+    inEditMode,
     onDelete
 }) => {
 
@@ -44,11 +44,12 @@ export const PicksDashboardWrapper = ({
             awayTeam={awayTeam}
             pick={pick}
             showSubmitTime={showSubmitTime()}
-            disabled={(!showDelete && !gamePassedEdit)}
+            disabled={(!inEditMode && !gamePassedEdit)}
+            editMode={inEditMode}
             remove={removeGame}
-            showDeleteButton={(showDelete && !removeGame && !gamePassedEdit)}
+            showDeleteButton={(inEditMode && !removeGame && !gamePassedEdit)}
             onTeamSelected={(event) => onTeamSelected(event)}
-            onDeleteClicked={(event) => deleteClicked()}
+            onDeleteClicked={() => deleteClicked()}
         />
     )
 }

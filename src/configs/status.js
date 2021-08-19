@@ -5,7 +5,7 @@ export const status = {
     COMPLETE: "complete",
     SUCCESS: "success",
     MESSAGE: {
-        ERROR_GENERIC: "There was a failuer. Please try again later.",
+        ERROR_GENERIC: "There was a failure. Please try again later.",
         USER: {
             LOGIN_ERROR: "Something went wrong signing in user.",
             PASSWORD_ERROR: "Something went wrong creating password.",

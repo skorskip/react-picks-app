@@ -1,12 +1,10 @@
 import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { User } from '../../model/user/user';
 import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
-
-const usersUrl = environment.userServiceURL + 'users';
 
 const userAdapter = createEntityAdapter();
 
@@ -70,7 +68,7 @@ export const signOut = createAsyncThunk('user/signOut', async () => {
 })
 
 export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password, token) => {
-    const url = usersUrl + '/login';
+    const url = endpoints.USERS.LOGIN;
     try {
         const newUser = User.createUser(username, password);
         const response = await client.post(url, newUser, {Authorization: token});

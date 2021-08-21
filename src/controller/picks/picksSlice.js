@@ -8,6 +8,7 @@ const picksAdapter = createEntityAdapter();
 
 const initialState = picksAdapter.getInitialState({
     status: status.IDLE,
+    message: null,
     weekSet: "",
     picks: []
 });
@@ -88,6 +89,7 @@ export const deletePicks = createAsyncThunk('picks/deletePicks', async (param) =
 const picksSlice = createSlice({
     name: 'picks',
     initialState,
+    reducers: {},
     extraReducers : (builder) => {
         builder
             .addCase(fetchUsersPicks.pending, (state, action) => {
@@ -126,6 +128,7 @@ const picksSlice = createSlice({
                     state.status = status.COMPLETE;
                 } else {
                     state.picks = [];
+                    state.message = action.payload.message;
                     state.status = status.ERROR;
                 }
             })
@@ -165,6 +168,8 @@ const picksSlice = createSlice({
 });
 
 export const selectPicks = (state) => state.picks.picks;
+
+export const selectPicksMessage = (state) => state.picks.message;
 
 export const getPicksSetWeek = (state) => state.picks.weekSet;
 

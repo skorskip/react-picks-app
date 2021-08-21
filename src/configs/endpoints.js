@@ -3,7 +3,7 @@ import {environment} from './environment';
 export const endpoints = {
     PICKS : {
         BASE: `${environment.picksServiceURL}picks/`,
-        ADD : `${environment.picksServiceURL}picks/create`,
+        ADD : `${environment.picksServiceURL}picks/v2/create`,
         BY_WEEK: `${environment.picksServiceURL}picks/week`,
         OTHERS_BY_WEEK: `${environment.picksServiceURL}picks/others`,
         ALL_PICKS_BY_WEEK: `${environment.picksServiceURL}picks/games`

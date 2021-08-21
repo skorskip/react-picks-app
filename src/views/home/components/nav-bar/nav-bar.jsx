@@ -9,6 +9,7 @@ import './nav-bar.css';
 import { status } from '../../../../configs/status';
 import { client } from '../../../../utils/client';
 import { environment } from '../../../../configs/environment';
+import { getAnnouncementCheckLocal, getLiveThreadCheckLocal, resetAnnouncementCheckLocal, resetLiveThreadCheckLocal } from '../../../../utils/localData';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
@@ -49,7 +50,7 @@ export const NavBar = () => {
 
     const clickAnnouncements = () => {
         setMessages(0);
-        localStorage.setItem("announcementCheck", new Date().toUTCString())
+        resetAnnouncementCheckLocal();
     }
 
     const pulseNotify = (isActiveThread) && (
@@ -63,7 +64,7 @@ export const NavBar = () => {
             announcementsStatus === status.IDLE && 
             leagueState === status.COMPLETE ) {
                 
-            const params = { lastCheckDate: localStorage.getItem("announcementCheck") }
+            const params = { lastCheckDate: getAnnouncementCheckLocal() }
             dispatch(fetchAnnouncements(params));
         }
     }, [announcementsStatus, userState, dispatch, leagueState]);
@@ -77,9 +78,9 @@ export const NavBar = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {   
-                var response = await client.post(announcementsUrl, {lastCheckDate: localStorage.getItem('liveThreadCheck')});
+                var response = await client.post(announcementsUrl, {lastCheckDate: getLiveThreadCheckLocal()});
                 setIsActiveThread(response);
-                localStorage.setItem('liveThreadCheck', new Date().toUTCString());
+                resetLiveThreadCheckLocal();
             } catch(error) {
                 console.error(error);
             }

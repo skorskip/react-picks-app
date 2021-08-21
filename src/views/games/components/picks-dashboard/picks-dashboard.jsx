@@ -46,7 +46,7 @@ export const PicksDashboard = () => {
         return null;
     }
 
-    const submitDelete = (submit) => {
+    const submitEdit = (submit) => {
         if(submit) {
             if(deletePicksArray.length !== 0 ) {
                 dispatch(deletePicks({ picks: deletePicksArray.map(pick => pick.pick_id) }))
@@ -103,7 +103,7 @@ export const PicksDashboard = () => {
                 { data => (<>{editMode(data)}</>)}
             </Subscriber>
             <Subscriber topic={NAV_DONE_BUTTON}>
-                { data => (<>{submitDelete(data)}</>) }
+                { data => (<>{submitEdit(data)}</>) }
             </Subscriber>
             { games }
         </div>

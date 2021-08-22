@@ -1,5 +1,3 @@
-import { Pick } from "../model/pick/pick";
-
 const localDataEnum = {
     STAGED_PICKS: "stagedPicks",
     USER: "user",
@@ -9,14 +7,16 @@ const localDataEnum = {
     LIVE_THREAD_CHECK: "liveThreadCheck"
 }
 
-export const setStagedPicksLocal = (stagedPicks, newPick, user_id) => {
+export const setStagedPicksLocal = (stagedPicks, newPick) => {
+    let pickObject = newPick.pick;
     let updated = stagedPicks;
+
     if(newPick.highlight) {
-        let pickObject = new Pick(user_id, newPick.gameId, newPick.teamId, newPick.submitBy);
-        updated[newPick.gameId] = pickObject;
+        updated[pickObject.game_id] = pickObject;
     } else {
-        delete updated[newPick.gameId];
+        delete updated[pickObject.game_id];
     }
+
     localStorage.setItem(localDataEnum.STAGED_PICKS, JSON.stringify(updated));
     return updated;
 }

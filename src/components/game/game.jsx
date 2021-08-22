@@ -6,12 +6,14 @@ import { Icon, Button } from 'semantic-ui-react';
 import './game.css';
 import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
 import { UsersPickData } from './components/users-pick-data/users-pick-data';
+import { Pick } from '../../model/pick/pick';
 
 export const Game = ({ 
     game, 
     homeTeam, 
     awayTeam, 
-    pick, 
+    pick,
+    userId,
     showSubmitTime, 
     disabled,
     editMode,
@@ -25,7 +27,7 @@ export const Game = ({
     const gameLocked = new Date(game?.pick_submit_by_date) <= new Date();
 
     const pickResult = () => {
-        if(game.game_status === GameStatusEnum.completed && pick !== null && pick !== undefined){
+        if(game.game_status === GameStatusEnum.completed && pick != null){
             if(pick.team_id === game.winning_team_id) {
               return GameWinStatusEnum.win;
             } else if(game.winning_team_id === null) {
@@ -46,27 +48,26 @@ export const Game = ({
     const teamSelected = (event) => {
         let pickOpt = {
             highlight : event.highlight,
-            teamId: event.team.team_id,
-            gameId: game.game_id,
-            submitBy: game.pick_submit_by_date
+            pick: new Pick(null, userId, game.game_id, event.team.team_id, game.pick_submit_by_date)
         }
 
         if(editMode) {
-            setHighlightAway(!highlightAway);
-            setHighlightHome(!highlightHome);
-            if(!event.highlight) {
-                pickOpt.teamId = (event.team.team_id === awayTeam.team_id) ? homeTeam.team_id : awayTeam.team_id;
+            if(event.highlight) {
+                setHighlightAway(!highlightAway);
+                setHighlightHome(!highlightHome);
                 pickOpt.highlight = true;
+                pickOpt.pick.pick_id = pick.pick_id;
+                onTeamSelected(pickOpt);
             }
         } else if(event.team.team_id === awayTeam.team_id) {
             if(event.highlight) setHighlightHome(false);
-            setHighlightAway(event.highlight)
+            setHighlightAway(event.highlight);
+            onTeamSelected(pickOpt);
         } else {
             if(event.highlight) setHighlightAway(false);
-            setHighlightHome(event.highlight)
+            setHighlightHome(event.highlight);
+            onTeamSelected(pickOpt);
         }
-
-        onTeamSelected(pickOpt);
     }
 
     const submitBy = showSubmitTime && (

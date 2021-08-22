@@ -55,7 +55,9 @@ const picksForUserSlice = createSlice({
                         game: game,
                         awayTeam: teams.find(team => team.team_id === game.away_team_id),
                         homeTeam: teams.find(team => team.team_id === game.home_team_id),
-                        pick: picks[i]
+                        pick: picks[i],
+                        winning_team_id: game.winning_team_id,
+                        game_status: game.game_status 
                         }
                 
                         picksList.push(gameObject);

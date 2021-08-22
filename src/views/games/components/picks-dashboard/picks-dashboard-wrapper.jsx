@@ -7,7 +7,8 @@ import { Game } from '../../../../components/game/game';
 export const PicksDashboardWrapper = ({ 
     id, 
     previousId, 
-    index, 
+    index,
+    userId,
     onTeamSelected,
     inEditMode,
     onDelete
@@ -43,6 +44,7 @@ export const PicksDashboardWrapper = ({
             homeTeam={homeTeam}
             awayTeam={awayTeam}
             pick={pick}
+            userId={userId}
             showSubmitTime={showSubmitTime()}
             disabled={(!inEditMode && !gamePassedEdit)}
             editMode={inEditMode}

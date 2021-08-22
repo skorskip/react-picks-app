@@ -40,15 +40,10 @@ export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async 
 
 export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
     try {
-        var updated = [];
-        const url = endpoints.PICKS.ADD;
+        const url = endpoints.PICKS.ADD + param.userId;
         const response = await client.post(url, param.picks);
-        param.picks.forEach((newPick, index) => {
-            newPick.pick_id = parseInt(response.result) + index;
-            updated.push(newPick);
-        });
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.ADD_SUCCESS});
-        return updated;
+        return response;
     } catch(error) {
         console.error(error);
         publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
@@ -57,33 +52,29 @@ export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
 });
 
 export const updatePicks = createAsyncThunk('picks/updatePicks', async (param) => {
-    for(const pick of param.picks) {
-        const url = endpoints.PICKS.BASE + pick.pick_id;
-        try {
-            await client.put(url, pick);
-        } catch(error) {
-            console.error(error);
-            publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
-            return {status: status.ERROR, message: error};
-        }
+    try {
+        const url = endpoints.PICKS.UPDATE + param.userId;
+        const response = await client.post(url, param.picks);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error}
     }
-    publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
-    return param.picks;
 });
 
 export const deletePicks = createAsyncThunk('picks/deletePicks', async (param) => {
-    for(const pick_id of param.picks){
-        const url = endpoints.PICKS.BASE + pick_id;
-        try{
-            await client.delete(url);
-        } catch(error) {
-            console.error(error);
-            publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
-            return {status: status.ERROR, message: error};
-        }
-    };
-    publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
-    return param.picks;
+    try {
+        const url = endpoints.PICKS.DELETE + param.userId;
+        const response = await client.post(url, param.picks);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error}
+    }
  });
 
 const picksSlice = createSlice({
@@ -123,8 +114,7 @@ const picksSlice = createSlice({
             })
             .addCase(addPicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
-                    let newPicks = state.picks.concat(action.payload);
-                    state.picks = newPicks.sort((a,b) => new Date(a.pick_submit_by_date) - new Date(b.pick_submit_by_date));
+                    state.picks = action.payload.picks;
                     state.status = status.COMPLETE;
                 } else {
                     state.picks = [];
@@ -137,17 +127,11 @@ const picksSlice = createSlice({
             })
             .addCase(updatePicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
-                    for(const pick of action.payload){
-                        for(var i = 0; i < state.picks.length; i++) {
-                            if(state.picks[i].pick_id === pick.pick_id) {
-                                state.picks[i] = pick;
-                                break;
-                            }
-                        }
-                    }
+                    state.picks = action.payload.picks;
                     state.status = status.COMPLETE;
                 } else {
                     state.picks = [];
+                    state.message = action.payload.message;
                     state.status = status.ERROR;
                 }
             })
@@ -156,11 +140,11 @@ const picksSlice = createSlice({
             })
             .addCase(deletePicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
-                    const filtered = state.picks.filter(pick => !action.payload.includes(pick.pick_id));
-                    state.picks = filtered;
+                    state.picks = action.payload.picks;
                     state.status = status.COMPLETE;
                 } else {
                     state.picks = [];
+                    state.message = action.payload.message;
                     state.status = status.ERROR;
                 }
             })

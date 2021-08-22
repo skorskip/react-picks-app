@@ -91,7 +91,7 @@ export const Standings = () => {
         )
     }
 
-    const noStandings = (standings.length === 0) && (
+    const noStandings = (standings.length === 0 && standingsStatus !== status.LOADING) && (
         <div className="no-standings-set secondary-color">
             No standings yet
         </div>

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectGamesById, selectTeamById } from '../../../../controller/games/gamesSlice';
 import { Game } from '../../../../components/game/game';
 
-export const GameDashboardWrapper = ({ id, previousId, index, picked, onTeamSelected}) => {
+export const GameDashboardWrapper = ({ id, previousId, index, picked, userId, onTeamSelected}) => {
 
     const game = useSelector((state) => selectGamesById(state, id));
     const previousGame = useSelector((state) => selectGamesById(state, previousId));
@@ -23,6 +23,7 @@ export const GameDashboardWrapper = ({ id, previousId, index, picked, onTeamSele
             homeTeam={homeTeam}
             awayTeam={awayTeam}
             pick={picked}
+            userId={userId}
             showSubmitTime={showSubmitTime()}
             disabled={false}
             onTeamSelected={(event) => onTeamSelected(event)}

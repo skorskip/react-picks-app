@@ -10,6 +10,8 @@ import "./pick-peek-modal.css";
 import { GameLoader } from '../game-loader/game-loader';
 import { useHistory, useLocation } from 'react-router-dom';
 import { status } from '../../configs/status';
+import { PickStatus } from '../game/components/pick-staus/pick-status';
+import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
 
 export const PickPeekModal = () => {
     
@@ -42,6 +44,21 @@ export const PickPeekModal = () => {
     const viewPicks = () => {
         history.push(`/games/others?season=${season}&seasonType=${seasonType}&week=${week}&user=${userData.user_id}`);
         closeClick();
+    }
+
+    const pickResult = (pick) => {
+        if(pick.game_status === GameStatusEnum.completed && pick != null){
+            if(pick.pick.team_id === pick.winning_team_id) {
+              return GameWinStatusEnum.win;
+            } else if(pick.winning_team_id === null) {
+              return GameWinStatusEnum.push;
+            } else {
+              return GameWinStatusEnum.lose;
+            }
+          }
+          else {
+            return null;
+          }
     }
 
     const modalHeader = (
@@ -93,11 +110,11 @@ export const PickPeekModal = () => {
                         highlight={pick.awayTeam.team_id === pick.pick.team_id}
                         disabled={true}
                     />
-                    <div className="quaternary-background game-icon-container">
-                        <div className="tiertary-color game-icon">
-                            @
-                        </div>
-                    </div>
+                    <PickStatus 
+                        submitTime={pick?.pick_submit_by_date}
+                        pickSuccess={pickResult(pick)}
+                        gameStatus={pick?.game_status} 
+                    />
                     <Team
                         team={pick.homeTeam}
                         locked={false}

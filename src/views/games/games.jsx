@@ -102,20 +102,16 @@ export const Games = ({routes}) => {
         </TransitionGroup>
     );
 
-    const getAllData = (season, seasonType, week, user) => {
-        dispatch(fetchGames({ season: season, seasonType: seasonType, week: week, user: user }));
-        dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }));
-        if(other === null || other === "null") {
-            dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
-        }
-    }
-
     useEffect(() => {
         if(gamesState === status.IDLE && 
             leagueState === status.COMPLETE) {
-                getAllData(currSeason, currSeasonType, currWeek, user);
+                dispatch(fetchGames({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+                dispatch(fetchUserPickData({ season: currSeason, seasonType: currSeasonType, week: currWeek }));
+                if(other === null || other === "null") {
+                    dispatch(fetchPicks({ season: currSeason, seasonType: currSeasonType, week: currWeek, user: user }));
+                }
         }
-    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user, other, getAllData])
+    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user, other])
 
     useEffect(() => {
         const shouldRefresh = () => {
@@ -127,9 +123,13 @@ export const Games = ({routes}) => {
         }
 
         if(shouldRefresh()){
-            getAllData(season, seasonType, week, user);
+            dispatch(fetchGames({ season: season, seasonType: seasonType, week: week, user: user }));
+            dispatch(fetchUserPickData({ season: season, seasonType: seasonType, week: week }));
+            if(other === null || other === "null") {
+                dispatch(fetchPicks({ season: season, seasonType: seasonType, week: week, user: user }));
+            }
         }
-    }, [dispatch, user, season, week, seasonType, view, currWeek, other, setWeek, getAllData])
+    }, [dispatch, user, season, week, seasonType, view, currWeek, other, setWeek])
 
     return (
         <div {...swipeHandlers} style={{ touchAction: 'pan-y' }}>

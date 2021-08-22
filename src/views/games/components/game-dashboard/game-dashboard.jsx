@@ -35,14 +35,14 @@ export const GameDashboard = () => {
     const [submitSent, setSubmitSent] = useState(false);
 
     const teamSelected = (event) => {
-        let updated = setStagedPicksLocal(stagedPicks, event, user.user_id);
+        let updated = setStagedPicksLocal(stagedPicks, event);
         setStagedCount(Object.keys(updated).length);
         setStagedPicks(updated);
     }
 
     const submitPicks = () => {
         let stagedPicksList = Object.values(stagedPicks);
-        dispatch(addPicks({ picks: stagedPicksList }));
+        dispatch(addPicks({ picks: stagedPicksList, userId: user.user_id }));
         setSubmitSent(true);
     }
 
@@ -65,6 +65,7 @@ export const GameDashboard = () => {
                 previousId={gamesIds[index - 1]}
                 index={index}
                 picked={stagedPicks === {} ? null : stagedPicks[gameId]}
+                userId={user?.user_id}
                 onTeamSelected={teamSelected}
             />
         )

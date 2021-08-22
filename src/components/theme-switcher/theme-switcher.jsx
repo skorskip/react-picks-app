@@ -4,7 +4,7 @@ import { Subscriber } from '../../utils/pubSub';
 import { getThemeLocal } from '../../utils/localData';
 
 export const ThemeSwitcher = () => {
-    const [theme, setTheme] = useState(getThemeLocal() === null ? "light" : getThemeLocal());
+    const [theme, setTheme] = useState(getThemeLocal() == null ? "light" : getThemeLocal());
 
     const setNewTheme = (data) => {
         if(data !== null) {

@@ -58,7 +58,7 @@ export const setThemeLocal = (theme) => {
 }
 
 export const getThemeLocal = () => {
-    localStorage.getItem(localDataEnum.THEME);
+    return localStorage.getItem(localDataEnum.THEME);
 }
 
 export const resetLiveThreadCheckLocal = () => {

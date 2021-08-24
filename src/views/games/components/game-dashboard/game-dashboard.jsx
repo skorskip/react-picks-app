@@ -9,7 +9,6 @@ import { Button, Icon } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
 import { status } from '../../../../configs/status';
-import { PickSubmitEnum } from '../../../../model/pick/pick';
 import { setStagedPicksLocal, resetStagedPicksLocal, getStagedPicksLocal } from '../../../../utils/localData';
 import './game-dashboard.css';
 
@@ -29,9 +28,10 @@ export const GameDashboard = () => {
     const query = new URLSearchParams(search);
     const week = query.get("week");
 
-    const initialStaged = getStagedPicksLocal();
-    const [stagedPicks, setStagedPicks] = useState(initialStaged !== null ? initialStaged : {});
-    const [stagedCount, setStagedCount] = useState(initialStaged === null ? 0 : Object.keys(initialStaged).length);
+    const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() !== null ? 
+        getStagedPicksLocal() : {});
+    const [stagedCount, setStagedCount] = useState(getStagedPicksLocal() === null ? 
+        0 : Object.keys(getStagedPicksLocal()).length);
     const [submitSent, setSubmitSent] = useState(false);
 
     const teamSelected = (event) => {
@@ -53,7 +53,9 @@ export const GameDashboard = () => {
     );
     
     const getSubmitClass = () => {
-        return (stagedCount > 0 && (parseInt(week) === parseInt(league.currentWeek) || week === null)) ? 
+        return (stagedCount > 0 && 
+            (parseInt(week) === parseInt(league.currentWeek) 
+            || week === null)) ? 
             "submit-container show-submit-button" : "submit-container hide-submit-button"
     };
 
@@ -72,7 +74,8 @@ export const GameDashboard = () => {
     });
 
     useEffect(() => {
-        if(Object.values(stagedPicks).find((initial) => new Date(initial.pick_submit_by_date) > new Date()) === undefined) {
+        if(Object.values(stagedPicks).find((initial) => 
+            new Date(initial.pick_submit_by_date) > new Date()) === undefined) {
             setStagedCount(0);
             setStagedPicks({});
         }
@@ -89,25 +92,15 @@ export const GameDashboard = () => {
         if(pickLoader === status.ERROR) {
             setSubmitSent(false);
             if(picksMessage != null) {
-                let errorMessage = picksMessage.content?.message;
-                switch (errorMessage) {
-                    case PickSubmitEnum.PASS_SUBMIT_DATE : 
-                        alert("Can't Submit Passed the Deadline");
-                        break;
-                    case PickSubmitEnum.TOO_MANY_PICKS :
-                        alert(`You got too many picks, ${picksMessage.content.data.over} over ${picksMessage.content.data.limit}`);
-                        break;
-                    case PickSubmitEnum.NO_PICKS : 
-                        alert("Going to need more than that!");
-                        break;
-                    default :
-                        break;
-                }
+                alert(picksMessage);
             }
         }
     },[pickLoader, submitSent, stagedPicks, history, picksMessage]);
 
-    if(gameLoader === status.LOADING || gamesIds === undefined || pickLoader === status.LOADING) {
+    if(gameLoader === status.LOADING || 
+        gamesIds === undefined || 
+        pickLoader === status.LOADING) {
+
         return (<GameLoader height="110" count="8"/>)
     }
 

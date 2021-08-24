@@ -86,7 +86,7 @@ export const Standings = () => {
     const winPct = (standing) => {
         return (
             <div className={getItemClass(standing.user_id, "win-pct")}>
-                { standing.win_pct }
+                { standing.win_pct.toFixed(3) }
             </div>
         )
     }

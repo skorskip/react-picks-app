@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPicksIds, selectPicks, updatePicks, deletePicks } from '../../../../controller/picks/picksSlice';
+import { selectPicksIds, selectPicks, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/picks/picksSlice';
 import './picks-dashboard.css';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
@@ -15,12 +15,21 @@ export const PicksDashboard = () => {
     const loader = useSelector((state) => state.picks.status);
     const picks = useSelector(selectPicks);
     const user = useSelector(selectUser);
+    const picksMessage = useSelector(selectPicksMessage);
 
     const [updatePicksArray, setUpdatePicks] = useState([]);
     const [deletePicksArray, setDeletePicks] = useState([]); 
     const [inEditMode, setInEditMode] = useState(false);
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if(loader === status.ERROR) {
+            if(picksMessage != null) {
+                alert(picksMessage);
+            }
+        }
+    },[loader, picksMessage, status]);
 
     if(loader === status.LOADING || pickIds === undefined) {
         return (

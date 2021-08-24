@@ -3,6 +3,7 @@ import { client } from '../../utils/client'
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
+import { PickSubmitEnum } from '../../model/pick/pick';
 
 const picksAdapter = createEntityAdapter();
 
@@ -12,6 +13,22 @@ const initialState = picksAdapter.getInitialState({
     weekSet: "",
     picks: []
 });
+
+const getMessageFromError = (error) => {
+    switch (error.message) {
+        case PickSubmitEnum.PASS_SUBMIT_DATE :
+            return status.MESSAGE.PICKS.PASS_SUBMIT_DATE;
+        case PickSubmitEnum.TOO_MANY_PICKS :
+            let message = status.MESSAGE.PICKS.TOO_MANY_PICKS;
+            message = message.replace('$OVER', error.content.data.over)
+                .replace('$LIMIT', error.content.data.limit);
+            return message;
+        case PickSubmitEnum.NO_PICKS : 
+            return status.MESSAGE.PICKS.NO_PICKS;
+        default :
+            return;
+    }
+}
 
 export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) => {
     try {
@@ -24,7 +41,6 @@ export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) =>
         return {status: status.ERROR, message: error}
     }
 });
-
 
 export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async (param) => {
     try {
@@ -88,7 +104,6 @@ const picksSlice = createSlice({
             })
             .addCase(fetchUsersPicks.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    state.picks = [];
                     state.status = status.ERROR;
                 } else {
                     state.picks = action.payload.response.picks;
@@ -101,7 +116,6 @@ const picksSlice = createSlice({
             })
             .addCase(fetchPicks.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    state.picks = [];
                     state.status = status.ERROR;
                 } else {
                     state.picks = action.payload.response.picks;
@@ -117,8 +131,8 @@ const picksSlice = createSlice({
                     state.picks = action.payload.picks;
                     state.status = status.COMPLETE;
                 } else {
-                    state.picks = [];
-                    state.message = action.payload.message;
+                    let error = action.payload.message.content;
+                    state.message = getMessageFromError(error);
                     state.status = status.ERROR;
                 }
             })
@@ -130,8 +144,8 @@ const picksSlice = createSlice({
                     state.picks = action.payload.picks;
                     state.status = status.COMPLETE;
                 } else {
-                    state.picks = [];
-                    state.message = action.payload.message;
+                    let error = action.payload.message.content;
+                    state.message = getMessageFromError(error);
                     state.status = status.ERROR;
                 }
             })
@@ -143,8 +157,8 @@ const picksSlice = createSlice({
                     state.picks = action.payload.picks;
                     state.status = status.COMPLETE;
                 } else {
-                    state.picks = [];
-                    state.message = action.payload.message;
+                    let error = action.payload.message.content;
+                    state.message = getMessageFromError(error);
                     state.status = status.ERROR;
                 }
             })

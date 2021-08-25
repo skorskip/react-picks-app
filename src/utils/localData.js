@@ -8,6 +8,7 @@ const localDataEnum = {
 }
 
 export const setStagedPicksLocal = (stagedPicks, newPick) => {
+
     let pickObject = newPick.pick;
     let updated = stagedPicks;
 
@@ -26,7 +27,7 @@ export const resetStagedPicksLocal = () => {
 }
 
 export const getStagedPicksLocal = () => {
-    if(localStorage.getItem(localDataEnum.STAGED_PICKS)){
+    if(localStorage.getItem(localDataEnum.STAGED_PICKS) != null){
         return JSON.parse(localStorage.getItem(localDataEnum.STAGED_PICKS));
     } else {
         return null;

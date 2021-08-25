@@ -58,7 +58,8 @@ export const Games = ({routes}) => {
 
     const swipeHandlers = useSwipeable({
         onSwipedRight: () => swipeView('game'),
-        onSwipedLeft: () => swipeView('pick')
+        onSwipedLeft: () => swipeView('pick'),
+        delta : 100,
     });
 
 

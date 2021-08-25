@@ -10,13 +10,13 @@ export class Pick {
         user_id,
         game_id,
         team_id,
-        pick_sumbit_by_date
+        pick_submit_by_date
     ) {
         this.pick_id = pick_id;
         this.user_id = user_id;
         this.game_id = game_id;
         this.team_id = team_id;
         this.submitted_date = new Date().toISOString();
-        this.pick_sumbit_by_date = pick_sumbit_by_date;
+        this.pick_submit_by_date = pick_submit_by_date;
     }
 }

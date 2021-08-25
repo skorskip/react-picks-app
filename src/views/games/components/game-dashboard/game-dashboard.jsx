@@ -28,10 +28,8 @@ export const GameDashboard = () => {
     const query = new URLSearchParams(search);
     const week = query.get("week");
 
-    const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() !== null ? 
-        getStagedPicksLocal() : {});
-    const [stagedCount, setStagedCount] = useState(getStagedPicksLocal() === null ? 
-        0 : Object.keys(getStagedPicksLocal()).length);
+    const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() != null ? getStagedPicksLocal() : {});
+    const [stagedCount, setStagedCount] = useState(getStagedPicksLocal() == null ? 0 : Object.keys(getStagedPicksLocal()).length);
     const [submitSent, setSubmitSent] = useState(false);
 
     const teamSelected = (event) => {
@@ -74,8 +72,7 @@ export const GameDashboard = () => {
     });
 
     useEffect(() => {
-        if(Object.values(stagedPicks).find((initial) => 
-            new Date(initial.pick_submit_by_date) > new Date()) === undefined) {
+        if(Object.values(stagedPicks).find((initial) => new Date(initial.pick_submit_by_date) > new Date()) == null) {
             setStagedCount(0);
             setStagedPicks({});
         }

@@ -86,7 +86,7 @@ export const GameDashboard = () => {
             setSubmitSent(false);
             history.push("/games/pick");
         }
-        if(pickLoader === status.ERROR) {
+        if(pickLoader === status.ERROR && submitSent) {
             setSubmitSent(false);
             if(picksMessage != null) {
                 alert(picksMessage);

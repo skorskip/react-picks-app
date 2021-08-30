@@ -1,0 +1,55 @@
+.toggle-picks-container {
+	position: fixed;
+    height: 50px;
+    z-index: 3;
+    top:0;
+	left:0;
+    display: flex;
+    justify-content: space-between;
+	width: 100%;
+	padding: 4px;
+}
+
+.toggle-button {
+    border-radius: 4px;
+	cursor: pointer;
+    width: 100px;
+	box-shadow: none !important;
+	width: auto;
+}
+
+.spectator-container {
+	display: flex;
+	padding: 5px;
+	align-items: center;
+	justify-content: space-between;
+	border-radius: 4px;
+	padding-right: 10px;
+    padding-left: 10px;
+}
+
+.edit-button-container {
+	padding: 4px;
+}
+
+.spectator-icon {
+	padding-right: 10px;
+}
+
+.toggle-container {
+	border-radius: 4px;
+	padding: 4px;
+	display: flex;
+	align-items: center;
+}
+
+.game-toggle-icon {
+	margin: 0px !important;
+}
+
+@media only screen and (min-width: 650px) {
+	.toggle-picks-container {
+		top: 60px;
+	}
+
+}

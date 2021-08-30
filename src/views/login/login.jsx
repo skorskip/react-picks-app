@@ -1,30 +1,39 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PickLogo } from '../../components/pick-logo/pick-logo'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './login.css'
-import { Form, Icon, Button, Card } from 'react-bulma-components'
-import { faKey, faLock, faUserAlt } from '@fortawesome/free-solid-svg-icons'
-import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth'
-import store from '../../store'
-import { fetchUser } from '../../controller/user/userSlice'
+import { Form, Input, Button, Message,Icon } from 'semantic-ui-react'
+import { fetchUser, login, createPassword, resetPassword, forgotPassword } from '../../controller/user/userSlice'
+import { useLocation, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AmplifyEnum } from '../../utils/amplifyAuth';
+import { fetchToken } from '../../controller/token/tokenSlice';
+import { status } from '../../configs/status'
 
 export const Login = () => {
     const formInfo = {
         username: "",
         password: "",
+        newPassword: "",
         confirmPassword: "",
-        code: "",
-        authUser: {},
+        code: ""
     }
 
+    let { search } = useLocation();
+    let history = useHistory();
+    const query = new URLSearchParams(search);
+    const loginType = query.get("type");
     const [title, setTitle] = useState('pickem');
     const [completeLoginForm, setCompleteLoginForm] = useState(false);
-    const [forgotPasswordForm, setForgotPasswordForm] = useState(false);
+    const [forgotPasswordForm, setForgotPasswordForm] = useState(loginType !== null ? loginType==="newpassword" : false);
     const [passwordIncorrect, setPasswordIncorrect] = useState(false);
     const [passwordMismatch, setPasswordMismatch] = useState(false);
     const [emptyUsername, setEmptyUsername] = useState(false);
     const [formData, setFormData] = useState(formInfo);
     const [laoder, setLoader] = useState(false);
+    const tokenState = useSelector((state) => state.token.status);
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const dispatch = useDispatch();
 
     const handleChange = (event) => {
         setFormData({
@@ -35,54 +44,51 @@ export const Login = () => {
 
     const completeForgotPassword = () => {
         setPasswordMismatch(formData.password !== formData.confirmPassword);
-        if(!passwordMismatch) {
-            AmplifyAuth.ForgotPassword(formData.username, formData.password, formData.code).then((result) => {
-                if(result.error === AmplifyEnum.inValidUser) {
-                    alert("Something went wrong");
-                } else {
-                    getUserInfo();
-                }
+        if(formData.password !== '' && formData.password === formData.confirmPassword) {
+            resetPassword(formData.username, formData.password, formData.code).then((result) => {
+                setLoader(false);
+                setToken();
+                setForgotPasswordForm(false);
             });
         }
     }
 
     const completeLogin = () => {
-        setPasswordMismatch(formData.password !== formData.confirmPassword);
-        if(!passwordMismatch) {
-            AmplifyAuth.CompletePasswordLogin(formData.password, formData.authUser).then((result) => {
-                if(result.error === AmplifyEnum.inValidUser) {
-                    alert("Something went wrong");
-                } else {
-                    getUserInfo();
-                }
+        setPasswordMismatch(formData.newPassword !== formData.confirmPassword);
+        if(formData.password !== '' && formData.newPassword === formData.confirmPassword) {
+            createPassword(formData.username, formData.password, formData.newPassword).then((result) => {
+                setLoader(false);
+                setToken();
+                setCompleteLoginForm(false);
             });
         }
     }
 
     const authorize = () => {
-        AmplifyAuth.AmplifyLogin(formData.username, formData.password).then((result) => {
+        login(formData.username, formData.password).then((result) => {
             setLoader(false);
             if(result.error === AmplifyEnum.inValidUser) {
                 setPasswordIncorrect(true);
             } else if(result.challengeName != null && result.challengeName === AmplifyEnum.needNewPassword) {
-                setFormData({...formData, authUser: result});
+                setTitle('Welcome!');
                 setCompleteLoginForm(true);
-                setFormData({...formData, password: ''});
             } else {
-                getUserInfo();
-            }
+                setToken();
+            } 
         });
     }
     
-    const getUserInfo = () => {
-        store.dispatch(fetchUser(formData.username, formData.passsword));
-        setLoader(false);
+    const setToken = () => {
+        dispatch(fetchToken());
+        setUsername(formData.username);
+        setPassword(formData.password);
     }
 
     const attemptLogin = event => {
         event.preventDefault();
         setLoader(true);
         if(formData.username === '') {
+            setLoader(false);
             setEmptyUsername(true);
         } else {
             if(forgotPasswordForm) {
@@ -95,88 +101,147 @@ export const Login = () => {
         }
     }
 
-    const forgotPassword = () => {
-        setPasswordIncorrect(false);
-        setEmptyUsername(false);
-        setFormData({...formData, password: ''});
-        setForgotPasswordForm(true);
-        setTitle('Whoops...');
-        AmplifyAuth.SendForgotPasswordCode(formData.username);
+    const showForgotPassword = () => {
+        if(formData.username !== '') {
+            setPasswordIncorrect(false);
+            setEmptyUsername(false);
+            setFormData({...formData, password: ''});
+            setForgotPasswordForm(true);
+            setTitle('Whoops...');
+            forgotPassword(formData.username);
+        } else {
+            setEmptyUsername(true);
+        }
     }
 
     const usernameForm = !completeLoginForm && (
-        <Form.Field>
-            <Form.Control iconLeft>
-                <Form.Input className="is-medium" name="username" color={passwordIncorrect ? "danger" : null} type="text" placeholder="Username/Email" onChange={handleChange} value={formData.username}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faUserAlt} />
-                </Icon>
-            </Form.Control>
-            { emptyUsername && <Form.Help align="left" color="danger">Must provide username or email</Form.Help>}
-        </Form.Field>
+        <Form.Field
+            control={Input}
+            name="username"
+            placeholder="Username/Email"
+            type="text"
+            icon='user'
+            iconPosition='left'
+            onChange={handleChange} 
+            value={formData.username}
+            className="loginInput"
+            error={(emptyUsername && {
+                content: 'Must provide username or email',
+                pointing: 'above'
+            }) || passwordIncorrect}
+        />
     );
 
     const codeForm = forgotPasswordForm && (
-        <Form.Field>
-            <Form.Control iconLeft>
-                <Form.Input className="is-medium" name="code" type="text" placeholder="Verification code" onChange={handleChange} value={formData.code}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faKey} />
-                </Icon>
-            </Form.Control>
-        </Form.Field>
+        <Form.Field 
+            control={Input}
+            name="code"
+            type="text"
+            placeholder="Verification code"
+            icon='key'
+            iconPosition='left'
+            className="loginInput"
+            onChange={handleChange}
+            value={formData.code}
+        />
     );
 
-    const passwordForm = (
-        <Form.Field>
-            <Form.Control iconLeft>
-                    <Form.Input className="is-medium" name="password" color={passwordIncorrect ? "danger" : null} type="password" placeholder={forgotPasswordForm ? "New Password" : "Password"} onChange={handleChange} value={formData.password}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faLock} />
-                </Icon>
-            </Form.Control>
-            { passwordIncorrect && <Form.Help align="left" color="danger"><a onClick={forgotPassword}>Forgot Password?</a></Form.Help> }
-        </Form.Field>
+    const passwordForm = !completeLoginForm &&(
+        <Form.Field
+            control={Input}
+            name='password'
+            placeholder={forgotPasswordForm ? "New Password" : "Password"}
+            icon='lock'
+            iconPosition='left'
+            type="password"
+            className="loginInput"
+            onChange={handleChange} 
+            value={formData.password}
+            error={passwordIncorrect && {
+                content: 'Username or password incorrect',
+                pointing: 'above'
+            }}
+        />
+    );
+
+    const newPasswordForm = completeLoginForm && (
+        <Form.Field
+            control={Input}
+            name='newPassword'
+            placeholder='New Password'
+            icon='lock'
+            iconPosition='left'
+            type="password"
+            className="loginInput"
+            onChange={handleChange} 
+            value={formData.newPassword}
+            error={passwordIncorrect && {
+                content: 'Username or password incorrect',
+                pointing: 'above'
+            }}
+        />
     );
 
     const passwordConfirmForm = (forgotPasswordForm || completeLoginForm) && (
-        <Form.Field>
-            <Form.Control iconLeft>
-                <Form.Input className="is-medium" name="confirmPassword" type="password" placeholder="Confirm Password" onChange={handleChange} value={formData.confirmPassword}/>
-                <Icon align="left">
-                    <FontAwesomeIcon className="primary" icon={faLock} />
-                </Icon>
-            </Form.Control>
-            { passwordMismatch && <Form.Help align="left" color="danger">Passwords don't match</Form.Help>}
-        </Form.Field>
-    )
+        <Form.Field
+            control={Input}
+            name='confirmPassword'
+            placeholder='Confirm password'
+            type='password'
+            icon='lock'
+            iconPosition='left'
+            onChange={handleChange} 
+            value={formData.confirmPassword}
+            className="loginInput"
+            error={passwordMismatch && { 
+                content: 'Passwords do not match.',
+                pointing: 'above'
+            }}
+        />
+    );
+
+    useEffect(() => {
+        if(tokenState === status.COMPLETE && username !== '' && password !== '') {
+            dispatch(fetchUser(username, password));
+            history.push("/");
+        }
+    }, [tokenState, username, password, dispatch, history]);
 
     return (
-
         <div className="loginContainer">
             <div className="loginHeader">
-            <div>
-                <PickLogo sizeParam="'m'"></PickLogo>
-            </div>
-            <div className="loginTitle">
-                {title}
-            </div>
+                <div>
+                    <PickLogo sizeParam="'m'"></PickLogo>
+                </div>
+                <div className="loginTitle secondary-color">
+                    {title}
+                </div>
+                { forgotPasswordForm && 
+                <Message warning>
+                    <Icon name='info circle'/>
+                    Check your email for a code.
+                </Message> }
+                { completeLoginForm && 
+                <Message warning>
+                    <Icon name='info circle'/>
+                    Create a new password.
+                </Message> }
+                <Form onSubmit={attemptLogin} className="loginForm" size='big'>
+                    { usernameForm }
+                    { codeForm }
+                    { passwordForm }
+                    { newPasswordForm }
+                    { passwordConfirmForm }
 
-            <form onSubmit={attemptLogin} className="loginForm">
-
-                { usernameForm }
-                { codeForm }
-                { passwordForm }
-                { passwordConfirmForm }
-
-                {laoder ? 
-                    <Button loading className="loginButton primary-background base noSelect"></Button> :
-                    <Button type="submit" className="loginButton primary-background base noSelect">
-                        Login
-                    </Button>
-                }
-            </form>
-
+                    {laoder ? 
+                        <Button loading size="huge" className="loginButton primary-background base-color noSelect">Loading</Button>:
+                        <Button content="Login" type="submit" size="huge" className="loginButton primary-background base-color noSelect" />
+                    }
+                </Form>
+                <br></br>
+                <div className="forgot-password-link secondary-color">
+                    Forgot Password? &nbsp;<div className="link" onClick={showForgotPassword}>Reset here.</div>
+                </div>
             </div>
         </div>  
     );

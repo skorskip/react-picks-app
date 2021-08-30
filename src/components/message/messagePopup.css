@@ -1,0 +1,18 @@
+.message-container {
+	position: fixed !important;
+	right: 0px;
+	width: 100%;
+    bottom: 100px;
+	transition-duration: 500ms;
+	transition-timing-function: ease-in-out;
+	display:flex;
+	z-index: 5;
+}
+
+.message-content {
+	margin: 20px !important;
+	width: 100%;
+	font-size: 2em;
+	display: flex;
+	justify-content: flex-start;
+}

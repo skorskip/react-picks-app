@@ -1,0 +1,279 @@
+/*<-------DARK COLORS-------->*/
+.primary-color {
+  color: #125740 !important;
+}
+
+.secondary-color {
+  color: black !important;
+}
+
+.tiertary-color {
+  color: #d6d6d6 !important;
+}
+
+.tiertary-light-color {
+  color: #f5f3f3 !important;
+}
+
+.quaternary-color {
+  color: white !important;
+}
+
+.base-color {
+  color: white !important;
+}
+
+.accent {
+  color: #125740 !important;
+}
+
+.primary-background {
+  background-color: #125740 !important;
+}
+
+.secondary-background {
+  background-color: black !important;
+}
+
+.tiertary-background {
+  background-color: #d6d6d6 !important;
+}
+
+.tiertary-light-background {
+  background-color: white !important;
+}
+
+.quaternary-background {
+  background-color: white !important;
+}
+
+.base-background {
+  background-color: white !important;
+}
+
+.accent-background {
+  background-color: #125740 !important;
+}
+
+.primary-fill {
+  fill: #125740;
+}
+
+.secondary-fill {
+  fill: black;
+}
+
+.bar {
+  background-color: #125740 !important;
+}
+
+.ui.progress {
+  background-color: #d6d6d6 !important;
+}
+
+body {
+  background: white !important;
+}
+
+/*-----------TEAM COLORS----------*/
+.ruby {
+  color: #125740 !important;
+}
+
+.burgundy {
+  color: #125740 !important;
+}
+
+.teal {
+  color: #125740 !important;
+}
+
+.carolina-blue {
+  color: #125740 !important;
+}
+
+.star-command-blue {
+  color: #125740 !important;
+}
+
+.air-force-blue {
+  color: #125740 !important;
+}
+
+.midnight-blue {
+  color: #125740 !important;
+}
+
+.eerie-black {
+  color: #125740 !important;
+}
+
+.jungle-green {
+  color: #125740 !important;
+}
+
+.orange {
+  color: #125740 !important;
+}
+
+.brown {
+  color: #125740 !important;
+}
+
+.amaranth-red {
+  color: #125740 !important;
+}
+
+.violet {
+  color: #125740 !important;
+}
+
+.red {
+  color: #125740 !important;
+}
+
+.blue {
+  color: #125740 !important;
+}
+
+.navy {
+  color: #125740 !important;
+}
+
+.tan {
+  color: #125740 !important;
+}
+
+.midnight-green {
+  color: #125740 !important;
+}
+
+.gold {
+  color: #125740 !important;
+}
+
+.lime-green {
+  color: #125740 !important;
+}
+
+.grey {
+  color: #125740 !important;
+}
+
+.olive {
+  color: #125740 !important;
+}
+
+.green {
+  color: #125740 !important;
+}
+
+.yellow {
+  color: #125740 !important;
+}
+
+.purple {
+  color: #125740 !important;
+}
+
+.ruby-background {
+  background-color: #125740 !important;
+}
+
+.burgundy-background {
+  background-color: #125740 !important;
+}
+
+.teal-background {
+  background-color: #125740 !important;
+}
+
+.carolina-blue-background {
+  background-color: #125740 !important;
+}
+
+.star-command-blue-background {
+  background-color: #125740 !important;
+}
+
+.air-force-blue-background {
+  background-color: #125740 !important;
+}
+
+.midnight-blue-background {
+  background-color: #125740 !important;
+}
+
+.eerie-black-background {
+  background-color: #125740 !important;
+}
+
+.jungle-green-background {
+  background-color: #125740 !important;
+}
+
+.orange-background {
+  background-color: #125740 !important;
+}
+
+.brown-background {
+  background-color: #125740 !important;
+}
+
+.amaranth-red-background {
+  background-color: #125740 !important;
+}
+
+.violet-background {
+  background-color: #125740 !important;
+}
+
+.red-background {
+  background-color: #125740 !important;
+}
+
+.blue-background {
+  background-color: #125740 !important;
+}
+
+.navy-background {
+  background-color: #125740 !important;
+}
+
+.tan-background {
+  background-color: #125740 !important;
+}
+
+.midnight-green-background {
+  background-color: #125740 !important;
+}
+
+.gold-background {
+  background-color: #125740 !important;
+}
+
+.lime-green-background {
+  background-color: #125740 !important;
+}
+
+.grey-background {
+  background-color: #125740 !important;
+}
+
+.olive-background {
+  background-color: #125740 !important;
+}
+
+.green-background {
+  background-color: #125740 !important;
+}
+
+.yellow-background {
+  background-color: #125740 !important;
+}
+
+.purple-background {
+  background-color: #125740 !important;
+}
+
+/*# sourceMappingURL=styles-jets.css.map */

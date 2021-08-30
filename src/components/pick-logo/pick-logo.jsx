@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import '../pick-logo/pick-logo.css'
 
-export const PickLogo = (sizeParam) => {
-
-    const [sizeClass, setSizeClass] = useState('small');
-    
+export const PickLogo = ({sizeParam}) => {
     const size = (param) => {
         switch(param) {
-            case 'm': setSizeClass('medium'); break;
-            case 's': setSizeClass('small'); break;
-            case 'l': setSizeClass('large'); break;
-            default: setSizeClass('small'); break;
+            case 'm': return 'medium';
+            case 's': return 'small';
+            case 'xs' : return 'xsmall'; 
+            case 'l': return 'large'; 
+            default: return 'small'; 
         }
     };
-
-    useEffect(() => {size(sizeParam)}, [sizeParam]);
 
     return (
         <>
             <svg 
-                className={sizeClass} 
+                className={size(sizeParam)} 
                 xmlns="http://www.w3.org/2000/svg" 
                 version="1.1" 
                 width="100%" 

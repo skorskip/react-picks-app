@@ -1,0 +1,279 @@
+/*<-------DARK COLORS-------->*/
+.primary-color {
+  color: #D3BC8D !important;
+}
+
+.secondary-color {
+  color: #adbbc9 !important;
+}
+
+.tiertary-color {
+  color: #353535 !important;
+}
+
+.tiertary-light-color {
+  color: #151515 !important;
+}
+
+.quaternary-color {
+  color: #151515 !important;
+}
+
+.base-color {
+  color: black !important;
+}
+
+.accent {
+  color: #D3BC8D !important;
+}
+
+.primary-background {
+  background-color: #D3BC8D !important;
+}
+
+.secondary-background {
+  background-color: #adbbc9 !important;
+}
+
+.tiertary-background {
+  background-color: #353535 !important;
+}
+
+.tiertary-light-background {
+  background-color: #151515 !important;
+}
+
+.quaternary-background {
+  background-color: #151515 !important;
+}
+
+.base-background {
+  background-color: black !important;
+}
+
+.accent-background {
+  background-color: #D3BC8D !important;
+}
+
+.primary-fill {
+  fill: #D3BC8D;
+}
+
+.secondary-fill {
+  fill: #adbbc9;
+}
+
+.bar {
+  background-color: #D3BC8D !important;
+}
+
+.ui.progress {
+  background-color: #353535 !important;
+}
+
+body {
+  background: black !important;
+}
+
+/*-----------TEAM COLORS----------*/
+.ruby {
+  color: #D3BC8D !important;
+}
+
+.burgundy {
+  color: #D3BC8D !important;
+}
+
+.teal {
+  color: #D3BC8D !important;
+}
+
+.carolina-blue {
+  color: #D3BC8D !important;
+}
+
+.star-command-blue {
+  color: #D3BC8D !important;
+}
+
+.air-force-blue {
+  color: #D3BC8D !important;
+}
+
+.midnight-blue {
+  color: #D3BC8D !important;
+}
+
+.eerie-black {
+  color: #D3BC8D !important;
+}
+
+.jungle-green {
+  color: #D3BC8D !important;
+}
+
+.orange {
+  color: #D3BC8D !important;
+}
+
+.brown {
+  color: #D3BC8D !important;
+}
+
+.amaranth-red {
+  color: #D3BC8D !important;
+}
+
+.violet {
+  color: #D3BC8D !important;
+}
+
+.red {
+  color: #D3BC8D !important;
+}
+
+.blue {
+  color: #D3BC8D !important;
+}
+
+.navy {
+  color: #D3BC8D !important;
+}
+
+.tan {
+  color: #D3BC8D !important;
+}
+
+.midnight-green {
+  color: #D3BC8D !important;
+}
+
+.gold {
+  color: #D3BC8D !important;
+}
+
+.lime-green {
+  color: #D3BC8D !important;
+}
+
+.grey {
+  color: #D3BC8D !important;
+}
+
+.olive {
+  color: #D3BC8D !important;
+}
+
+.green {
+  color: #D3BC8D !important;
+}
+
+.yellow {
+  color: #D3BC8D !important;
+}
+
+.purple {
+  color: #D3BC8D !important;
+}
+
+.ruby-background {
+  background-color: #D3BC8D !important;
+}
+
+.burgundy-background {
+  background-color: #D3BC8D !important;
+}
+
+.teal-background {
+  background-color: #D3BC8D !important;
+}
+
+.carolina-blue-background {
+  background-color: #D3BC8D !important;
+}
+
+.star-command-blue-background {
+  background-color: #D3BC8D !important;
+}
+
+.air-force-blue-background {
+  background-color: #D3BC8D !important;
+}
+
+.midnight-blue-background {
+  background-color: #D3BC8D !important;
+}
+
+.eerie-black-background {
+  background-color: #D3BC8D !important;
+}
+
+.jungle-green-background {
+  background-color: #D3BC8D !important;
+}
+
+.orange-background {
+  background-color: #D3BC8D !important;
+}
+
+.brown-background {
+  background-color: #D3BC8D !important;
+}
+
+.amaranth-red-background {
+  background-color: #D3BC8D !important;
+}
+
+.violet-background {
+  background-color: #D3BC8D !important;
+}
+
+.red-background {
+  background-color: #D3BC8D !important;
+}
+
+.blue-background {
+  background-color: #D3BC8D !important;
+}
+
+.navy-background {
+  background-color: #D3BC8D !important;
+}
+
+.tan-background {
+  background-color: #D3BC8D !important;
+}
+
+.midnight-green-background {
+  background-color: #D3BC8D !important;
+}
+
+.gold-background {
+  background-color: #D3BC8D !important;
+}
+
+.lime-green-background {
+  background-color: #D3BC8D !important;
+}
+
+.grey-background {
+  background-color: #D3BC8D !important;
+}
+
+.olive-background {
+  background-color: #D3BC8D !important;
+}
+
+.green-background {
+  background-color: #D3BC8D !important;
+}
+
+.yellow-background {
+  background-color: #D3BC8D !important;
+}
+
+.purple-background {
+  background-color: #D3BC8D !important;
+}
+
+/*# sourceMappingURL=styles-saints.css.map */

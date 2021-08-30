@@ -1,0 +1,134 @@
+.picks-data-container {
+	position: absolute;
+	right: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+}
+
+.picks-data-container-final {
+	position: absolute;
+	right: 0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.picks-data-group {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.picks-data-group-final {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.pick-data {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transform: scale(1.1);
+}
+
+.pick-data-icon {
+	padding: 5px;
+}
+
+.picks-data-overview {
+	width: 100%;
+	padding: 0px !important;
+}
+
+.pick-data-button-group {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.show-less-button-group {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.picks-data-users {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: row
+}
+
+.users-column {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding-left: 20px;
+}
+
+.user-item {
+	margin: 5px !important;
+}
+
+.show-less-button {
+	width: 100%;
+}
+
+.floating-users-pick-button {
+	width: 150px;
+	height: 110px;
+	float: left;
+	border-radius: 1rem;
+	background-color: transparent;
+	padding: 5px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.users-pick-list {
+	margin-top: 5px;
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+.user-pick-label-container {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.user-pick-label {
+	display: flex !important;
+	flex-direction: row;
+	width: auto;
+	background-color: transparent !important;
+	margin: 5px;
+}
+
+.user-pick-font {
+	margin-right: 5px;
+}
+
+@media only screen and (min-width: 650px) {
+	.picks-data-container {
+		width: auto;
+		right: auto;
+		padding: 5px;
+		padding-top: 10px;
+	}
+
+	.picks-data-container-final {
+		width: auto;
+		right: auto;
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+}

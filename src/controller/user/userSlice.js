@@ -1,37 +1,114 @@
 import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { User } from '../../model/user/user';
-
-const usersUrl = environment.userServiceURL + 'users';
+import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
+import { status } from '../../configs/status';
+import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
+import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
 
 const userAdapter = createEntityAdapter();
 
-export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password) => {
-    const url = usersUrl + '/login';
-    const newUser = new User(0, username, password, '', '', '', '', '', '', '');
-    const response = await client.post(url, newUser);
-    return response[0];
+const initialState = userAdapter.getInitialState({
+    status: getUserLocal() === null ? status.IDLE : status.COMPLETE,
+    user: getUserLocal() === null ? {} : getUserLocal()
+});
+
+export const login = async (username, password) => {
+    try {
+        let response = await AmplifyAuth.AmplifyLogin(username, password);
+        return response;
+    } catch(error) {
+        console.error(error);
+        return {error: AmplifyEnum.inValidUser}
+    }
+};
+
+export const forgotPassword = async (username) => {
+    try {
+        let response = await AmplifyAuth.SendForgotPasswordCode(username);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSCODE_SUCCESS})
+        return response
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR})
+    }
+}
+
+export const resetPassword = async (username, password, code) => {
+    try {
+       let response = await AmplifyAuth.ForgotPassword(username, password, code);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS})
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR});
+    }
+}
+
+export const createPassword = async (username, tempPassword, newPassword) => {
+    try {
+        let response = await AmplifyAuth.CompletePasswordLogin(username, tempPassword, newPassword);
+        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS});
+        return response;
+    } catch(error) {
+        console.error(error)
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR});
+    }
+}
+
+export const signOut = createAsyncThunk('user/signOut', async () => {
+    try {
+        let response = await AmplifyAuth.SignOut();
+        clearAllLocal();
+        return response;
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+    }
+})
+
+export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password, token) => {
+    const url = endpoints.USERS.LOGIN;
+    try {
+        const newUser = User.createUser(username, password);
+        const response = await client.post(url, newUser, {Authorization: token});
+        setUserLocal(response[0])
+        return response[0];
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type:status.ERROR, message:status.MESSAGE.USER.LOGIN_ERROR});
+        return {status: status.ERROR, message: error}
+    }
 })   
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: userAdapter.getInitialState(),
+    initialState,
     extraReducers : (builder) => {
         builder
             .addCase(fetchUser.fulfilled, (state, action) => {
-                userAdapter.setAll(state, action.payload)
+                if(action.payload?.status === status.ERROR) {
+                    state.user = {}
+                    state.status = status.ERROR;
+                } else {
+                    state.user = action.payload;
+                    state.status = status.COMPLETE;
+                }
+            })
+            .addCase(fetchUser.pending, (state, action) => {
+                state.status = status.LOADING;
+            })
+            .addCase(signOut.fulfilled, (state, action) => {
+                state.user = {}
+                state.status = status.IDLE;
             })
     },
 });
 
 export const { usersLoaded } = userSlice.actions
 
-const userSelectors = userAdapter.getSelectors((state) => state.user)
-
-export const {
-    selectAll: selectUser
-} = userSelectors
+export const selectUser = (state) => state.user.user;
 
 export default userSlice.reducer
 

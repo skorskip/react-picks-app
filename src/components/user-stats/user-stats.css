@@ -1,0 +1,120 @@
+.card-title {
+	padding: 2px;
+	border-radius: 8px;
+	margin: 10px;
+    cursor: pointer;
+    border: solid 1px;
+}
+
+.card-bottom {
+	padding: 2px;
+	border-radius: 8px;
+	margin: 10px;
+}
+
+.card-header {
+	display: flex;
+	flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+    align-items: center;
+}
+
+.card-subheader {
+    display: flex;
+	flex-direction: row;
+    justify-content: flex-start; 
+}
+
+.card-header-text {
+	margin-top: 20px;
+	font-size:1.5em;
+    margin: 10px;
+}
+
+.info-header {
+    display: flex;
+    font-size: 1.5em;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-stat-info-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.field {
+    font-size: 1.3em;
+    padding: 5px;
+    margin: 5px;
+}
+
+.info-field {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.icon-container {
+    border-radius: 50%;
+    height: 25px;
+    padding: 10px;
+}
+
+
+.pick-progress-numbers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    font-size: 1em;
+}
+
+.pick-progress-container {
+    padding: 5px;
+}
+
+.large-font {
+    font-size: 2em;
+}
+
+.medium-font {
+    font-size: 1.3em;
+}
+
+.pick-stat-card {
+    border: 1px solid;
+    border-radius: 8px;
+    margin: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.picks-stat-card-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.pick-stat-icon {
+    display: flex;
+    flex-direction: row;
+}
+
+.pick-progress-group {
+    margin: 10px;
+}
+
+.progress-bar-stat {
+    padding: 5px;
+}
+
+.stat-title {
+    padding-top: 5px;
+}

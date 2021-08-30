@@ -1,3 +1,7 @@
+export const UserTypeEnum = {
+    PARTICIPANT: "participant"
+}
+
 export class User {
     constructor(user_id, user_name, password, email, first_name, last_name, status, type, last_login_date){
         this.user_id = user_id;
@@ -9,5 +13,9 @@ export class User {
         this.status = status;
         this.type = type;
         this.last_login_date = last_login_date;
+    }
+
+    static createUser(user_name, password) {
+        return new User(0, user_name, password, '','','','','', '', '');
     }
 }

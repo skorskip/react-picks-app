@@ -1,0 +1,35 @@
+.week-switcher-container {
+    padding-top: 50px;
+}
+
+.header-container {
+	position: fixed;
+    height: 50px;
+    z-index: 3;
+    top:0;
+    display: flex;
+    justify-content: center;
+	width: 100%;
+	padding: 4px;
+}
+
+.spectator-container {
+	display: flex;
+	padding: 5px;
+	align-items: center;
+	justify-content: space-around;
+	border-radius: 4px;
+	padding-right: 10px;
+    padding-left: 10px;
+}
+
+.spectator-icon {
+	padding-right: 10px;
+}
+
+@media only screen and (min-width: 650px) {
+	.header-container  {
+		top: 60px;
+	}
+
+}

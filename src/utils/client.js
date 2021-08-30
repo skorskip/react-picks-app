@@ -1,7 +1,9 @@
+import { getTokenLocal } from "./localData"
+
 export async function client(endpoint, { body, ...customConfig } = {}) {
     const headers = { 
       'Content-Type': 'application/json', 
-      'Authorization': localStorage.getItem('token') 
+      'Authorization': customConfig.Authorization ? customConfig.Authorization : getTokenLocal() 
     }
   
     const config = {
@@ -36,4 +38,12 @@ export async function client(endpoint, { body, ...customConfig } = {}) {
   
   client.post = function (endpoint, body, customConfig = {}) {
     return client(endpoint, { ...customConfig, body })
+  }
+
+  client.delete = function (endpoint, body, customConfig = {}) {
+    return client(endpoint, { ...customConfig, method: 'DELETE' })
+  }
+
+  client.put = function (endpoint, body, customConfig = {}) {
+    return client(endpoint, { ...customConfig, method: 'PUT', body })
   }

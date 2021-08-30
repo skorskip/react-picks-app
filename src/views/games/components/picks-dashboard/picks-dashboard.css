@@ -1,0 +1,47 @@
+.delete-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 5px !important;
+	margin-right: 25px !important;
+	margin-left: 25px !important;
+    border: solid 1px !important;
+    padding: 10px !important;
+    transition-duration: 500ms !important;
+	transition-timing-function: ease-in-out !important;
+}
+
+.bottom-margin {
+	margin-bottom: 5px;
+}
+
+.no-picks-set {
+	font-size: 2em;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	height: 250px;
+	margin-top:20%;
+	padding: 10px;
+}
+
+.no-picks-set-content {
+	opacity: .4;
+}
+
+.empty-icon {
+	padding: 15px;
+	font-size: 200%;
+}
+
+@media only screen and (min-width: 650px) {
+	.games-container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: flex-start;
+	}
+}

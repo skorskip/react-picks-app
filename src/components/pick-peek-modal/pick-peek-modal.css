@@ -1,0 +1,153 @@
+.user-modal {
+	display: flex;
+	position: fixed;
+	flex-direction: column;
+	bottom: calc(50% - 225px);
+	left: calc(50% - 175px);
+	height: 550px;
+	border-radius: 12px;
+	width: 350px;
+	z-index: 5;
+}
+
+.init-icon {
+    display: flex;
+	justify-content: center;
+	align-items: center;
+    border: solid 4px;
+    border-radius: 50%;
+    height: 70px;
+    width: 70px;
+    padding: 10px;
+	font-size: 2em;
+	position: absolute;
+	top: 50px;
+}
+
+.modal-init {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.card-header-text {
+	font-size: 1.5em;
+}
+
+.modal-container {
+	display: flex;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.4);
+	z-index: 4;
+}
+
+.modal-header {
+	display: flex;
+	justify-content: flex-start;
+	height: 80px;
+	margin-bottom: 45px;
+}
+
+.modal-title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 100%;
+}
+
+.user-name {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.modal-content {
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+	height: 70%;
+}
+
+.view-picks-button {
+    border-radius: 4px;
+	cursor: pointer;
+	margin: 10px;
+	display: flex;
+	flex-direction: row;
+	width: auto !important;
+}
+
+.no-picks {
+	padding: 10px;
+	display: flex;
+	justify-content: center;
+	font-size: 2em;
+}
+
+.team-picks {
+	margin: 15px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.close-modal-icon {
+	display: flex;
+	justify-content: flex-start;
+	cursor: pointer;
+	padding: 10px;
+	width: calc(50% - 85px);
+}
+
+.week-title-modal {
+	padding: 10px;
+	margin-bottom: 15px;
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-top: 5px;
+}
+
+.separator {
+	display: flex;
+	flex-direction: row;
+	border-bottom: 1px solid;
+}
+
+.teams-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.game-icon {
+	font-size: 2.5em;
+	z-index: 2;
+}
+
+.game-icon-container {
+	position:absolute;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.picks-none-container {
+	padding: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2em;
+	opacity: .4;
+}
+
+.week-modal-title {
+	font-size: 1.5em;
+    margin: 15px;
+}

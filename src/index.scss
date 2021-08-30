@@ -1,0 +1,61 @@
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+body,html,span,div {
+	// font-family: 'Rubik', sans-serif;
+	font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+.highlight-border {
+	border: solid 6px !important;
+}
+
+.circle-container {
+	height: 75px;
+	width: 75px;
+	border-radius: 50%;
+	text-align: center;
+	margin-top: -30px;
+	cursor: pointer;
+}
+
+.noSelect {
+    outline: none !important;
+}
+
+$success: 			rgb(27, 136, 52);
+$failure:			#d02020;
+$warn:				#ca7220;
+$failure-light:		#f15d5d63;
+
+.success-color    					{ color: $success !important; }
+.failure-color    					{ color: $failure !important; }
+.warn-color       					{ color: $warn !important; }
+
+.success-background 			{ background-color: $success !important; }
+.failure-background  			{ background-color: $failure !important; }
+.warn-background  				{ background-color: $warn !important; }
+.failure-light-background		{ background-color: $failure-light !important; }
+
+
+.failure-snack {
+	border-left: 3px solid $failure;
+	box-shadow: 0 0 8px rgba(0,0,0,.2);
+}
+
+.success-snack {
+	border-left: 3px solid $success;
+	box-shadow: 0 0 8px rgba(0,0,0,.2);
+}

@@ -78,10 +78,13 @@
     align-items: center;
 }
 
-.icon-container {
+.profile-icon-container {
     border-radius: 50%;
     height: 25px;
     padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .init-header-icon {
@@ -113,8 +116,9 @@
     margin: 5px !important;
     width: 95px;
     height: 45px;
-    display: flex;
+    display: flex !important;
     justify-content: center;
+    align-items: center;
 }
 
 .toggle-container {

@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
-const announcementsUrl = environment.messageServiceURL + 'message';
 const announcementsAdapter = createEntityAdapter();
 
 const initialState = announcementsAdapter.getInitialState({
@@ -14,7 +13,7 @@ const initialState = announcementsAdapter.getInitialState({
 
 export const fetchAnnouncements = createAsyncThunk('announcemnets/fetchAnnouncements', async (params) => {
     try {
-        const url = announcementsUrl + '/announcements';
+        const url = endpoints.MESSAGES.ANNOUNCEMENTS;
         const response = await client.post(url, params);
         return response;
     } catch(error) {

@@ -1,10 +1,8 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
-
-const userStandingsUrl = environment.userServiceURL + 'users/standings';
 
 const userStandingsAdapter = createEntityAdapter();
 
@@ -14,7 +12,7 @@ const initialState = userStandingsAdapter.getInitialState({
 });
 
 export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStandings', async (params) => {
-    const url = `${userStandingsUrl}?season=${params.season}&seasonType=${params.seasonType}`;
+    const url = `${endpoints.USERS.STANDINGS}?season=${params.season}&seasonType=${params.seasonType}`;
     try {
         const response = await client.get(url);
         return response;

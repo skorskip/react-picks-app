@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import { SET_THEME } from '../../configs/topics';
 import { Subscriber } from '../../utils/pubSub';
+import { getThemeLocal } from '../../utils/localData';
 
 export const ThemeSwitcher = () => {
-    const [theme, setTheme] = useState(localStorage.getItem('theme') === null ? "light" : localStorage.getItem('theme'));
+    const [theme, setTheme] = useState(getThemeLocal() == null ? "light" : getThemeLocal());
 
     const setNewTheme = (data) => {
         if(data !== null) {

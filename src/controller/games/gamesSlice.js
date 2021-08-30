@@ -1,10 +1,8 @@
 import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
-
-const weekUrl = environment.weekServiceURL + 'week';
 
 const gamesAdapter = createEntityAdapter();
 
@@ -16,7 +14,7 @@ const initialState = gamesAdapter.getInitialState({
 
 export const fetchGames = createAsyncThunk('user/fetchGames',  async (param) => {
     try {
-        const url = `${weekUrl}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
+        const url = `${endpoints.GAMES.BASE}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
         const response = await client.post(url, param.user);
         return response;
     } catch(error) {

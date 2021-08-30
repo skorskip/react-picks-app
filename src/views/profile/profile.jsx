@@ -7,12 +7,13 @@ import { UserStats } from '../../components/user-stats/user-stats';
 import { useHistory } from 'react-router-dom';
 import { themeList } from '../../configs/themes';
 import { publish, SET_THEME } from '../../utils/pubSub';
+import { getThemeLocal, setThemeLocal } from '../../utils/localData';
 
 export const Profile = () => {
     const user = useSelector(selectUser);
     const history = useHistory();
     const dispatch = useDispatch();
-    const [theme, setTheme] = useState(localStorage.getItem('theme') === null ? "light" : localStorage.getItem('theme'));
+    const [theme, setTheme] = useState(getThemeLocal() === null ? "light" : getThemeLocal());
 
     const signOutUser = () => {
         dispatch(signOut());
@@ -25,7 +26,7 @@ export const Profile = () => {
     }
 
     const toggleTheme = (newTheme) => {
-        localStorage.setItem("theme", newTheme);
+        setThemeLocal(newTheme)
         setTheme(newTheme);
         publish(SET_THEME, newTheme);
     }
@@ -73,7 +74,7 @@ export const Profile = () => {
                 </div>
                 <div className="info-content">
                     <div className="info-field">
-                        <div className="icon-container primary-color">
+                        <div className="profile-icon-container primary-color">
                             <div className="primary-color">
                                 <Icon name="user"/>
                             </div>
@@ -83,7 +84,7 @@ export const Profile = () => {
                         </div>
                     </div>
                     <div className="info-field">
-                        <div className="icon-container primary-color">
+                        <div className="profile-icon-container primary-color">
                             <Icon name="mail"/>
                         </div>
                         <div className="field">

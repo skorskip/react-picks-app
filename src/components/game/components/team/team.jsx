@@ -38,6 +38,14 @@ export const Team = ({
         }
     }
 
+    const getSpreadClass = () => {
+        if(/windows phone|android/i.test(navigator.userAgent)) {
+            return 'game-card-spread-android tiertary-color base-background'
+        } else {
+            return 'game-card-spread tiertary-color base-background'
+        }
+    }
+
     const getGameSpread = (number) => {
         if(number){
             if(number > 0) {
@@ -56,7 +64,7 @@ export const Team = ({
 
     const teamWithScore = locked && (
         <div className={ getClass('score') }>
-            <div className="large-text-padding">{ score }</div>
+            <div className="large-text-padding">{ score ? score : 0}</div>
             <div className="small-text-middle">{ team.abbreviation }</div>
         </div>
     );
@@ -69,7 +77,7 @@ export const Team = ({
     );
 
     const spreadIcon = (spread != null && spread !== 0) && (
-        <div className="game-card-spread tiertary-color base-background">
+        <div className={getSpreadClass()}>
             <div className="game-card-spread-icon accent base-background">
                 <b>
                     { getGameSpread(spread) }

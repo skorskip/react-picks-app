@@ -1,18 +1,17 @@
 import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { User } from '../../model/user/user';
 import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
-
-const usersUrl = environment.userServiceURL + 'users';
+import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
 
 const userAdapter = createEntityAdapter();
 
 const initialState = userAdapter.getInitialState({
-    status: localStorage.getItem("user") === null ? status.IDLE : status.COMPLETE,
-    user: localStorage.getItem("user") === null ? {} : JSON.parse(localStorage.getItem("user"))
+    status: getUserLocal() === null ? status.IDLE : status.COMPLETE,
+    user: getUserLocal() === null ? {} : getUserLocal()
 });
 
 export const login = async (username, password) => {
@@ -61,7 +60,7 @@ export const createPassword = async (username, tempPassword, newPassword) => {
 export const signOut = createAsyncThunk('user/signOut', async () => {
     try {
         let response = await AmplifyAuth.SignOut();
-        localStorage.clear();
+        clearAllLocal();
         return response;
     } catch(error) {
         console.error(error);
@@ -70,11 +69,11 @@ export const signOut = createAsyncThunk('user/signOut', async () => {
 })
 
 export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password, token) => {
-    const url = usersUrl + '/login';
+    const url = endpoints.USERS.LOGIN;
     try {
         const newUser = User.createUser(username, password);
         const response = await client.post(url, newUser, {Authorization: token});
-        localStorage.setItem("user", JSON.stringify(response[0]));
+        setUserLocal(response[0])
         return response[0];
     } catch(error) {
         console.error(error);

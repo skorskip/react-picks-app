@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify';
+import { setTokenLocal } from './localData';
 
 export const AmplifyEnum = {
     needNewPassword: 'NEW_PASSWORD_REQUIRED',
@@ -16,7 +17,7 @@ export default class AmplifyAuth {
                 return response;
             } else {
                 const signedInUser = await Auth.currentSession();
-                localStorage.setItem("token", signedInUser.getIdToken().getJwtToken());
+                setTokenLocal(signedInUser.getIdToken().getJwtToken());
                 return response;
             }
         } catch(error) {
@@ -69,7 +70,7 @@ export default class AmplifyAuth {
             if(new Date() > expiration) {
                 return null;
             } else {
-                localStorage.setItem("token", response.getIdToken().getJwtToken());
+                setTokenLocal(response.getIdToken().getJwtToken());
                 return response.getIdToken().getJwtToken();
             }
         } catch(error) {

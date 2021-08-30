@@ -86,13 +86,13 @@ export const Standings = () => {
     const winPct = (standing) => {
         return (
             <div className={getItemClass(standing.user_id, "win-pct")}>
-                { standing.win_pct }
+                { standing.win_pct.toFixed(3) }
             </div>
         )
     }
 
-    const noStandings = (standings.length === 0) && (
-        <div className="no-standings-set">
+    const noStandings = (standings.length === 0 && standingsStatus !== status.LOADING) && (
+        <div className="no-standings-set secondary-color">
             No standings yet
         </div>
     )

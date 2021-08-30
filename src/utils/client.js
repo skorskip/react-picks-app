@@ -1,7 +1,9 @@
+import { getTokenLocal } from "./localData"
+
 export async function client(endpoint, { body, ...customConfig } = {}) {
     const headers = { 
       'Content-Type': 'application/json', 
-      'Authorization': customConfig.Authorization ? customConfig.Authorization : localStorage.getItem('token') 
+      'Authorization': customConfig.Authorization ? customConfig.Authorization : getTokenLocal() 
     }
   
     const config = {

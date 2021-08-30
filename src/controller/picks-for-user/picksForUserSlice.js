@@ -1,10 +1,8 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { client } from '../../utils/client';
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
-
-const picksForUserUrl = environment.picksServiceURL + 'picks/others';
 
 const picksForUserAdapter = createEntityAdapter();
 
@@ -14,7 +12,7 @@ const initialState = picksForUserAdapter.getInitialState({
 });
 
 export const fetchPicksForUser = createAsyncThunk('picksForUser/fetchPicksForUser', async (params) => {
-    const url = `${picksForUserUrl}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&user=${params.userId}`;
+    const url = `${endpoints.PICKS.OTHERS_BY_WEEK}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&user=${params.userId}`;
     try {
         const response = await client.get(url);
         return response;
@@ -57,7 +55,9 @@ const picksForUserSlice = createSlice({
                         game: game,
                         awayTeam: teams.find(team => team.team_id === game.away_team_id),
                         homeTeam: teams.find(team => team.team_id === game.home_team_id),
-                        pick: picks[i]
+                        pick: picks[i],
+                        winning_team_id: game.winning_team_id,
+                        game_status: game.game_status 
                         }
                 
                         picksList.push(gameObject);

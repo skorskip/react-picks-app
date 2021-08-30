@@ -94,6 +94,22 @@
 	align-items: center;
 }
 
+.game-card-spread-android {
+	position: absolute;
+	float: left;
+	margin-left: 120px;
+	margin-top: -70px;
+    text-align: center;
+	border-radius: 50%;
+	padding: 5px;
+	border: solid 2px;
+	width: 60px;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .game-card-spread-icon {
 	display: flex;
     align-items: center;

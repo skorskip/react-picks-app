@@ -1,10 +1,9 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
-import { environment } from '../../configs/environment';
+import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { client } from '../../utils/client';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
-const usersUrl = environment.userServiceURL + 'users';
 const userPickLimitAdapter = createEntityAdapter();
 
 const initialState = userPickLimitAdapter.getInitialState({
@@ -13,7 +12,7 @@ const initialState = userPickLimitAdapter.getInitialState({
 });
 
 export const fetchUserPickLimit = createAsyncThunk('userPickData/fetchUserPickLimit', async (params) => {
-    const url = `${usersUrl}/userPicksLimit?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&userId=${params.user_id}`;
+    const url = `${endpoints.USERS.PICK_LIMIT}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&userId=${params.user_id}`;
     try{
         const response = await client.get(url);
         return response[0];

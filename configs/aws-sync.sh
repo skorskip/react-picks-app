@@ -35,7 +35,7 @@ fi
 
 echo -e "Build started with ${BLUE}$environment${NC} ..."
 cd ..
-npm run build
+npm run build .env.$environment
 
 echo -e "${YELLOW}Start S3 sync to ${BLUE}$bucket${YELLOW} as ${BLUE}$profile${YELLOW}? y/n${NC}"
 read start

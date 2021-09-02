@@ -72,7 +72,7 @@ export const UserStats = () => {
 
     useEffect(() => {
         if(userStandingsState === status.IDLE && leagueState === status.COMPLETE) {
-            dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
+            dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
         }
     }, [userState, leagueState, userStandingsState, league, dispatch]);
 

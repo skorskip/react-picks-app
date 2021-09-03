@@ -26,6 +26,7 @@ export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
 const leagueSlice = createSlice({
     name: 'league',
     initialState,
+    reducers: {},
     extraReducers : (builder) => {
         builder
             .addCase(fetchLeague.pending, (state, action) => {

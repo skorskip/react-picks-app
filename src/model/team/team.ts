@@ -1,4 +1,12 @@
 export class Team {
+
+    team_id : Number;
+    primary_color: String;
+    secondary_color: String;
+    display_color: String;
+    team_name: String;
+    abbreviation: String;
+
     constructor(
         team_id,
         primary_color,

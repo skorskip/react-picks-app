@@ -5,6 +5,14 @@ export const PickSubmitEnum = {
 }
 
 export class Pick {
+
+    pick_id: Number;
+    user_id: Number;
+    game_id: Number;
+    team_id: Number;
+    submitted_date: String;
+    pick_submit_by_date: Date;
+
     constructor(
         pick_id,
         user_id,

@@ -11,6 +11,22 @@ export const GameWinStatusEnum = {
 }
 
 export class Game {
+
+    game_id: Number;
+    week: Number;
+    season: Number;
+    start_time: Date;
+    pick_submit_by_date: Date;
+    home_team_id: Number;
+    away_team_id: Number;
+    home_team_score: Number;
+    away_team_score: Number;
+    home_spread: Number;
+    game_status: String;
+    winning_team_id: Number;
+    current_quarter: String;
+    seconds_left_in_quarter: String;   
+
     constructor(
         game_id,
         week,

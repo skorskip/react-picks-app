@@ -3,15 +3,17 @@ import { client } from '../../utils/client'
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
-import { PickSubmitEnum } from '../../model/pick/pick';
+import { Pick, PickSubmitEnum } from '../../model/pick/pick';
+import { PickRequest } from '../../model/postRequests/pickRequest';
+import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 
 const picksAdapter = createEntityAdapter();
 
 const initialState = picksAdapter.getInitialState({
     status: status.IDLE,
-    message: null,
-    weekSet: "",
-    picks: []
+    message: "" as String,
+    weekSet: null as Number,
+    picks: [] as Pick[]
 });
 
 const getMessageFromError = (error) => {
@@ -30,21 +32,9 @@ const getMessageFromError = (error) => {
     }
 }
 
-export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param) => {
+export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param: SeasonRequest) => {
     try {
         const url = `${endpoints.PICKS.BY_WEEK}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`;
-        const response = await client.post(url, param.user);
-        return {week: param.week, response: response};
-    } catch(error) {
-        console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
-        return {status: status.ERROR, message: error}
-    }
-});
-
-export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async (param) => {
-    try {
-        const url = `${endpoints.PICKS.OTHERS_BY_WEEK}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}&user=${param.user}`;
         const response = await client.get(url);
         return {week: param.week, response: response};
     } catch(error) {
@@ -54,9 +44,21 @@ export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async 
     }
 });
 
-export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
+export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async (param: PickRequest) => {
     try {
-        const url = endpoints.PICKS.ADD + param.userId;
+        const url = `${endpoints.PICKS.OTHERS_BY_WEEK}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}&user=${param.user_id}`;
+        const response = await client.get(url);
+        return {week: param.week, response: response};
+    } catch(error) {
+        console.error(error);
+        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
+        return {status: status.ERROR, message: error}
+    }
+});
+
+export const addPicks = createAsyncThunk('picks/addPicks', async (param: PickRequest) => {
+    try {
+        const url = endpoints.PICKS.ADD + param.user_id;
         const response = await client.post(url, param.picks);
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.ADD_SUCCESS});
         return response;
@@ -67,9 +69,9 @@ export const addPicks = createAsyncThunk('picks/addPicks', async (param) => {
     }
 });
 
-export const updatePicks = createAsyncThunk('picks/updatePicks', async (param) => {
+export const updatePicks = createAsyncThunk('picks/updatePicks', async (param: PickRequest) => {
     try {
-        const url = endpoints.PICKS.UPDATE + param.userId;
+        const url = endpoints.PICKS.UPDATE;
         const response = await client.post(url, param.picks);
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
         return response;
@@ -80,9 +82,9 @@ export const updatePicks = createAsyncThunk('picks/updatePicks', async (param) =
     }
 });
 
-export const deletePicks = createAsyncThunk('picks/deletePicks', async (param) => {
+export const deletePicks = createAsyncThunk('picks/deletePicks', async (param: PickRequest) => {
     try {
-        const url = endpoints.PICKS.DELETE + param.userId;
+        const url = endpoints.PICKS.DELETE;
         const response = await client.post(url, param.picks);
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
         return response;
@@ -106,7 +108,7 @@ const picksSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.status = status.ERROR;
                 } else {
-                    state.picks = action.payload.response.picks;
+                    state.picks = action.payload.response.picks as Pick[];
                     state.weekSet = 0;
                     state.status = status.COMPLETE;
                 }
@@ -118,7 +120,7 @@ const picksSlice = createSlice({
                 if(action.payload?.status === status.ERROR) {
                     state.status = status.ERROR;
                 } else {
-                    state.picks = action.payload.response.picks;
+                    state.picks = action.payload.response.picks as Pick[];
                     state.weekSet = action.payload.week;
                     state.status = status.COMPLETE;
                 }
@@ -128,7 +130,7 @@ const picksSlice = createSlice({
             })
             .addCase(addPicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
-                    state.picks = action.payload.picks;
+                    state.picks = action.payload.picks as Pick[];
                     state.status = status.COMPLETE;
                 } else {
                     let error = action.payload.message.content;
@@ -141,7 +143,7 @@ const picksSlice = createSlice({
             })
             .addCase(updatePicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
-                    state.picks = action.payload.picks;
+                    state.picks = action.payload.picks as Pick[];
                     state.status = status.COMPLETE;
                 } else {
                     let error = action.payload.message.content;
@@ -154,7 +156,7 @@ const picksSlice = createSlice({
             })
             .addCase(deletePicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
-                    state.picks = action.payload.picks;
+                    state.picks = action.payload.picks as Pick[];
                     state.status = status.COMPLETE;
                 } else {
                     let error = action.payload.message.content;
@@ -165,16 +167,16 @@ const picksSlice = createSlice({
     },
 });
 
-export const selectPicks = (state) => state.picks.picks;
+export const selectPicks = (state) => state.picks.picks as Pick[];
 
 export const selectPicksMessage = (state) => state.picks.message;
 
 export const getPicksSetWeek = (state) => state.picks.weekSet;
 
-export const selectPicksById = (state, pickId) => state.picks.picks.find((pick) => pick.pick_id === pickId);
+export const selectPicksById = (state, pickId) => state.picks.picks.find((pick) => pick.pick_id === pickId) as Pick[];
 
-export const selectPicksIds = (state) => state.picks.picks.map((pick) => pick.pick_id);
+export const selectPicksIds = (state) => state.picks.picks.map((pick) => pick.pick_id) as Number[];
 
-export const selectPicksGamesIds = (state) => state.picks.picks.map((pick) => pick.game_id);
+export const selectPicksGamesIds = (state) => state.picks.picks.map((pick) => pick.game_id) as Number[];
 
 export default picksSlice.reducer

@@ -1,4 +1,12 @@
 export class League {
+
+    currentWeek: Number;
+    currentSeason: Number;
+    maxTotalPicks: Number;
+    seasonStart: Number;
+    seasonEndWeek: Number;
+    currentSeasonType: Number;
+
     constructor(
         currentWeek,
         currentSeason,

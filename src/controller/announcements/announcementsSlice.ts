@@ -26,6 +26,7 @@ export const fetchAnnouncements = createAsyncThunk('announcemnets/fetchAnnouncem
 const announcementsSlice = createSlice({
     name: 'announcements',
     initialState,
+    reducers : {},
     extraReducers : (builder) => {
         builder
             .addCase(fetchAnnouncements.pending, (state, action) => {

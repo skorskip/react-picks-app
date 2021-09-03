@@ -71,8 +71,7 @@ export const signOut = createAsyncThunk('user/signOut', async () => {
 export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password, token) => {
     const url = endpoints.USERS.LOGIN;
     try {
-        const newUser = User.createUser(username, password);
-        const response = await client.post(url, newUser, {Authorization: token});
+        const response = await client.get(url, {Authorization: token});
         setUserLocal(response[0])
         return response[0];
     } catch(error) {

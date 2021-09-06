@@ -73,7 +73,7 @@ export const StandingsUserCard = ({ standing, isCurrentUser }) => {
         </div>
     )
 
-    const bonus = (standing.bonus_nbr !== 0) && (
+    const bonus = (
         <div className="bonus">
             <div className="standing-card-bonus-icon success-color">
                 { Array(parseInt(standing.bonus_nbr)).fill(<span>$</span>) }

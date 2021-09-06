@@ -35,6 +35,8 @@ fi
 
 echo -e "Build started with ${BLUE}$environment${NC} ..."
 cd ..
+rm .env.local
+cp .env.$environment .env.local
 npm run build
 
 echo -e "${YELLOW}Start S3 sync to ${BLUE}$bucket${YELLOW} as ${BLUE}$profile${YELLOW}? y/n${NC}"
@@ -44,6 +46,13 @@ if [ $start = "y" ]; then
     echo "Sync started..."
     cd build/
     aws s3 sync . s3://$bucket --delete --profile $profile
+    if [ $environment = "production" ]; then
+      echo "Spike cache production ..."
+      aws cloudfront create-invalidation --profile $profile --distribution-id E1ZO94AO5J7H6D --paths "/*"
+    elif [ $environment = "dev" ]; then
+      echo "Spike cache dev ..." 
+      aws cloudfront create-invalidation --profile $profile --distribution-id E16VNHLRRRDERV --paths "/*"
+    fi
     echo -e "${GREEN}Process compelete${NC}"
 else 
     echo -e "${RED}Cancelled${NC}"

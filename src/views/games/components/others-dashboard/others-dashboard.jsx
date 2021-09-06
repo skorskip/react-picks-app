@@ -29,7 +29,7 @@ export const OthersDashboard = () => {
 
     useEffect(() => {
         if(standingsStatus === status.IDLE && leagueStatus === status.COMPLETE) {
-            dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType}));
+            dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
         }
     }, [dispatch, standingsStatus, leagueStatus, league]);
 

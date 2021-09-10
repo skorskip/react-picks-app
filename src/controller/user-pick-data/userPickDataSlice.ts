@@ -3,15 +3,17 @@ import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { client } from '../../utils/client';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
+import { SeasonRequest } from '../../model/postRequests/seasonRequest';
+import { PicksUserData } from '../../model/picksUserData/picksUserData';
 
 const userPickDataAdapter = createEntityAdapter();
 
 const initialState = userPickDataAdapter.getInitialState({
     status: status.IDLE,
-    userPickData: {}
+    userPickData: [] as PicksUserData[]
 });
 
-export const fetchUserPickData = createAsyncThunk('userPickData/fetchUserPickData', async (params) => {
+export const fetchUserPickData = createAsyncThunk('userPickData/fetchUserPickData', async (params: SeasonRequest) => {
     const url = `${endpoints.PICKS.ALL_PICKS_BY_WEEK}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}`;
     try {
         const response = await client.get(url);
@@ -26,6 +28,7 @@ export const fetchUserPickData = createAsyncThunk('userPickData/fetchUserPickDat
 const userPickDataSlice = createSlice({
     name: 'userPickData',
     initialState,
+    reducers: {},
     extraReducers : (builder) => {
         builder
             .addCase(fetchUserPickData.pending, (state, action) => {
@@ -33,7 +36,6 @@ const userPickDataSlice = createSlice({
             })
             .addCase(fetchUserPickData.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    state.userPickData = {};
                     state.status = status.ERROR;
                 } else {
                     state.userPickData = action.payload;
@@ -43,6 +45,6 @@ const userPickDataSlice = createSlice({
     }
 });
 
-export const selectUserPickDataByGame = (state, gameId) => state.userPickData.userPickData[gameId];
+export const selectUserPickDataByGame = (state, gameId) => state.userPickData.userPickData.filter(data => data.game_id === gameId) as PicksUserData[];
 
 export default userPickDataSlice.reducer;

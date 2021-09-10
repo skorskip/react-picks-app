@@ -1,18 +1,20 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
+import { PickRequest } from '../../model/postRequests/pickRequest';
+import { UserDetails } from '../../model/userDetails/userDetails';
 import { client } from '../../utils/client';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
-const userPickLimitAdapter = createEntityAdapter();
+const userDetailsAdapter = createEntityAdapter();
 
-const initialState = userPickLimitAdapter.getInitialState({
+const initialState = userDetailsAdapter.getInitialState({
     status: status.IDLE,
-    userPickLimit: {}
+    userDetails: {} as UserDetails
 });
 
-export const fetchUserPickLimit = createAsyncThunk('userPickData/fetchUserPickLimit', async (params) => {
-    const url = `${endpoints.USERS.PICK_LIMIT}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&userId=${params.user_id}`;
+export const fetchUserDetails = createAsyncThunk('userDetails/fetchUserDetails', async (user_id) => {
+    const url = `${endpoints.USERS.DETAILS}?userId=${user_id}`;
     try{
         const response = await client.get(url);
         return response[0];
@@ -23,26 +25,26 @@ export const fetchUserPickLimit = createAsyncThunk('userPickData/fetchUserPickLi
     }
 });
 
-const userPickLimitSlice = createSlice({
-    name: 'userPickLimit',
+const userDetailsSlice = createSlice({
+    name: 'userDetails',
     initialState,
+    reducers: {},
     extraReducers : (builder) => {
         builder
-            .addCase(fetchUserPickLimit.pending, (state, action) => {
+            .addCase(fetchUserDetails.pending, (state, action) => {
                 state.status = status.LOADING;
             })
-            .addCase(fetchUserPickLimit.fulfilled, (state, action) => {
+            .addCase(fetchUserDetails.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    state.userPickLimit = {};
                     state.status = status.ERROR;
                 } else {
-                    state.userPickLimit = action.payload;
+                    state.userDetails = action.payload;
                     state.status = status.COMPLETE;
                 }
             })
     }
 });
 
-export const selectUserPickLimit = (state) => state.userPickLimit.userPickLimit;
+export const selectUserDetails = (state) => state.userDetails.userDetails as UserDetails;
 
-export default userPickLimitSlice.reducer;
+export default userDetailsSlice.reducer;

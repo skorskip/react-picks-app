@@ -68,7 +68,7 @@ export const signOut = createAsyncThunk('user/signOut', async () => {
     }
 })
 
-export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, password, token) => {
+export const fetchUser = createAsyncThunk('user/fetchUser',  async (token) => {
     const url = endpoints.USERS.LOGIN;
     try {
         const response = await client.get(url, {Authorization: token});
@@ -84,6 +84,7 @@ export const fetchUser = createAsyncThunk('user/fetchUser',  async (username, pa
 const userSlice = createSlice({
     name: 'user',
     initialState,
+    reducers: {},
     extraReducers : (builder) => {
         builder
             .addCase(fetchUser.fulfilled, (state, action) => {
@@ -104,8 +105,6 @@ const userSlice = createSlice({
             })
     },
 });
-
-export const { usersLoaded } = userSlice.actions
 
 export const selectUser = (state) => state.user.user;
 

@@ -1,4 +1,5 @@
 import { Auth } from 'aws-amplify';
+import { status } from '../configs/status';
 import { setTokenLocal } from './localData';
 
 export const AmplifyEnum = {
@@ -14,11 +15,11 @@ export default class AmplifyAuth {
         try {
             const response = await Auth.signIn({username: username, password: password});
             if(response.challengeName === AmplifyEnum.needNewPassword) {
-                return response;
+                return {status: status.SUCCESS, response: response};
             } else {
                 const signedInUser = await Auth.currentSession();
                 setTokenLocal(signedInUser.getIdToken().getJwtToken());
-                return response;
+                return {status: status.SUCCESS, response: response};
             }
         } catch(error) {
             throw error;
@@ -30,7 +31,7 @@ export default class AmplifyAuth {
             const response = await Auth.signIn({username: username, password: tempPassword});
             const { requiredAttributes } = response.challengeParam;
             await Auth.completeNewPassword(response, newPassword, requiredAttributes);
-            return {success: AmplifyEnum.success};
+            return {status: status.SUCCESS};
         } catch(error) {
             throw error;
         }
@@ -39,7 +40,7 @@ export default class AmplifyAuth {
     static async ForgotPassword(username, password, code) {
         try {
             const response = await Auth.forgotPasswordSubmit(username, code, password);
-            return response;
+            return {status: status.SUCCESS, response: response};
         } catch(error) {
             throw error;
         }
@@ -48,7 +49,7 @@ export default class AmplifyAuth {
     static async SendForgotPasswordCode(username) {
         try {
             const response = await Auth.forgotPassword(username);
-            return response;
+            return {status: status.SUCCESS, response: response};
         } catch(error) {
             throw error;
         }
@@ -57,21 +58,21 @@ export default class AmplifyAuth {
     static async SignOut() {
         try {
             const response = await Auth.signOut({global: true});
-            return response;
+            return {status: status.SUCCESS, response: response};
         } catch(error) {
             throw error;
         }
     }
 
-    static async FetchCurrentSession () {
+    static async FetchCurrentSession() {
         try {
             const response = await Auth.currentSession();
             var expiration = new Date(response.getIdToken().getExpiration() * 1000);
             if(new Date() > expiration) {
-                return null;
+                return {status: status.SUCCESS, response: null};
             } else {
                 setTokenLocal(response.getIdToken().getJwtToken());
-                return response.getIdToken().getJwtToken();
+                return {status: status.SUCCESS, response: response.getIdToken().getJwtToken()}
             }
         } catch(error) {
             throw error;

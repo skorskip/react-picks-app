@@ -3,6 +3,7 @@ import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
+import { DateRequest } from '../../model/postRequests/dateRequest';
 
 const announcementsAdapter = createEntityAdapter();
 
@@ -11,7 +12,7 @@ const initialState = announcementsAdapter.getInitialState({
     announcements: {}
 });
 
-export const fetchAnnouncements = createAsyncThunk('announcemnets/fetchAnnouncements', async (params) => {
+export const fetchAnnouncements = createAsyncThunk('announcemnets/fetchAnnouncements', async (params: DateRequest) => {
     try {
         const url = endpoints.MESSAGES.ANNOUNCEMENTS;
         const response = await client.post(url, params);

@@ -6,7 +6,7 @@ const tokenAdapter = createEntityAdapter();
 
 const initialState = tokenAdapter.getInitialState({
     status: status.IDLE,
-    token: null
+    token:  null
 });
 
 export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
@@ -14,19 +14,19 @@ export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
         return AmplifyAuth.FetchCurrentSession();
     } catch(error) {
         console.error(error);
-        return {status: status.ERROR, message: error}
+        return {status: status.ERROR, message: error, response: null}
     }
-
 });
 
 const tokenSlice = createSlice({
     name: 'token',
     initialState,
+    reducers: {},
     extraReducers : (builder) => {
         builder
             .addCase(fetchToken.fulfilled, (state, action) => {
-                if(action.payload?.status !== status.ERROR) {
-                    state.token = action.payload
+                if(action.payload.status !== status.ERROR) {
+                    state.token = action.payload.response;
                     state.status = status.COMPLETE;
                 } else {
                     state.status = status.IDLE;

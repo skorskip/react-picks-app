@@ -25,6 +25,7 @@ export const endpoints = {
         BASE : `${environment.userServiceURL}users`,
         LOGIN : `${environment.userServiceURL}users/login`,
         PICK_LIMIT : `${environment.userServiceURL}users/userPicksLimit`,
-        STANDINGS : `${environment.userServiceURL}users/standings`
+        STANDINGS : `${environment.userServiceURL}users/standings`,
+        DETAILS : `${environment.userServiceURL}users/details`
     }
 }

@@ -1,24 +1,24 @@
 export class UserDetails {
-    user_id         : Number;
-    user_type       : String;
-    max_picks       : Number;
-    picks_penalty   : Number;
-    pending_picks   : Number;
-    picks           : Number;
-    ranking         : Number;
-    wins            : Number;
-    win_pct         : Number;
+    user_id         : number;
+    user_type       : string;
+    max_picks       : number;
+    picks_penalty   : number;
+    pending_picks   : number;
+    picks           : number;
+    ranking         : number;
+    wins            : number;
+    win_pct         : number;
 
     constructor(
-        user_id      ,
-        user_type    ,
-        max_picks    ,
-        picks_penalty,
-        pending_picks,
-        picks        ,
-        ranking      ,
-        wins         ,
-        win_pct      
+        user_id         : number,
+        user_type       : string,
+        max_picks       : number,
+        picks_penalty   : number,
+        pending_picks   : number,
+        picks           : number,
+        ranking         : number,
+        wins            : number,
+        win_pct         : number
     ) {
         this.user_id      = user_id      
         this.user_type    = user_type    

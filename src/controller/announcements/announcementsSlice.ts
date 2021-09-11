@@ -4,12 +4,14 @@ import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { DateRequest } from '../../model/postRequests/dateRequest';
+import { RootState } from '../../store';
+import { Announcement, Message } from '../../model/announcement/announcement';
 
 const announcementsAdapter = createEntityAdapter();
 
 const initialState = announcementsAdapter.getInitialState({
     status: status.IDLE,
-    announcements: {}
+    announcements: new Announcement(0, "", [] as Message[])
 });
 
 export const fetchAnnouncements = createAsyncThunk('announcemnets/fetchAnnouncements', async (params: DateRequest) => {
@@ -35,7 +37,6 @@ const announcementsSlice = createSlice({
             })
             .addCase(fetchAnnouncements.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    state.announcements = {messages:[]};
                     state.status = status.ERROR;
                 } else {
                     state.announcements = action.payload;
@@ -45,6 +46,6 @@ const announcementsSlice = createSlice({
     }
 });
 
-export const selectAnnouncements = (state) => state.announcements.announcements;
+export const selectAnnouncements = (state: RootState) => state.announcements.announcements as Announcement;
 
 export default announcementsSlice.reducer;

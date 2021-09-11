@@ -11,22 +11,22 @@ export const AmplifyEnum = {
 
 export default class AmplifyAuth {
     
-    static async AmplifyLogin (username, password) {
+    static async AmplifyLogin (username: string, password: string) {
         try {
             const response = await Auth.signIn({username: username, password: password});
             if(response.challengeName === AmplifyEnum.needNewPassword) {
-                return {status: status.SUCCESS, response: response};
+                return {status: status.SUCCESS, response: response, error: null};
             } else {
                 const signedInUser = await Auth.currentSession();
                 setTokenLocal(signedInUser.getIdToken().getJwtToken());
-                return {status: status.SUCCESS, response: response};
+                return {status: status.SUCCESS, response: response, error: null};
             }
         } catch(error) {
             throw error;
         }
     }
 
-    static async CompletePasswordLogin(username, tempPassword, newPassword) {
+    static async CompletePasswordLogin(username: string, tempPassword: string, newPassword: string) {
         try {
             const response = await Auth.signIn({username: username, password: tempPassword});
             const { requiredAttributes } = response.challengeParam;
@@ -37,7 +37,7 @@ export default class AmplifyAuth {
         }
     }
 
-    static async ForgotPassword(username, password, code) {
+    static async ForgotPassword(username: string, password: string, code: string) {
         try {
             const response = await Auth.forgotPasswordSubmit(username, code, password);
             return {status: status.SUCCESS, response: response};
@@ -46,7 +46,7 @@ export default class AmplifyAuth {
         }
     }
 
-    static async SendForgotPasswordCode(username) {
+    static async SendForgotPasswordCode(username: string) {
         try {
             const response = await Auth.forgotPassword(username);
             return {status: status.SUCCESS, response: response};

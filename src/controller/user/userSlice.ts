@@ -6,6 +6,7 @@ import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
+import { RootState } from '../../store';
 
 const userAdapter = createEntityAdapter();
 
@@ -14,17 +15,17 @@ const initialState = userAdapter.getInitialState({
     user: getUserLocal() === null ? {} : getUserLocal()
 });
 
-export const login = async (username, password) => {
+export const login = async (username: string, password: string) => {
     try {
         let response = await AmplifyAuth.AmplifyLogin(username, password);
         return response;
     } catch(error) {
         console.error(error);
-        return {error: AmplifyEnum.inValidUser}
+        return {status: status.ERROR, response: null, error: AmplifyEnum.inValidUser}
     }
 };
 
-export const forgotPassword = async (username) => {
+export const forgotPassword = async (username: string) => {
     try {
         let response = await AmplifyAuth.SendForgotPasswordCode(username);
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSCODE_SUCCESS})
@@ -35,7 +36,7 @@ export const forgotPassword = async (username) => {
     }
 }
 
-export const resetPassword = async (username, password, code) => {
+export const resetPassword = async (username: string, password: string, code: string) => {
     try {
        let response = await AmplifyAuth.ForgotPassword(username, password, code);
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS})
@@ -46,7 +47,7 @@ export const resetPassword = async (username, password, code) => {
     }
 }
 
-export const createPassword = async (username, tempPassword, newPassword) => {
+export const createPassword = async (username: string, tempPassword: string, newPassword: string) => {
     try {
         let response = await AmplifyAuth.CompletePasswordLogin(username, tempPassword, newPassword);
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS});
@@ -106,7 +107,7 @@ const userSlice = createSlice({
     },
 });
 
-export const selectUser = (state) => state.user.user;
+export const selectUser = (state: RootState) => state.user.user;
 
 export default userSlice.reducer
 

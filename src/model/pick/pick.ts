@@ -6,19 +6,19 @@ export const PickSubmitEnum = {
 
 export class Pick {
 
-    pick_id: Number;
-    user_id: Number;
-    game_id: Number;
-    team_id: Number;
-    submitted_date: String;
-    pick_submit_by_date: Date;
+    pick_id: number;
+    user_id: number;
+    game_id: number;
+    team_id: number;
+    submitted_date: string;
+    pick_submit_by_date: string;
 
     constructor(
-        pick_id,
-        user_id,
-        game_id,
-        team_id,
-        pick_submit_by_date
+        pick_id: number,
+        user_id: number,
+        game_id: number,
+        team_id: number,
+        pick_submit_by_date: string
     ) {
         this.pick_id = pick_id;
         this.user_id = user_id;

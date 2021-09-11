@@ -3,6 +3,7 @@ import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { UserDetails } from '../../model/userDetails/userDetails';
+import { RootState } from '../../store';
 import { client } from '../../utils/client';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
@@ -45,6 +46,6 @@ const userDetailsSlice = createSlice({
     }
 });
 
-export const selectUserDetails = (state) => state.userDetails.userDetails as UserDetails;
+export const selectUserDetails = (state: RootState) => state.userDetails.userDetails as UserDetails;
 
 export default userDetailsSlice.reducer;

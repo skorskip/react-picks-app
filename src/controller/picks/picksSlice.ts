@@ -6,6 +6,8 @@ import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { Pick, PickSubmitEnum } from '../../model/pick/pick';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
+import { PickDeleteRequest } from '../../model/postRequests/pickDeleteRequest';
+import { RootState } from '../../store';
 
 const picksAdapter = createEntityAdapter();
 
@@ -82,7 +84,7 @@ export const updatePicks = createAsyncThunk('picks/updatePicks', async (param: P
     }
 });
 
-export const deletePicks = createAsyncThunk('picks/deletePicks', async (param: PickRequest) => {
+export const deletePicks = createAsyncThunk('picks/deletePicks', async (param: PickDeleteRequest) => {
     try {
         const url = endpoints.PICKS.DELETE;
         const response = await client.post(url, param.picks);
@@ -167,16 +169,16 @@ const picksSlice = createSlice({
     },
 });
 
-export const selectPicks = (state) => state.picks.picks as Pick[];
+export const selectPicks = (state: RootState) => state.picks.picks as Pick[];
 
-export const selectPicksMessage = (state) => state.picks.message;
+export const selectPicksMessage = (state: RootState) => state.picks.message;
 
-export const getPicksSetWeek = (state) => state.picks.weekSet;
+export const getPicksSetWeek = (state: RootState) => state.picks.weekSet;
 
-export const selectPicksById = (state, pickId) => state.picks.picks.find((pick) => pick.pick_id === pickId) as Pick[];
+export const selectPicksById = (state: RootState, pickId: number) => state.picks.picks.find((pick: Pick) => pick.pick_id === pickId) as Pick;
 
-export const selectPicksIds = (state) => state.picks.picks.map((pick) => pick.pick_id) as Number[];
+export const selectPicksIds = (state: RootState) => state.picks.picks.map((pick: Pick) => pick.pick_id) as number[];
 
-export const selectPicksGamesIds = (state) => state.picks.picks.map((pick) => pick.game_id) as Number[];
+export const selectPicksGamesIds = (state: RootState) => state.picks.picks.map((pick: Pick) => pick.game_id) as number[];
 
 export default picksSlice.reducer

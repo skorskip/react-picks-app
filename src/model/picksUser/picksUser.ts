@@ -7,16 +7,18 @@ export class PicksUser {
     awayTeam: Team;
     homeTeam: Team;
     pick: Pick;
-    winning_team_id: Number;
-    game_status: String;
+    winning_team_id: number;
+    game_status: string;
+    pick_submit_by_date: string;
 
     constructor(
-        game, 
-        awayTeam, 
-        homeTeam, 
-        pick, 
-        winning_team_id, 
-        game_status) {
+        game: Game, 
+        awayTeam: Team, 
+        homeTeam: Team, 
+        pick: Pick, 
+        winning_team_id: number, 
+        game_status: string,
+        pick_submit_by_date: string) {
 
             this.game = game;
             this.awayTeam = awayTeam;
@@ -24,6 +26,7 @@ export class PicksUser {
             this.pick = pick;
             this.winning_team_id = winning_team_id;
             this.game_status = game_status;
+            this.pick_submit_by_date = pick_submit_by_date;
     }
 
 }

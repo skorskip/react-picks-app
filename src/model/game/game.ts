@@ -12,36 +12,36 @@ export const GameWinStatusEnum = {
 
 export class Game {
 
-    game_id: Number;
-    week: Number;
-    season: Number;
-    start_time: Date;
-    pick_submit_by_date: Date;
-    home_team_id: Number;
-    away_team_id: Number;
-    home_team_score: Number;
-    away_team_score: Number;
-    home_spread: Number;
-    game_status: String;
-    winning_team_id: Number;
-    current_quarter: String;
-    seconds_left_in_quarter: String;   
+    game_id:                    number;
+    week:                       number;
+    season:                     number;
+    start_time:                 string;
+    pick_submit_by_date:        string;
+    home_team_id:               number;
+    away_team_id:               number;
+    home_team_score:            number;
+    away_team_score:            number;
+    home_spread:                number;
+    game_status:                string;
+    winning_team_id:            number;
+    current_quarter:            number;
+    seconds_left_in_quarter:    number;   
 
     constructor(
-        game_id,
-        week,
-        season,
-        start_time,
-        pick_submit_by_date,
-        home_team_id,
-        away_team_id,
-        home_team_score,
-        away_team_score,
-        home_spread,
-        game_status,
-        winning_team_id,
-        current_quarter,
-        seconds_left_in_quarter
+        game_id:                    number,
+        week:                       number,
+        season:                     number,
+        start_time:                 string,
+        pick_submit_by_date:        string,
+        home_team_id:               number,
+        away_team_id:               number,
+        home_team_score:            number,
+        away_team_score:            number,
+        home_spread:                number,
+        game_status:                string,
+        winning_team_id:            number,
+        current_quarter:            number,
+        seconds_left_in_quarter:    number
     ) {
         this.game_id = game_id;
         this.week = week;

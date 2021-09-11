@@ -1,18 +1,16 @@
-import { Pick } from "../pick/pick";
-
-export class PickRequest {
+export class PickDeleteRequest {
     season:         number;
     seasonType:     number;
     week:           number;
     user_id:        number;
-    picks:          Pick[];
+    picks:          number[];
 
     constructor(
         season:         number,
         seasonType:     number,
         week:           number,
         user_id:        number,
-        picks:          Pick[]
+        picks:          number[]
     ) {
         this.season = season;
         this.seasonType = seasonType;

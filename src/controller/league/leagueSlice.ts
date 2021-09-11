@@ -3,6 +3,7 @@ import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
+import { RootState } from '../../store';
 
 const leagueAdapter = createEntityAdapter();
 
@@ -44,7 +45,7 @@ const leagueSlice = createSlice({
     }
 });
 
-export const selectLeague = (state) => state.league.league;
-export const selectMessageSource = (state) => state.league.league?.messageSource;
+export const selectLeague = (state: RootState) => state.league.league;
+export const selectMessageSource = (state: RootState) => state.league.league?.messageSource;
 
 export default leagueSlice.reducer

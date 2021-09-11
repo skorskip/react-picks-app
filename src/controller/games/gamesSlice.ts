@@ -6,6 +6,7 @@ import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { Game } from '../../model/game/game';
 import { Team } from '../../model/team/team';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
+import { RootState } from '../../store';
 
 const gamesAdapter = createEntityAdapter();
 
@@ -50,16 +51,16 @@ const gamesSlice = createSlice({
     },
 });
 
-export const selectGames = (state) => state.games.games as Game[]
+export const selectGames = (state: RootState) => state.games.games as Game[]
 
-export const selectGamesById = (state, gameId) => state.games.games.find((game) => game.game_id === gameId) as Game;
+export const selectGamesById = (state: RootState, gameId: number) => state.games.games.find((game: Game) => game.game_id === gameId) as Game;
 
-export const selectGameIds = (state) => state.games.games.map((game) => game.game_id) as Number[];
+export const selectGameIds = (state: RootState) => state.games.games.map((game: Game) => game.game_id) as number[];
 
-export const selectGamesPastSubmit = (state) => state.games.games.find((game) => game.pick_submit_by_date < new Date()) as Game[];
+export const selectGamesPastSubmit = (state: RootState) => state.games.games.find((game: Game) => new Date(game.pick_submit_by_date) < new Date()) as Game[];
 
-export const selectTeams = (state) => state.games.teams as Team[]
+export const selectTeams = (state: RootState) => state.games.teams as Team[]
 
-export const selectTeamById = (state, teamId) => state.games.teams.find((team) => team.team_id === teamId) as Team; 
+export const selectTeamById = (state: RootState, teamId: number) => state.games.teams.find((team: Team) => team.team_id === teamId) as Team; 
 
 export default gamesSlice.reducer

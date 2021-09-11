@@ -1,32 +1,34 @@
 export class UserStanding {
 
-    user_id: Number;
-    ranking: Number;
-    user_inits: String; 
-    user_name: String; 
-    first_name: String; 
-    last_name: String; 
-    wins: Number;
-    picks: Number;
-    win_pct: Number;
-    pending_picks: Number;
-    bonus_nbr: Number;
-    prev_ranking: Number;
-    date: Date;
+    user_id:        number;
+    ranking:        number;
+    user_inits:     string; 
+    user_name:      string; 
+    first_name:     string; 
+    last_name:      string; 
+    wins:           number;
+    picks:          number;
+    win_pct:        number;
+    pending_picks:  number;
+    bonus_nbr:      number;
+    prev_ranking:   number;
+    date:           Date;
 
     constructor(
-        user_id, 
-        ranking, 
-        user_inits, 
-        user_name, 
-        first_name, 
-        last_name, 
-        wins, picks, 
-        win_pct, 
-        pending_picks,
-        bonus_nbr,
-        prev_ranking,
-        date) {
+        user_id:        number,
+        ranking:        number,
+        user_inits:     string,
+        user_name:      string,
+        first_name:     string,
+        last_name:      string,
+        wins:           number,
+        picks:          number,
+        win_pct:        number,
+        pending_picks:  number,
+        bonus_nbr:      number,
+        prev_ranking:   number,
+        date:           Date
+    ) {
 
         this.user_id = user_id;
         this.ranking = ranking;

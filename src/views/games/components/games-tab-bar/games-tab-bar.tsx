@@ -6,16 +6,20 @@ import { useSelector } from 'react-redux';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
 import './games-tab-bar.css';
 
+interface RouteParams {
+    slug: string
+}
+
 type Props = {
     pickCount: number
 }
 
 export const GamesTabBar = ({pickCount}:Props) => {
-    let view = useParams();
+    let view = useParams<RouteParams>();
     const league = useSelector(selectLeague);
     const history = useHistory();
     const [isEditSelected, setIsEditSelected] = useState(false);
-    const currentWeek = league.currentWeek;
+    const currentWeek = league.currentWeek.toString();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
     const season = query.get("season");
@@ -32,7 +36,7 @@ export const GamesTabBar = ({pickCount}:Props) => {
     }
 
     const getButtonClass = (selectedView: string) => {
-        if(view === selectedView) {
+        if(view.slug === selectedView) {
             return "toggle-button primary-background base-color";
         } else {
             return "toggle-button tiertary-light-background secondary-color";
@@ -51,14 +55,14 @@ export const GamesTabBar = ({pickCount}:Props) => {
     }
 
     const editButton = (
-        view === "pick" && 
+        view.slug === "pick" && 
         !isEditSelected && 
         pickCount > 0 && 
-        parseInt(week) === currentWeek) && (
+        week === currentWeek) && (
         <Button className="tiertary-light-background secondary-color" onClick={() => selectEdit()}>Edit</Button>
     )
 
-    const doneButton = (view === "pick" && isEditSelected) && (
+    const doneButton = (view.slug === "pick" && isEditSelected) && (
         <Button className="primary-background base-color" onClick={() => selectDone()}>Done</Button>
     )
 

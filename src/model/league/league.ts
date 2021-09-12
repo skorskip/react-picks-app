@@ -1,25 +1,34 @@
+export class MessageSource {
+    channel: string;
+    chatChannel: string;
+
+    constructor(channel: string, chatChannel: string) {
+        this.channel=channel;
+        this.chatChannel = chatChannel;
+    }
+    
+}
+
 export class League {
 
-    currentWeek: Number;
-    currentSeason: Number;
-    maxTotalPicks: Number;
-    seasonStart: Number;
-    seasonEndWeek: Number;
-    currentSeasonType: Number;
+    currentWeek:        number;
+    currentSeason:      number;
+    maxTotalPicks:      number;
+    currentSeasonType:  number;
+    messageSource:      MessageSource;
 
     constructor(
-        currentWeek,
-        currentSeason,
-        maxTotalPicks,
-        seasonStart,
-        seasonEndWeek,
-        currentSeasonType
+        currentWeek:        number,
+        currentSeason:      number,
+        maxTotalPicks:      number,
+        currentSeasonType:  number,
+        messageSource:      MessageSource
+
     ) {
         this.currentWeek = currentWeek;
         this.currentSeason = currentSeason;
         this.maxTotalPicks = maxTotalPicks;
-        this.seasonStart = seasonStart;
-        this.seasonEndWeek = seasonEndWeek;
         this.currentSeasonType = currentSeasonType;
+        this.messageSource = messageSource;
     }
 }

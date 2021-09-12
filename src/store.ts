@@ -11,7 +11,7 @@ import tokenReducer from '../src/controller/token/tokenSlice'
 import picksForUserReducer from '../src/controller/picks-for-user/picksForUserSlice'
 import userDetailsReducer from '../src/controller/user-details/userDetailsSlice'
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     user: userReducer,
     games: gamesReducer,
@@ -30,3 +30,5 @@ export default configureStore({
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch
+
+export default store

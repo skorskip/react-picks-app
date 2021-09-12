@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import store from './store';
 import { Provider } from 'react-redux';
 import 'semantic-ui-css/semantic.min.css'
+import { IfStatement } from '@babel/types';
+
+
 
 ReactDOM.render(
   <React.StrictMode>

@@ -9,6 +9,8 @@ import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal'
 import { status } from '../../configs/status';
 import { StandingsUserCard } from './components/standings-user-card/standings-user-card';
 import { Icon } from 'semantic-ui-react';
+import { SHOW_MESSAGE } from '../../utils/pubSub';
+import { publish } from '../../controller/pubSub/pubSubSlice';
 
 export const Standings = () => {
     const standings = useSelector(selectUserStandings);
@@ -53,6 +55,12 @@ export const Standings = () => {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
         }
     }, [dispatch, standingsStatus, leagueStatus, league]);
+
+    useEffect(() => {
+        if(standingsStatus === status.ERROR) {
+            dispatch(publish({topic: SHOW_MESSAGE, data: {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC}}));
+        }
+    }, [standingsStatus])
 
     return (
         <>

@@ -4,7 +4,7 @@ import { Message, Icon } from 'semantic-ui-react';
 import { status } from '../../configs/status';
 import './messagePopup.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { subscribe, publish } from '../../controller/pubSub/pubSubSlice';
+import { subscribe, clear } from '../../controller/pubSub/pubSubSlice';
 
 export const MessagePopup = () => {
     const [type, setType] = useState("");
@@ -27,17 +27,15 @@ export const MessagePopup = () => {
 
     useEffect(() => {
         if(sub.topic === SHOW_MESSAGE) {
-            if(sub.data != null && sub.data.message !== "" && sub.data.message != null) {
-                setType(sub.data.type);
-                setMessage(sub.data.message);
-                setShowMessage(true);
-    
-                setTimeout(() => {
-                    dispatch(publish("", {}))
-                }, 3000)
-            } else {
-                setShowMessage(false);
-            }
+            setType(sub.data.type);
+            setMessage(sub.data.message);
+            setShowMessage(true);
+
+            setTimeout(() => {
+                dispatch(clear())
+            }, 3000)
+        } else {
+            setShowMessage(false);
         }
     }, [sub, dispatch])
 

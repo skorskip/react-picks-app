@@ -2,7 +2,10 @@ import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/too
 import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
+import { SHOW_MESSAGE } from '../../utils/pubSub';
+import { publish } from '../pubSub/pubSubSlice';
+import { useDispatch } from 'react-redux';
+
 
 const userStandingsAdapter = createEntityAdapter();
 
@@ -18,7 +21,6 @@ export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStand
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error};
     }
 })

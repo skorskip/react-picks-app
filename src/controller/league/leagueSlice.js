@@ -14,12 +14,12 @@ const initialState = leagueAdapter.getInitialState({
 });
 
 export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
-    const dispatch = useDispatch();
     try {
         const url = endpoints.LEAGUE.SETTINGS;
         const response = await client.get(url);
         return response;
     } catch(error) {
+        const dispatch = useDispatch();
         console.error(error);
         dispatch(publish({topic: SHOW_MESSAGE, data: {tupe: status.ERROR, message: status.MESSAGE.ERROR_GENERIC}}))
         return {status: status.ERROR, message: error}

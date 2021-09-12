@@ -2,7 +2,9 @@ import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/too
 import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
+import { SHOW_MESSAGE } from '../../utils/pubSub';
+import { publish } from '../pubSub/pubSubSlice';
+import { useDispatch } from 'react-redux';
 
 const leagueAdapter = createEntityAdapter();
 
@@ -12,13 +14,14 @@ const initialState = leagueAdapter.getInitialState({
 });
 
 export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
+    const dispatch = useDispatch();
     try {
         const url = endpoints.LEAGUE.SETTINGS;
         const response = await client.get(url);
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
+        dispatch(publish({topic: SHOW_MESSAGE, data: {tupe: status.ERROR, message: status.MESSAGE.ERROR_GENERIC}}))
         return {status: status.ERROR, message: error}
     }
 });

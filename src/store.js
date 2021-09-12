@@ -10,6 +10,7 @@ import userStandingsReducer from '../src/controller/user-standings/userStandings
 import tokenReducer from '../src/controller/token/tokenSlice'
 import picksForUserReducer from '../src/controller/picks-for-user/picksForUserSlice'
 import userPickLimitReducer from '../src/controller/user-pick-limit/userPickLimitSlice'
+import pubSubReducer from '../src/controller/pubSub/pubSubSlice'
 
 export default configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export default configureStore({
     userStandings: userStandingsReducer,
     token: tokenReducer,
     picksForUser: picksForUserReducer,
-    userPickLimit: userPickLimitReducer
+    userPickLimit: userPickLimitReducer,
+    pubSub: pubSubReducer
   }
 })

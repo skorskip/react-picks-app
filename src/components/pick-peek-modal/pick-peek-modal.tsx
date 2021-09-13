@@ -5,7 +5,7 @@ import { TeamCard } from '../game-card/components/team-card/team-card';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { selectPicksForUser } from '../../controller/picks-for-user/picksForUserSlice';
 import { fetchPicksForUser } from '../../controller/picks-for-user/picksForUserSlice';
-import { SHOW_MODAL, Subscriber, publish } from '../../utils/pubSub';
+import { SHOW_MODAL, SHOW_MESSAGE } from '../../configs/topics';
 import "./pick-peek-modal.css";
 import { GameLoader } from '../game-loader/game-loader';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -13,10 +13,10 @@ import { status } from '../../configs/status';
 import { PickStatus } from '../game-card/components/pick-staus/pick-status';
 import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
 import { RootState } from '../../store';
-import { UserStanding } from '../../model/userStanding/userStanding';
-import { Pick } from '../../model/pick/pick';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { PicksUser } from '../../model/picksUser/picksUser';
+import { clear, publish, PubSub, subscribe } from '../../controller/pubSub/pubSubSlice';
+import { SnackMessage } from '../message/messagePopup';
 
 export const PickPeekModal = () => {
     
@@ -25,26 +25,20 @@ export const PickPeekModal = () => {
     const leagueState = useSelector((state: RootState) => state.league.status);
     const userPicks = useSelector(selectPicksForUser);
     const userPicksState = useSelector((state: RootState) => state.picksForUser.status);
-    const [userData, setUserData] = useState({user_id: '', first_name: '', last_name: '', user_inits: ''});
+    const [userData, setUserData] = useState({user_id: -1, first_name: '', last_name: '', user_inits: ''});
+    const sub = useSelector(subscribe);
     const dispatch = useDispatch();
 
     const history = useHistory();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
-    const season = query.get("season") === null ? league.currentSeason : query.get("season");
-    const week = query.get("week") === null ? league.currentWeek : query.get("week")
-    const seasonType = query.get("seasonType") === null ? league.currentSeasonType : query.get("seasonType");
-
-    const showModalSub = (data: any) => {
-        setShowModal(data !== null);
-        if(data !== null) {
-            setUserData(data)
-        }
-    }
+    const season = query.get("season") === null ? league.currentSeason : parseInt(query.get("season") || "");
+    const week = query.get("week") === null ? league.currentWeek : parseInt(query.get("week") || "")
+    const seasonType = query.get("seasonType") === null ? league.currentSeasonType : parseInt(query.get("seasonType") || "");
 
     const closeClick = () => {
         setShowModal(false);
-        publish(SHOW_MODAL, null);
+        dispatch(clear());
     }
 
     const viewPicks = () => {
@@ -163,18 +157,28 @@ export const PickPeekModal = () => {
     );
 
     useEffect(() => {
-        if(leagueState === status.COMPLETE && userData.user_id !== "") {
-            let request = new PickRequest(season, seasonType, week, userData.user_id, null);
+        if(leagueState === status.COMPLETE && userData.user_id !== 0) {
+            let request = new PickRequest(season, seasonType, week, userData.user_id, []);
             dispatch(fetchPicksForUser(request));
         }
     }, [userData.user_id, leagueState, league, dispatch]);
 
+    useEffect(() => {
+        if(userPicksState === status.ERROR) {
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            dispatch(publish(request));
+        }
+    },[dispatch, userPicksState]);
+
+    useEffect(() => {
+        if(sub.topic === SHOW_MODAL) {
+            setUserData(sub.data);
+        } 
+    }, [sub])
+
 
     return (
         <>
-            <Subscriber topic={SHOW_MODAL}>
-                {(data: any) => (<>{showModalSub(data)}</>)}
-            </Subscriber>
             { userModal }
         </>
     );

@@ -5,6 +5,7 @@ import { status } from '../../configs/status';
 import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { PicksUser } from '../../model/picksUser/picksUser';
+import { RootState } from '../../store';
 
 const picksForUserAdapter = createEntityAdapter();
 
@@ -20,7 +21,6 @@ export const fetchPicksForUser = createAsyncThunk('picksForUser/fetchPicksForUse
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type:status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
 })
@@ -46,6 +46,6 @@ const picksForUserSlice = createSlice({
     }
 });
 
-export const selectPicksForUser = (state) => state.picksForUser.picksForUser as PicksUser[];
+export const selectPicksForUser = (state: RootState) => state.picksForUser.picksForUser as PicksUser[];
 
 export default picksForUserSlice.reducer

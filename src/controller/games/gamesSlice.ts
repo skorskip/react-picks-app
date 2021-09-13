@@ -57,7 +57,7 @@ export const selectGamesById = (state: RootState, gameId: number) => state.games
 
 export const selectGameIds = (state: RootState) => state.games.games.map((game: Game) => game.game_id) as number[];
 
-export const selectGamesPastSubmit = (state: RootState) => state.games.games.find((game: Game) => new Date(game.pick_submit_by_date) < new Date()) as Game[];
+export const selectGamesPastSubmit = (state: RootState) => state.games.games.find((game: Game) => new Date(game.pick_submit_by_date) < new Date()) as Game;
 
 export const selectTeams = (state: RootState) => state.games.teams as Team[]
 

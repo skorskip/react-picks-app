@@ -10,6 +10,7 @@ import userStandingsReducer from '../src/controller/user-standings/userStandings
 import tokenReducer from '../src/controller/token/tokenSlice'
 import picksForUserReducer from '../src/controller/picks-for-user/picksForUserSlice'
 import userDetailsReducer from '../src/controller/user-details/userDetailsSlice'
+import PubSubReducer from '../src/controller/pubSub/pubSubSlice'
 
 const store = configureStore({
   reducer: {
@@ -22,7 +23,8 @@ const store = configureStore({
     userStandings: userStandingsReducer,
     token: tokenReducer,
     picksForUser: picksForUserReducer,
-    userDetails: userDetailsReducer
+    userDetails: userDetailsReducer,
+    pubSub: PubSubReducer
   }
 })
 

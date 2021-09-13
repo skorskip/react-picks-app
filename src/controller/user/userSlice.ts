@@ -1,10 +1,8 @@
 import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
 import { endpoints } from '../../configs/endpoints';
-import { User } from '../../model/user/user';
 import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
 import { RootState } from '../../store';
 

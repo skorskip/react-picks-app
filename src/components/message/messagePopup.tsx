@@ -1,27 +1,27 @@
-import React, {useState} from 'react';
-import { SHOW_MESSAGE, Subscriber, publish } from '../../utils/pubSub';
+import React, {useEffect, useState} from 'react';
+import { SHOW_MESSAGE } from '../../configs/topics';
 import { Message, Icon } from 'semantic-ui-react';
 import { status } from '../../configs/status';
 import './messagePopup.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { subscribe, clear } from '../../controller/pubSub/pubSubSlice';
+
+export class SnackMessage {
+    type: string;
+    message: string;
+
+    constructor(type: string, message: string) {
+        this.type = type;
+        this.message = message;
+    }
+}
 
 export const MessagePopup = () => {
     const [type, setType] = useState("");
     const [message, setMessage] = useState("");
     const [showMessage, setShowMessage] = useState(false);
-    
-    const showMessageSub = (data: any) => {
-        if(data != null && data.message !== "" && data.message != null) {
-            setType(data.type);
-            setMessage(data.message);
-            setShowMessage(true);
-
-            setTimeout(() => {
-                publish(SHOW_MESSAGE, null)
-            }, 3000)
-        } else {
-            setShowMessage(false);
-        }
-    }
+    const sub = useSelector(subscribe);
+    const dispatch = useDispatch();
 
     const messageDisplay = (showMessage) && (
         type === status.ERROR ? (
@@ -35,14 +35,21 @@ export const MessagePopup = () => {
         ) 
     );
 
+    useEffect(() => {
+        if(sub.topic === SHOW_MESSAGE) {
+            setType(sub.data.type);
+            setMessage(sub.data.message);
+            setShowMessage(true);
+
+            setTimeout(() => {
+                dispatch(clear)
+            }, 3000)
+        }
+    }, [sub, dispatch]);
+
     return (
-        <>
-            <Subscriber topic={SHOW_MESSAGE}>
-                {(data:any) => (<>{showMessageSub(data)}</>)}
-            </Subscriber>
-            <div className="message-container">
-                { messageDisplay }
-            </div>
-        </>
+        <div className="message-container">
+            { messageDisplay }
+        </div>
     );
 }

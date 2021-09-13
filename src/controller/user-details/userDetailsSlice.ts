@@ -5,7 +5,6 @@ import { PickRequest } from '../../model/postRequests/pickRequest';
 import { UserDetails } from '../../model/userDetails/userDetails';
 import { RootState } from '../../store';
 import { client } from '../../utils/client';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 
 const userDetailsAdapter = createEntityAdapter();
 
@@ -14,8 +13,8 @@ const initialState = userDetailsAdapter.getInitialState({
     userDetails: {} as UserDetails
 });
 
-export const fetchUserDetails = createAsyncThunk('userDetails/fetchUserDetails', async (user_id) => {
-    const url = `${endpoints.USERS.DETAILS}?userId=${user_id}`;
+export const fetchUserDetails = createAsyncThunk('userDetails/fetchUserDetails', async (params: PickRequest) => {
+    const url = `${endpoints.USERS.DETAILS}?userId=${params.user_id}`;
     try{
         const response = await client.get(url);
         return response[0];

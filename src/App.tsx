@@ -10,9 +10,11 @@ import './App.scss';
 import { useEffect } from 'react';
 import { fetchLeague } from './controller/league/leagueSlice';
 import { status } from './configs/status';
-import { MessagePopup } from './components/message/messagePopup';
+import { MessagePopup, SnackMessage } from './components/message/messagePopup';
 import { ThemeSwitcher } from './components/theme-switcher/theme-switcher';
 import { RootState } from './store';
+import { publish, PubSub } from './controller/pubSub/pubSubSlice';
+import { SHOW_MESSAGE } from './configs/topics';
 
 Amplify.configure({...awsconfig, ssr: true});
 
@@ -35,6 +37,13 @@ function App() {
   useEffect(() => {
     dispatch(fetchToken());
   },[]);
+
+  useEffect(() => {
+    if(leagueState === status.ERROR) {
+      let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+      dispatch(publish(request))
+    }
+  }, [leagueState, dispatch])
 
   if(userState === status.LOADING || 
     leagueState === status.LOADING) {

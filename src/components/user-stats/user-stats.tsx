@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Progress, Icon } from 'semantic-ui-react'
-import { userStandingById, fetchUserStandings } from '../../controller/user-standings/userStandingsSlice';
 import { selectUserDetails, fetchUserDetails } from '../../controller/user-details/userDetailsSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { selectUser } from '../../controller/user/userSlice';
@@ -8,6 +7,7 @@ import './user-stats.css';
 import { useDispatch, useSelector } from "react-redux";
 import { status } from "../../configs/status";
 import { RootState } from "../../store";
+import { PickRequest } from "../../model/postRequests/pickRequest";
 
 export const UserStats = () => {
     
@@ -43,7 +43,7 @@ export const UserStats = () => {
                 <div>Pick Count</div>
                 <div className="medium-font">{ pendingCount + pickCount } / { userDetails?.max_picks }</div>
             </div>
-            <Progress className="progress-bar-stat" percent={ ((pendingCount + pickCount) / parseInt(userDetails?.max_picks )) * 100 } />
+            <Progress className="progress-bar-stat" percent={ ((pendingCount + pickCount) / userDetails?.max_picks) * 100 } />
         </div>
     );
 
@@ -72,7 +72,8 @@ export const UserStats = () => {
 
     useEffect(() => {
         if(userDetailsState === status.IDLE && leagueState === status.COMPLETE && userState === status.COMPLETE) {
-            dispatch(fetchUserDetails(user.user_id));
+            let request = new PickRequest(0,0,0,user.user_id, [])
+            dispatch(fetchUserDetails(request));
         }
     }, [userDetailsState, leagueState, userState, league, user, dispatch]);
 

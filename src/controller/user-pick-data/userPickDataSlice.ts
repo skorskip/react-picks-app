@@ -2,9 +2,9 @@ import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/too
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { client } from '../../utils/client';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { PicksUserData } from '../../model/picksUserData/picksUserData';
+import { RootState } from '../../store';
 
 const userPickDataAdapter = createEntityAdapter();
 
@@ -45,6 +45,6 @@ const userPickDataSlice = createSlice({
     }
 });
 
-export const selectUserPickDataByGame = (state, gameId) => state.userPickData.userPickData.filter(data => data.game_id === gameId) as PicksUserData[];
+export const selectUserPickDataByGame = (state: RootState, gameId: number) => state.userPickData.userPickData.filter(data => data.game_id === gameId) as PicksUserData[];
 
 export default userPickDataSlice.reducer;

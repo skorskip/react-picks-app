@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
-import { publish, NAV_EDIT_BUTTON, NAV_DONE_BUTTON } from '../../../../utils/pubSub';
-import { useSelector } from 'react-redux';
+import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON } from '../../../../configs/topics';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
+import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import './games-tab-bar.css';
 
 interface RouteParams {
@@ -26,6 +27,7 @@ export const GamesTabBar = ({pickCount}:Props) => {
     const week = query.get("week") ? query.get("week") : currentWeek;
     const seasonType = query.get("seasonType");
     const weekQuery = `?season=${season}&seasonType=${seasonType}&week=${week}`;
+    const dispatch = useDispatch();
 
     const clickView = (view: string) => {
         if(season === null) {
@@ -44,13 +46,12 @@ export const GamesTabBar = ({pickCount}:Props) => {
     }
 
     const selectEdit = () => {
-        publish(NAV_EDIT_BUTTON, true);
+        dispatch(publish(new PubSub(NAV_EDIT_BUTTON, true)));
         setIsEditSelected(true);
     }
 
     const selectDone = () => {
-        publish(NAV_EDIT_BUTTON, null);
-        publish(NAV_DONE_BUTTON, true);
+        dispatch(publish(new PubSub(NAV_DONE_BUTTON, true)));
         setIsEditSelected(false);
     }
 

@@ -1,6 +1,6 @@
 import { getTokenLocal } from "./localData"
 
-export async function client(endpoint: string, { body, ...customConfig } = {}) {
+export async function client(endpoint: string, { body, ...customConfig } = {} as any) {
     const headers = { 
       'Content-Type': 'application/json', 
       'Authorization': customConfig.Authorization ? customConfig.Authorization : getTokenLocal() 

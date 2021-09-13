@@ -1,24 +1,45 @@
-import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter, createAction } from '@reduxjs/toolkit';
+import { RootState } from '../../store';
+
+export class PubSub {
+    topic: string;
+    data: any;
+
+    constructor(topic: string, data: any){
+        this.topic = topic;
+        this.data = data;
+    }
+}
 
 const pubSubAdapter = createEntityAdapter();
 
 const initialState = pubSubAdapter.getInitialState({
-    topic: "",
-    data: {} as any
+    pubSub: {} as PubSub 
 });
 
-const pubsubSlice = createSlice({
-    name: 'pubsub',
-    initialState,
-    reducers: {
-        publish(state, action) {
-            state.topic = action.payload.topic;
-            state.data = action.payload.data;
-        }
+export const publish = createAction('pubsSub/publish', function prepare(data: PubSub) {
+    return {
+        payload : data
     }
 });
 
-const { actions, reducer } = pubsubSlice
-export const { publish } = actions
+export const clear = createAction('pubSub/clear');
 
-export default reducer
+const pubsubSlice = createSlice({
+    name: 'pubSub',
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(publish, (state, action) => {
+                state.pubSub = action.payload
+            })
+            .addCase(clear, (state, action) => {
+                state.pubSub = new PubSub("", {});
+            })
+    }
+});
+
+export const subscribe = (state: RootState) => state.pubSub.pubSub as PubSub;
+
+export default pubsubSlice.reducer

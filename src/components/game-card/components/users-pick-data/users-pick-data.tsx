@@ -5,6 +5,7 @@ import { selectUserPickDataByGame } from '../../../../controller/user-pick-data/
 import { Game, GameStatusEnum } from '../../../../model/game/game';
 import { Pick } from '../../../../model/pick/pick';
 import { PicksUserData } from '../../../../model/picksUserData/picksUserData';
+import { RootState } from '../../../../store';
 import { publish, SHOW_MODAL } from '../../../../utils/pubSub';
 import './users-pick-data.css';
 
@@ -14,7 +15,7 @@ type Props = {
 
 export const UsersPickData = ({ game }:Props) => {
 
-    const picksData = useSelector((state) => selectUserPickDataByGame(state, game.game_id));
+    const picksData = useSelector((state: RootState) => selectUserPickDataByGame(state, game.game_id));
     const awayPicks = picksData ? picksData.filter((pick) => pick.team_id === game.away_team_id): [];
     const homePicks = picksData ? picksData.filter((pick) => pick.team_id === game.home_team_id): [];
     const [showPickers, setShowPickers] = useState(false);

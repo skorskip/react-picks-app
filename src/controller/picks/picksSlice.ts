@@ -13,12 +13,12 @@ const picksAdapter = createEntityAdapter();
 
 const initialState = picksAdapter.getInitialState({
     status: status.IDLE,
-    message: "" as String,
-    weekSet: null as Number,
+    message: "" as string | null,
+    weekSet: undefined as number | undefined,
     picks: [] as Pick[]
 });
 
-const getMessageFromError = (error) => {
+const getMessageFromError = (error: any) => {
     switch (error.message) {
         case PickSubmitEnum.PASS_SUBMIT_DATE :
             return status.MESSAGE.PICKS.PASS_SUBMIT_DATE;
@@ -30,7 +30,7 @@ const getMessageFromError = (error) => {
         case PickSubmitEnum.NO_PICKS : 
             return status.MESSAGE.PICKS.NO_PICKS;
         default :
-            return;
+            return null;
     }
 }
 
@@ -41,7 +41,6 @@ export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param: Se
         return {week: param.week, response: response};
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
 });
@@ -53,7 +52,6 @@ export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async 
         return {week: param.week, response: response};
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
 });
@@ -62,11 +60,9 @@ export const addPicks = createAsyncThunk('picks/addPicks', async (param: PickReq
     try {
         const url = endpoints.PICKS.ADD + param.user_id;
         const response = await client.post(url, param.picks);
-        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.ADD_SUCCESS});
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
 });
@@ -75,11 +71,9 @@ export const updatePicks = createAsyncThunk('picks/updatePicks', async (param: P
     try {
         const url = endpoints.PICKS.UPDATE;
         const response = await client.post(url, param.picks);
-        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
 });
@@ -88,11 +82,9 @@ export const deletePicks = createAsyncThunk('picks/deletePicks', async (param: P
     try {
         const url = endpoints.PICKS.DELETE;
         const response = await client.post(url, param.picks);
-        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.PICKS.EDIT_SUCCESS});
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error}
     }
  });

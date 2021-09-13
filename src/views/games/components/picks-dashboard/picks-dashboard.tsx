@@ -1,31 +1,33 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPicksIds, selectPicks, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/picks/picksSlice';
-import './picks-dashboard.css';
+import { selectPicksIds, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/picks/picksSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
-import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, Subscriber, publish } from '../../../../utils/pubSub';
+import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, SHOW_MESSAGE } from '../../../../configs/topics';
 import { status } from '../../../../configs/status';
 import { Icon } from 'semantic-ui-react';
 import { selectUser } from '../../../../controller/user/userSlice';
 import { RootState } from '../../../../store';
-import { TeamSelect } from '../../../../model/team/team';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
 import { Pick } from '../../../../model/pick/pick';
 import { PickDeleteRequest } from '../../../../model/postRequests/pickDeleteRequest';
 import { PickRequest } from '../../../../model/postRequests/pickRequest';
+import { clear, publish, PubSub, subscribe } from '../../../../controller/pubSub/pubSubSlice';
+import './picks-dashboard.css';
+import { SnackMessage } from '../../../../components/message/messagePopup';
 
 export const PicksDashboard = () => {
 
     const pickIds = useSelector(selectPicksIds);
     const loader = useSelector((state: RootState) => state.picks.status);
-    const picks = useSelector(selectPicks);
+    const sub = useSelector(subscribe);
     const user = useSelector(selectUser);
     const picksMessage = useSelector(selectPicksMessage);
 
     const [updatePicksArray, setUpdatePicks] = useState([] as Pick[]);
     const [deletePicksArray, setDeletePicks] = useState([] as number[]); 
     const [inEditMode, setInEditMode] = useState(false);
+    const [submitSent, setSubmitSent] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -33,9 +35,41 @@ export const PicksDashboard = () => {
         if(loader === status.ERROR) {
             if(picksMessage != null) {
                 alert(picksMessage);
+            } else {
+                let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+                dispatch(publish(request));
             }
         }
+
+        if(loader === status.COMPLETE && submitSent) {
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.EDIT_SUCCESS));
+            dispatch(publish(request)); 
+            setSubmitSent(false);
+        }
     },[loader, picksMessage, status]);
+
+    useEffect(() => {
+
+        if(sub.topic === NAV_DONE_BUTTON) {
+            if(deletePicksArray.length !== 0 ) {
+                let request = new PickDeleteRequest(0, 0, 0, user.user_id, deletePicksArray)
+                dispatch(deletePicks(request))
+            }
+            if(updatePicksArray.length !== 0){
+                let request = new PickRequest(0,0,0, user.user_id, updatePicksArray)
+                dispatch(updatePicks(request));
+            }
+            setSubmitSent(true);
+            dispatch(clear());
+        }
+        
+        if(sub.topic === NAV_EDIT_BUTTON) {
+            setInEditMode(sub.data);
+        } else {
+            setInEditMode(false);
+        }
+
+    }, [dispatch, sub]);
 
     if(loader === status.LOADING || pickIds === undefined) {
         return (
@@ -63,26 +97,6 @@ export const PicksDashboard = () => {
         tempDelete.push(pickToDelete.pick_id);
         setDeletePicks(tempDelete);
         setUpdatePicks(tempUpdate);
-    }
-
-    const editMode = (show: any) => {
-        setInEditMode(show);
-        return null;
-    }
-
-    const submitEdit = (submit: any) => {
-        if(submit != null) {
-            if(deletePicksArray.length !== 0 ) {
-                let request = new PickDeleteRequest(0, 0, 0, user.user_id, deletePicksArray)
-                dispatch(deletePicks(request))
-            }
-            if(updatePicksArray.length !== 0){
-                let request = new PickRequest(0,0,0, user.user_id, updatePicksArray)
-                dispatch(updatePicks(request));
-            }
-            publish(NAV_DONE_BUTTON, null);
-        }
-        return null;
     }
 
     const noPicks = pickIds.length === 0 && (
@@ -113,12 +127,6 @@ export const PicksDashboard = () => {
     return (
         <div className="games-container page">
             { noPicks }
-            <Subscriber topic={NAV_EDIT_BUTTON}>
-                { (data:any) => (<>{editMode(data)}</>)}
-            </Subscriber>
-            <Subscriber topic={NAV_DONE_BUTTON}>
-                { (data:any) => (<>{submitEdit(data)}</>) }
-            </Subscriber>
             { games }
         </div>
     );

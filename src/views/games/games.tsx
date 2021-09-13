@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
 import { selectPicksIds, fetchPicks, getPicksSetWeek } from '../../controller/picks/picksSlice';
@@ -9,7 +9,7 @@ import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
 import { WeekSwitcher } from './components/week-switcher/week-switcher';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Icon } from 'semantic-ui-react';
-import { WEEK_SHOW_WEEKS, Subscriber } from '../../utils/pubSub';
+import { WEEK_SHOW_WEEKS, SHOW_MESSAGE } from '../../configs/topics';
 import "./games.css";
 import "../../utils/slideTransition.scss";
 import { fetchUserPickData } from '../../controller/user-pick-data/userPickDataSlice';
@@ -19,6 +19,8 @@ import { UserTypeEnum } from '../../model/user/user';
 import { useSwipeable } from 'react-swipeable';
 import { RootState } from '../../store';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
+import { publish, PubSub, subscribe } from '../../controller/pubSub/pubSubSlice';
+import { SnackMessage } from '../../components/message/messagePopup';
 
 interface RouteParams {
     slug: string
@@ -34,7 +36,10 @@ export const Games = ({routes}: Props) => {
     const pickIds = useSelector(selectPicksIds);
     const gamesState = useSelector((state: RootState) => state.games.status);
     const leagueState = useSelector((state: RootState) => state.league.status);
+    const picksState = useSelector((state:RootState) => state.picks.status);
+    const pickForUserState = useSelector((state:RootState) => state.picksForUser.status);
     const setWeek = useSelector(getPicksSetWeek);
+    const sub = useSelector(subscribe);
     const dispatch = useDispatch();
 
     let location = useLocation();
@@ -43,9 +48,9 @@ export const Games = ({routes}: Props) => {
     let view = useParams<RouteParams>();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
-    const season = query.get("season")
-    const week = query.get("week")
-    const seasonType = query.get("seasonType")
+    const season = parseInt(query.get("season") || "");
+    const week = parseInt(query.get("week") || "" );
+    const seasonType = parseInt(query.get("seasonType")||"")
     const other = query.get("user");
 
     const currSeason = league.currentSeason
@@ -53,10 +58,6 @@ export const Games = ({routes}: Props) => {
     const currSeasonType = league.currentSeasonType
     const [weeksShown, setWeeksShown] = useState(false);
     const weekQuery = `?season=${season}&seasonType=${seasonType}&week=${week}`;
-    
-    const showWeeks = (show: any) => {
-        setWeeksShown(show);
-    }
 
     const swipeView = (view: string) => {
         if(season === null) {
@@ -128,7 +129,7 @@ export const Games = ({routes}: Props) => {
     useEffect(() => {
         const shouldRefresh = () => {
             if(season && week && seasonType) {
-                return parseInt(week) !== parseInt(setWeek);
+                return week !== setWeek;
             } else {
                 return false;
             }
@@ -144,11 +145,24 @@ export const Games = ({routes}: Props) => {
         }
     }, [dispatch, user, season, week, seasonType, view, currWeek, other, setWeek])
 
+    useEffect(() => {
+        if(gamesState === status.ERROR 
+            || picksState === status.ERROR
+            || pickForUserState === status.ERROR){
+                
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            dispatch(publish(request));
+        }
+    }, [gamesState, dispatch]);
+
+    useEffect(() => {
+        if(sub.topic === WEEK_SHOW_WEEKS) {
+            setWeeksShown(sub.data);
+        }
+    }, [sub, dispatch])
+
     return (
         <div {...swipeHandlers} style={{ touchAction: 'pan-y' }}>
-            <Subscriber topic={WEEK_SHOW_WEEKS}>
-                {(data:any) => (<>{showWeeks(data)}</>)}
-            </Subscriber>
             { spectatorView }
             { gamesTab }
             <div className="games-week-container">

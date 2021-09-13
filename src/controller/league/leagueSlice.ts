@@ -20,7 +20,6 @@ export const fetchLeague = createAsyncThunk('league/fetchLeague', async () => {
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
         return {status: status.ERROR, message: error}
     }
 });

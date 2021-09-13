@@ -1,22 +1,22 @@
 export class PicksUserData {
-    pick_id: Number;
-    game_id: Number;
-    team_id: Number;
-    user_id: Number;
-    user_inits: String;
-    first_name: String;
-    last_name: String;
-    pick_submit_by_date: String;
+    pick_id:                number;
+    game_id:                number;
+    team_id:                number;
+    user_id:                number;
+    user_inits:             string;
+    first_name:             string;
+    last_name:              string;
+    pick_submit_by_date:    string;
 
     constructor(
-        pick_id,
-        game_id,
-        team_id,
-        user_id,
-        user_inits,
-        first_name,
-        last_name,
-        pick_submit_by_date
+        pick_id:                number,
+        game_id:                number,
+        team_id:                number,
+        user_id:                number,
+        user_inits:             string,
+        first_name:             string,
+        last_name:              string,
+        pick_submit_by_date:    string
     ){
         this.pick_id = pick_id;
         this.game_id = game_id;

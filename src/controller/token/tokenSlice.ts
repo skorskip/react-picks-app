@@ -1,12 +1,13 @@
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import { status } from '../../configs/status';
+import { RootState } from '../../store';
 import AmplifyAuth from '../../utils/amplifyAuth';
 
 const tokenAdapter = createEntityAdapter();
 
 const initialState = tokenAdapter.getInitialState({
     status: status.IDLE,
-    token:  null
+    token:  null as string | null
 });
 
 export const fetchToken = createAsyncThunk('token/fetchToken', async () => {
@@ -39,6 +40,6 @@ const tokenSlice = createSlice({
     }
 });
 
-export const selectToken = (state) => state.token.token;
+export const selectToken = (state:RootState) => state.token.token;
 
 export default tokenSlice.reducer

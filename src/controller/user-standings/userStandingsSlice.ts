@@ -2,9 +2,9 @@ import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/too
 import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { UserStanding } from '../../model/userStanding/userStanding';
+import { RootState } from '../../store';
 
 const userStandingsAdapter = createEntityAdapter();
 
@@ -45,8 +45,8 @@ const userStandingsSlice = createSlice({
     }
 });
 
-export const selectUserStandings = (state) => state.userStandings.userStandings as UserStanding[];
+export const selectUserStandings = (state: RootState) => state.userStandings.userStandings as UserStanding[];
 
-export const userStandingById = (state, user_id) => state.userStandings.userStandings.find((standing) => standing.user_id === user_id) as UserStanding;
+export const userStandingById = (state: RootState, user_id: number) => state.userStandings.userStandings.find((standing) => standing.user_id === user_id) as UserStanding;
 
 export default userStandingsSlice.reducer

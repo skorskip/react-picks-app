@@ -1,3 +1,15 @@
+export class Theme {
+  name: string;
+  value: string;
+  style: string;
+
+  constructor(){
+    this.name = "";
+    this.style = "";
+    this.value = "";
+  }
+}
+
 export const themeList = [
   {
     name : "Light",
@@ -76,4 +88,4 @@ export const themeList = [
       }
 ];
 
-export const GetThemeInfo = (theme) => themeList.find(item => item.name === theme);
+export const GetThemeInfo = (theme: string) => themeList.find(item => item.name === theme) as Theme;

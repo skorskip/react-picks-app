@@ -15,6 +15,9 @@ import { RootState } from '../../../../store';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
 import { PickRequest } from '../../../../model/postRequests/pickRequest';
 import { Pick } from '../../../../model/pick/pick';
+import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { SnackMessage } from '../../../../components/message/messagePopup';
+import { SHOW_MESSAGE } from '../../../../configs/topics';
 
 export const GameDashboard = () => {
     const dispatch = useDispatch();
@@ -57,7 +60,7 @@ export const GameDashboard = () => {
     
     const getSubmitClass = () => {
         return (stagedCount > 0 && 
-            (week === parseInt(league.currentWeek) 
+            (week === league.currentWeek
             || week === null)) ? 
             "submit-container show-submit-button" : "submit-container hide-submit-button"
     };
@@ -89,12 +92,19 @@ export const GameDashboard = () => {
             setStagedCount(0);
             resetStagedPicksLocal();
             setSubmitSent(false);
+
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.ADD_SUCCESS));
+            dispatch(publish(request));
+
             history.push("/games/pick");
         }
         if(pickLoader === status.ERROR && submitSent) {
             setSubmitSent(false);
             if(picksMessage != null) {
                 alert(picksMessage);
+            } else {
+                let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+                dispatch(publish(request));
             }
         }
     },[pickLoader, submitSent, stagedPicks, history, picksMessage]);

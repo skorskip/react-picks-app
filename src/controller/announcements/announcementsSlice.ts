@@ -21,7 +21,6 @@ export const fetchAnnouncements = createAsyncThunk('announcemnets/fetchAnnouncem
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
         return {status: status.ERROR, message: error}
     }
 });

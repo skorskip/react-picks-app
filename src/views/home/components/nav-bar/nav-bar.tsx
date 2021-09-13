@@ -12,6 +12,9 @@ import { environment } from '../../../../configs/environment';
 import { getAnnouncementCheckLocal, getLiveThreadCheckLocal, resetAnnouncementCheckLocal, resetLiveThreadCheckLocal } from '../../../../utils/localData';
 import { RootState } from '../../../../store';
 import { DateRequest } from '../../../../model/postRequests/dateRequest';
+import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { SHOW_MESSAGE } from '../../../../configs/topics';
+import { SnackMessage } from '../../../../components/message/messagePopup';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
@@ -92,6 +95,13 @@ export const NavBar = () => {
             fetchData();
         }
     }, [userState, leagueState, announcementsUrl])
+
+    useEffect(() => {
+        if(announcementsStatus === status.ERROR){
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            dispatch(publish(request));
+        }
+    }, [announcementsStatus, dispatch]);
 
     return (
         <div className="base-background nav-container">

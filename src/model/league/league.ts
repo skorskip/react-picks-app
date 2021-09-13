@@ -9,6 +9,11 @@ export class MessageSource {
     
 }
 
+export class Bonus {
+    currentPotAmt: number;
+    constructor(currentPotAmt: number){this.currentPotAmt = currentPotAmt};
+}
+
 export class League {
 
     currentWeek:        number;
@@ -16,13 +21,15 @@ export class League {
     maxTotalPicks:      number;
     currentSeasonType:  number;
     messageSource:      MessageSource;
+    bonus:              Bonus;
 
     constructor(
         currentWeek:        number,
         currentSeason:      number,
         maxTotalPicks:      number,
         currentSeasonType:  number,
-        messageSource:      MessageSource
+        messageSource:      MessageSource,
+        bonus:              Bonus
 
     ) {
         this.currentWeek = currentWeek;
@@ -30,5 +37,6 @@ export class League {
         this.maxTotalPicks = maxTotalPicks;
         this.currentSeasonType = currentSeasonType;
         this.messageSource = messageSource;
+        this.bonus = bonus;
     }
 }

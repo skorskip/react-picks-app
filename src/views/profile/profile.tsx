@@ -6,8 +6,9 @@ import './profile.css';
 import { UserStats } from '../../components/user-stats/user-stats';
 import { useHistory } from 'react-router-dom';
 import { themeList } from '../../configs/themes';
-import { publish, SET_THEME } from '../../utils/pubSub';
 import { getThemeLocal, setThemeLocal } from '../../utils/localData';
+import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
+import { SET_THEME } from '../../configs/topics';
 
 export const Profile = () => {
     const user = useSelector(selectUser);
@@ -28,7 +29,7 @@ export const Profile = () => {
     const toggleTheme = (newTheme: string) => {
         setThemeLocal(newTheme)
         setTheme(newTheme);
-        publish(SET_THEME, newTheme);
+        dispatch(publish(new PubSub(SET_THEME, newTheme)));
     }
 
     const getThemeClass = (value: string) => {

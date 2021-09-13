@@ -5,6 +5,7 @@ import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
 import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
 import { RootState } from '../../store';
+import { useDispatch } from 'react-redux';
 
 const userAdapter = createEntityAdapter();
 
@@ -24,6 +25,7 @@ export const login = async (username: string, password: string) => {
 };
 
 export const forgotPassword = async (username: string) => {
+    const dispatch = useDispatch();
     try {
         let response = await AmplifyAuth.SendForgotPasswordCode(username);
         publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSCODE_SUCCESS})
@@ -63,7 +65,6 @@ export const signOut = createAsyncThunk('user/signOut', async () => {
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
     }
 })
 
@@ -75,7 +76,6 @@ export const fetchUser = createAsyncThunk('user/fetchUser',  async (token) => {
         return response[0];
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type:status.ERROR, message:status.MESSAGE.USER.LOGIN_ERROR});
         return {status: status.ERROR, message: error}
     }
 })   

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon } from 'semantic-ui-react';
 import { selectUser, signOut, forgotPassword} from '../../controller/user/userSlice';
@@ -8,10 +8,14 @@ import { useHistory } from 'react-router-dom';
 import { themeList } from '../../configs/themes';
 import { getThemeLocal, setThemeLocal } from '../../utils/localData';
 import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
-import { SET_THEME } from '../../configs/topics';
+import { SET_THEME, SHOW_MESSAGE } from '../../configs/topics';
+import { RootState } from '../../store';
+import { status } from '../../configs/status';
+import { SnackMessage } from '../../components/message/messagePopup';
 
 export const Profile = () => {
     const user = useSelector(selectUser);
+    const userState = useSelector((state:RootState) => state.user.status)
     const history = useHistory();
     const dispatch = useDispatch();
     const [theme, setTheme] = useState(getThemeLocal() === null ? "light" : getThemeLocal());
@@ -126,6 +130,13 @@ export const Profile = () => {
             </div>
         </div>
     )
+
+    useEffect(() => {
+        if(userState === status.ERROR) {
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.USER.LOGIN_ERROR));
+            dispatch(publish(request));
+        }
+    }, [userState, dispatch]);
 
     return (
         <div className="profile-container">

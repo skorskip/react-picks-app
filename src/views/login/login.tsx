@@ -9,6 +9,9 @@ import { AmplifyEnum } from '../../utils/amplifyAuth';
 import { fetchToken } from '../../controller/token/tokenSlice';
 import { status } from '../../configs/status'
 import { RootState } from '../../store'
+import { publish, PubSub } from '../../controller/pubSub/pubSubSlice'
+import { SHOW_MESSAGE } from '../../configs/topics'
+import { SnackMessage } from '../../components/message/messagePopup'
 
 export const Login = () => {
     const formInfo = {
@@ -34,6 +37,7 @@ export const Login = () => {
     const tokenState = useSelector((state: RootState) => state.token.status);
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
+    const userState = useSelector((state: RootState) => state.user.status);
     const dispatch = useDispatch();
 
     const handleChange = (event: { target: { name: any; value: any } }) => {
@@ -209,6 +213,13 @@ export const Login = () => {
             history.push("/");
         }
     }, [tokenState, username, password, dispatch, history]);
+
+    useEffect(() => {
+        if(userState === status.ERROR) {
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            dispatch(publish(request));
+        }
+    }, [userState, dispatch]);
 
     return (
         <div className="loginContainer">

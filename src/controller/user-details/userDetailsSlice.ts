@@ -20,7 +20,6 @@ export const fetchUserDetails = createAsyncThunk('userDetails/fetchUserDetails',
         return response[0];
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC});
         return {status: status.ERROR, message: error};
     }
 });

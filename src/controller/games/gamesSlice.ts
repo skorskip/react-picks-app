@@ -2,7 +2,6 @@ import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/to
 import { client } from '../../utils/client'
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { Game } from '../../model/game/game';
 import { Team } from '../../model/team/team';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
@@ -23,7 +22,6 @@ export const fetchGames = createAsyncThunk('user/fetchGames',  async (param: Sea
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, status.MESSAGE.ERROR_GENERIC);
         return {status: status.ERROR, message: error}
     }
 })

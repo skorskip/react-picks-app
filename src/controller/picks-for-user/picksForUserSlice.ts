@@ -2,7 +2,6 @@ import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/too
 import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { PicksUser } from '../../model/picksUser/picksUser';
 import { RootState } from '../../store';

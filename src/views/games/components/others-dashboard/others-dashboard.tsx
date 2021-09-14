@@ -10,6 +10,9 @@ import "./others-dashboard.css";
 import { Icon } from "semantic-ui-react";
 import { RootState } from "../../../../store";
 import { PickRequest } from "../../../../model/postRequests/pickRequest";
+import { publish, PubSub } from "../../../../controller/pubSub/pubSubSlice";
+import { SHOW_MESSAGE } from "../../../../configs/topics";
+import { SnackMessage } from "../../../../components/message/messagePopup";
 
 export const OthersDashboard = () => {
     const dispatch = useDispatch();
@@ -20,7 +23,7 @@ export const OthersDashboard = () => {
     const week = parseInt(query.get("week") || "");
     const seasonType = parseInt(query.get("seasonType") || "");
     const user = parseInt(query.get("user") || "");
-    const userInfo = useSelector((state) => userStandingById(state, user));
+    const userInfo = useSelector((state: RootState) => userStandingById(state, user));
     const standingsStatus = useSelector((state: RootState) => state.userStandings.status);
     const league = useSelector(selectLeague);
     const leagueStatus = useSelector((state:RootState) => state.league.status);
@@ -32,8 +35,12 @@ export const OthersDashboard = () => {
     useEffect(() => {
         if(standingsStatus === status.IDLE && leagueStatus === status.COMPLETE) {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
+        } else if(standingsStatus === status.ERROR) {
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            dispatch(publish(request));
         }
     }, [dispatch, standingsStatus, leagueStatus, league]);
+
 
     useEffect(() => {
         if(user != null && week != null && season != null && seasonType != null) {

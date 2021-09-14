@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { selectUserPickDataByGame } from '../../../../controller/user-pick-data/userPickDataSlice';
 import { Game, GameStatusEnum } from '../../../../model/game/game';
-import { Pick } from '../../../../model/pick/pick';
 import { PicksUserData } from '../../../../model/picksUserData/picksUserData';
 import { RootState } from '../../../../store';
-import { publish, SHOW_MODAL } from '../../../../utils/pubSub';
+import { SHOW_MODAL } from '../../../../configs/topics';
 import './users-pick-data.css';
+import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 
 type Props = {
     game: Game
@@ -19,6 +19,7 @@ export const UsersPickData = ({ game }:Props) => {
     const awayPicks = picksData ? picksData.filter((pick) => pick.team_id === game.away_team_id): [];
     const homePicks = picksData ? picksData.filter((pick) => pick.team_id === game.home_team_id): [];
     const [showPickers, setShowPickers] = useState(false);
+    const dispatch = useDispatch();
 
     const picksDataClick = () => {
         setShowPickers(!showPickers);
@@ -29,7 +30,7 @@ export const UsersPickData = ({ game }:Props) => {
     }
 
     const setUserModal = (pick: PicksUserData) => {
-        publish(SHOW_MODAL, pick);
+        dispatch(publish(new PubSub(SHOW_MODAL, pick)));
     }
 
     const containerClass = () => {

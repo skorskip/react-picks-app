@@ -6,6 +6,9 @@ import { status } from '../../configs/status';
 import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
 import { RootState } from '../../store';
 import { useDispatch } from 'react-redux';
+import { publish, PubSub } from '../pubSub/pubSubSlice';
+import { SHOW_MESSAGE } from '../../configs/topics';
+import { SnackMessage } from '../../components/message/messagePopup';
 
 const userAdapter = createEntityAdapter();
 
@@ -25,36 +28,32 @@ export const login = async (username: string, password: string) => {
 };
 
 export const forgotPassword = async (username: string) => {
-    const dispatch = useDispatch();
     try {
         let response = await AmplifyAuth.SendForgotPasswordCode(username);
-        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSCODE_SUCCESS})
         return response
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR})
+        return {status: status.ERROR, response: error}
     }
 }
 
 export const resetPassword = async (username: string, password: string, code: string) => {
     try {
-       let response = await AmplifyAuth.ForgotPassword(username, password, code);
-        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS})
+        let response = await AmplifyAuth.ForgotPassword(username, password, code);
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR});
+        return {status: status.ERROR, response: error}
     }
 }
 
 export const createPassword = async (username: string, tempPassword: string, newPassword: string) => {
     try {
-        let response = await AmplifyAuth.CompletePasswordLogin(username, tempPassword, newPassword);
-        publish(SHOW_MESSAGE, {type: status.SUCCESS, message: status.MESSAGE.USER.PASSWORD_SUCCESS});
+        let response = await AmplifyAuth.CompletePasswordLogin(username, tempPassword, newPassword);   
         return response;
     } catch(error) {
         console.error(error)
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.USER.PASSWORD_ERROR});
+        return {status: status.ERROR, response: error}
     }
 }
 

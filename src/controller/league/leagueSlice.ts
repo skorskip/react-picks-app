@@ -2,7 +2,6 @@ import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/too
 import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
-import { publish, SHOW_MESSAGE } from '../../utils/pubSub';
 import { RootState } from '../../store';
 import { League, MessageSource } from '../../model/league/league';
 

@@ -38,6 +38,7 @@ export const Games = ({routes}: Props) => {
     const leagueState = useSelector((state: RootState) => state.league.status);
     const picksState = useSelector((state:RootState) => state.picks.status);
     const pickForUserState = useSelector((state:RootState) => state.picksForUser.status);
+    const userPickDataState = useSelector((state: RootState) => state.userPickData.status);
     const setWeek = useSelector(getPicksSetWeek);
     const sub = useSelector(subscribe);
     const dispatch = useDispatch();
@@ -148,7 +149,8 @@ export const Games = ({routes}: Props) => {
     useEffect(() => {
         if(gamesState === status.ERROR 
             || picksState === status.ERROR
-            || pickForUserState === status.ERROR){
+            || pickForUserState === status.ERROR
+            || userPickDataState === status.ERROR){
                 
             let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
             dispatch(publish(request));

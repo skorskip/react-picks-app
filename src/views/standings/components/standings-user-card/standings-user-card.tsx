@@ -1,8 +1,10 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { UserStanding } from '../../../../model/userStanding/userStanding';
-import { SHOW_MODAL, publish } from '../../../../utils/pubSub';
+import { SHOW_MODAL } from '../../../../configs/topics';
 import '../../standings.css';
+import { useDispatch } from 'react-redux';
+import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 
 type Props = {
     standing: UserStanding,
@@ -10,6 +12,8 @@ type Props = {
 }
 
 export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
+
+    const dispatch = useDispatch();
 
     const getItemClass = (addClass: string) => {
         return (isCurrentUser) ? `${addClass} base-color` : `${addClass} secondary-color`;
@@ -41,7 +45,7 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
     }
 
     const viewModal = () => {
-        publish(SHOW_MODAL, standing);
+        dispatch(publish(new PubSub(SHOW_MODAL, standing)));
     }
 
     const rankingSymbol = (rank: number) => {

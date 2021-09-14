@@ -49,22 +49,43 @@ export const Login = () => {
 
     const completeForgotPassword = () => {
         setPasswordMismatch(formData.password !== formData.confirmPassword);
+
         if(formData.password !== '' && formData.password === formData.confirmPassword) {
             resetPassword(formData.username, formData.password, formData.code).then((result) => {
+
+                if(result.status === status.ERROR) {
+                    let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.USER.PASSWORD_ERROR));
+                    dispatch(publish(request));
+                }
+
                 setLoader(false);
                 setToken();
                 setForgotPasswordForm(false);
+
+                let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.USER.PASSWORD_SUCCESS));
+                dispatch(publish(request));
             });
         }
     }
 
     const completeLogin = () => {
         setPasswordMismatch(formData.newPassword !== formData.confirmPassword);
+        
         if(formData.password !== '' && formData.newPassword === formData.confirmPassword) {
+            
             createPassword(formData.username, formData.password, formData.newPassword).then((result) => {
+
+                if(result.status === status.ERROR) {
+                    let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.USER.PASSWORD_ERROR));
+                    dispatch(publish(request));
+                }
+
                 setLoader(false);
                 setToken();
                 setCompleteLoginForm(false);
+
+                let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.USER.PASSWORD_SUCCESS));
+                dispatch(publish(request));     
             });
         }
     }
@@ -115,7 +136,15 @@ export const Login = () => {
             setFormData({...formData, password: ''});
             setForgotPasswordForm(true);
             setTitle('Whoops...');
-            forgotPassword(formData.username);
+            forgotPassword(formData.username).then(result => {
+                if(result.status === status.ERROR) {
+                    let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.USER.PASSWORD_ERROR));
+                    dispatch(publish(request));
+                }
+
+                let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.USER.PASSCODE_SUCCESS));
+                dispatch(publish(request));
+            });
         } else {
             setEmptyUsername(true);
         }

@@ -1,7 +1,7 @@
 export class DateRequest {
-    lastCheckDate: Date;
+    lastCheckDate: string | null;
 
-    constructor(lastCheckDate: Date) {
+    constructor(lastCheckDate: string | null) {
         this.lastCheckDate = lastCheckDate;
     }
 }

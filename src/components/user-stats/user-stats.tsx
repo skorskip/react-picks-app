@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { status } from "../../configs/status";
 import { RootState } from "../../store";
 import { PickRequest } from "../../model/postRequests/pickRequest";
+import { publish, PubSub } from "../../controller/pubSub/pubSubSlice";
+import { SHOW_MESSAGE } from "../../configs/topics";
+import { SnackMessage } from "../message/messagePopup";
 
 export const UserStats = () => {
     
@@ -76,6 +79,13 @@ export const UserStats = () => {
             dispatch(fetchUserDetails(request));
         }
     }, [userDetailsState, leagueState, userState, league, user, dispatch]);
+
+    useEffect(() => {
+        if(userDetailsState === status.ERROR) {
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            dispatch(publish(request));
+        }
+    }, [userDetailsState, dispatch]);
 
     return (
         <div className="user-stat-card base-background tiertary-color">

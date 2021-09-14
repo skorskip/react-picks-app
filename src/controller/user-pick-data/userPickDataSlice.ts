@@ -20,7 +20,6 @@ export const fetchUserPickData = createAsyncThunk('userPickData/fetchUserPickDat
         return response;
     } catch(error) {
         console.error(error);
-        publish(SHOW_MESSAGE, {type: status.ERROR, message: status.MESSAGE.ERROR_GENERIC})
         return {status: status.ERROR, message: error}
     }
 });

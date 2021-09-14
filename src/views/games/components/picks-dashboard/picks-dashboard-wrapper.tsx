@@ -5,6 +5,7 @@ import { selectGamesById, selectTeamById } from '../../../../controller/games/ga
 import { GameCard } from '../../../../components/game-card/game-card';
 import { Pick } from '../../../../model/pick/pick';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
+import { RootState } from '../../../../store';
 
 type Props = {
     id: number,
@@ -26,15 +27,15 @@ export const PicksDashboardWrapper = ({
     onDelete
 }: Props) => {
 
-    const pick = useSelector((state) => selectPicksById(state, id))
-    const previousPick = useSelector((state) => selectPicksById(state, previousId));
-    const game = useSelector((state) => selectGamesById(state, pick.game_id));
-    const previousGame = useSelector((state) => {
+    const pick = useSelector((state: RootState) => selectPicksById(state, id))
+    const previousPick = useSelector((state: RootState) => selectPicksById(state, previousId));
+    const game = useSelector((state: RootState) => selectGamesById(state, pick.game_id));
+    const previousGame = useSelector((state: RootState) => {
         if(previousPick !== undefined){ return selectGamesById(state, previousPick.game_id)}
     });
     
-    const homeTeam = useSelector((state) => selectTeamById(state, game?.home_team_id));
-    const awayTeam = useSelector((state) => selectTeamById(state, game?.away_team_id));
+    const homeTeam = useSelector((state: RootState) => selectTeamById(state, game?.home_team_id));
+    const awayTeam = useSelector((state: RootState) => selectTeamById(state, game?.away_team_id));
     const [removeGame, setRemoveGame] = useState(false);
     const gamePassedEdit = new Date() > new Date(game?.pick_submit_by_date);
 

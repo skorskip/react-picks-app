@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { SET_THEME } from '../../configs/topics';
-import { Subscriber } from '../../utils/pubSub';
 import { getThemeLocal } from '../../utils/localData';
 import { useDispatch, useSelector } from 'react-redux';
 import { clear, subscribe } from '../../controller/pubSub/pubSubSlice';

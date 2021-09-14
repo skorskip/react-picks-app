@@ -4,6 +4,7 @@ import { selectGamesById, selectTeamById } from '../../../../controller/games/ga
 import { GameCard } from '../../../../components/game-card/game-card';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
 import { Pick } from '../../../../model/pick/pick';
+import { RootState } from '../../../../store';
 
 type Props = {
     id: number,
@@ -23,10 +24,10 @@ export const GameDashboardWrapper = ({
     onTeamSelected
 }: Props) => {
 
-    const game = useSelector((state) => selectGamesById(state, id));
-    const previousGame = useSelector((state) => selectGamesById(state, previousId));
-    const homeTeam = useSelector((state) => selectTeamById(state, game.home_team_id));
-    const awayTeam = useSelector((state) => selectTeamById(state, game.away_team_id));
+    const game = useSelector((state: RootState) => selectGamesById(state, id));
+    const previousGame = useSelector((state: RootState) => selectGamesById(state, previousId));
+    const homeTeam = useSelector((state: RootState) => selectTeamById(state, game.home_team_id));
+    const awayTeam = useSelector((state: RootState) => selectTeamById(state, game.away_team_id));
 
     const showSubmitTime = () => {
         if((index === 0) || previousGame.pick_submit_by_date !== game.pick_submit_by_date ) {

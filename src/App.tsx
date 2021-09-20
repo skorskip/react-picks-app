@@ -2,7 +2,7 @@ import React from 'react';
 import { Home } from './views/home/home';
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchToken } from './controller/token/tokenSlice';
 import { PickLoader } from './components/pick-loader/pick-loader';
@@ -34,9 +34,7 @@ function App() {
     }
   }, [userState, tokenState, dispatch, leagueState]);
 
-  useEffect(() => {
-    dispatch(fetchToken());
-  },[]);
+  useEffect(() => {dispatch(fetchToken())}, []);
 
   useEffect(() => {
     if(leagueState === status.ERROR) {

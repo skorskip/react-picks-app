@@ -106,9 +106,9 @@ export const Profile = () => {
         </div>
     );
 
-    const themeListDisplay = themeList.map((item) => {
+    const themeListDisplay = themeList.map((item, i) => {
         return (
-            <Button className={getThemeClass(item.value)} onClick={() => toggleTheme(item.value)}>
+            <Button key={i + item.value} className={getThemeClass(item.value)} onClick={() => toggleTheme(item.value)}>
                 {item.name}
             </Button>
         )

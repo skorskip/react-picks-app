@@ -13,12 +13,13 @@ const picksAdapter = createEntityAdapter();
 const initialState = picksAdapter.getInitialState({
     status: status.IDLE,
     message: "" as string | null,
-    weekSet: undefined as number | undefined,
+    weekSet: null as number | null | undefined,
     picks: [] as Pick[]
 });
 
 const getMessageFromError = (error: any) => {
-    switch (error.message) {
+    let message = error?.message;
+    switch (message) {
         case PickSubmitEnum.PASS_SUBMIT_DATE :
             return status.MESSAGE.PICKS.PASS_SUBMIT_DATE;
         case PickSubmitEnum.TOO_MANY_PICKS :
@@ -36,17 +37,6 @@ const getMessageFromError = (error: any) => {
 export const fetchPicks = createAsyncThunk('picks/fetchPicks',  async (param: SeasonRequest) => {
     try {
         const url = `${endpoints.PICKS.BY_WEEK}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`;
-        const response = await client.get(url);
-        return {week: param.week, response: response};
-    } catch(error) {
-        console.error(error);
-        return {status: status.ERROR, message: error}
-    }
-});
-
-export const fetchUsersPicks = createAsyncThunk('picks/fetchUsersPicks',  async (param: PickRequest) => {
-    try {
-        const url = `${endpoints.PICKS.OTHERS_BY_WEEK}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}&user=${param.user_id}`;
         const response = await client.get(url);
         return {week: param.week, response: response};
     } catch(error) {
@@ -94,18 +84,6 @@ const picksSlice = createSlice({
     reducers: {},
     extraReducers : (builder) => {
         builder
-            .addCase(fetchUsersPicks.pending, (state, action) => {
-                state.status = status.LOADING;
-            })
-            .addCase(fetchUsersPicks.fulfilled, (state, action) => {
-                if(action.payload?.status === status.ERROR) {
-                    state.status = status.ERROR;
-                } else {
-                    state.picks = action.payload.response.picks as Pick[];
-                    state.weekSet = 0;
-                    state.status = status.COMPLETE;
-                }
-            })
             .addCase(fetchPicks.pending, (state, action) => {
                 state.status = status.LOADING;
             })
@@ -168,7 +146,7 @@ export const getPicksSetWeek = (state: RootState) => state.picks.weekSet;
 
 export const selectPicksById = (state: RootState, pickId: number) => state.picks.picks.find((pick: Pick) => pick.pick_id === pickId) as Pick;
 
-export const selectPicksIds = (state: RootState) => state.picks.picks.map((pick: Pick) => pick.pick_id) as number[];
+export const selectPicksIds = (state: RootState) => state.picks.picks?.map((pick: Pick) => pick.pick_id) as number[];
 
 export const selectPicksGamesIds = (state: RootState) => state.picks.picks.map((pick: Pick) => pick.game_id) as number[];
 

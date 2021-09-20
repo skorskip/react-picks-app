@@ -1,17 +1,17 @@
 import { Pick } from "../pick/pick";
 
 export class PickRequest {
-    season:         number;
-    seasonType:     number;
-    week:           number;
-    user_id:        number;
+    season:         number | null;
+    seasonType:     number | null;
+    week:           number | null;
+    user_id:        number | null;
     picks:          Pick[];
 
     constructor(
-        season:         number,
-        seasonType:     number,
-        week:           number,
-        user_id:        number,
+        season:         number | null,
+        seasonType:     number | null,
+        week:           number | null,
+        user_id:        number | null,
         picks:          Pick[]
     ) {
         this.season = season;

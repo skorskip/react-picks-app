@@ -42,8 +42,9 @@ export const MessagePopup = () => {
             setShowMessage(true);
 
             setTimeout(() => {
-                dispatch(clear)
-            }, 3000)
+                setShowMessage(false);
+                dispatch(clear())
+            }, 3000);
         }
     }, [sub, dispatch]);
 

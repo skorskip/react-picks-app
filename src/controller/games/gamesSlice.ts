@@ -61,4 +61,16 @@ export const selectTeams = (state: RootState) => state.games.teams as Team[]
 
 export const selectTeamById = (state: RootState, teamId: number) => state.games.teams.find((team: Team) => team.team_id === teamId) as Team; 
 
+export const showSubmitByIndex = (state: RootState, index: number ) => {
+    let submitTime1 = state.games.games[index]?.pick_submit_by_date;
+    if(index && index === 0) {
+        return (new Date(submitTime1) > new Date()) as boolean;
+    } else if(index){
+        let submitTime2 = state.games.games[index - 1].pick_submit_by_date;
+        return ((submitTime1 !== submitTime2) && (new Date(submitTime1) > new Date())) as boolean;
+    } else {
+        return true;
+    }
+}
+
 export default gamesSlice.reducer

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon, Label } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import { selectUserPickDataByGame } from '../../../../controller/user-pick-data/userPickDataSlice';
 import { Game, GameStatusEnum } from '../../../../model/game/game';
 import { PicksUserData } from '../../../../model/picksUserData/picksUserData';

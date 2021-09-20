@@ -3,16 +3,19 @@ import {environment} from './environment';
 export const endpoints = {
     PICKS : {
         BASE: `${environment.picksServiceURL}picks/`,
-        ADD : `${environment.picksServiceURL}picks/v2/create/`,
-        DELETE : `${environment.picksServiceURL}picks/v2/delete/`,
-        UPDATE: `${environment.picksServiceURL}picks/v2/update/`,
+        ADD : `${environment.picksServiceURL}picks/create/`,
+        DELETE : `${environment.picksServiceURL}picks/delete`,
+        UPDATE: `${environment.picksServiceURL}picks/update`,
         BY_WEEK: `${environment.picksServiceURL}picks/week`,
         OTHERS_BY_WEEK: `${environment.picksServiceURL}picks/others`,
         ALL_PICKS_BY_WEEK: `${environment.picksServiceURL}picks/games`
     },
     MESSAGES : {
         BASE: `${environment.messageServiceURL}message/`,
-        ANNOUNCEMENTS: `${environment.messageServiceURL}message/announcements`
+        ANNOUNCEMENTS: `${environment.messageServiceURL}message/announcements`,
+        ACTIVE_CHAT: `${environment.messageServiceURL}message/active-thread`,
+        SET_REMINDER: `${environment.messageServiceURL}message/set-reminder`
+
     },
     GAMES : {
         BASE: `${environment.weekServiceURL}week`

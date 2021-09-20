@@ -14,6 +14,7 @@ type Props = {
 export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
 
     const dispatch = useDispatch();
+    const bonusCount = Array(standing.bonus_nbr).fill("");
 
     const getItemClass = (addClass: string) => {
         return (isCurrentUser) ? `${addClass} base-color` : `${addClass} secondary-color`;
@@ -83,10 +84,10 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
         </div>
     )
 
-    const bonus = (standing.bonus_nbr !== 0) && (
+    const bonus = (
         <div className="bonus">
             <div className="standing-card-bonus-icon success-color">
-                { Array(standing.bonus_nbr).fill(<span>$</span>) }
+                { bonusCount.map((count, i) => {return (<span key={i + standing.user_id + "-bonus"}>$</span>)}) }
             </div>
         </div>
     )

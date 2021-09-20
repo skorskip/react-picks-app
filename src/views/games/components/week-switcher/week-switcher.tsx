@@ -6,37 +6,38 @@ import { selectLeague } from '../../../../controller/league/leagueSlice';
 import { WEEK_SHOW_WEEKS } from '../../../../configs/topics';
 import './week-switcher.css';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { toInt } from '../../../../utils/tools';
 
 interface RouteParams {
-    slug: string
+    view: string
 }
 
 export const WeekSwitcher = () => {
 
     const history = useHistory();
-    let view = useParams<RouteParams>();
+    let param = useParams<RouteParams>();
     let { search } = useLocation();
     const league = useSelector(selectLeague);
     const query = new URLSearchParams(search);
     const currentWeek = league.currentWeek;
-    const season = query.get("season") === null ? league.currentSeason : parseInt(query.get("season") || "");
-    const week = query.get("week") === null ? league.currentWeek : parseInt(query.get("week") || "");
-    const seasonType = query.get("seasonType") === null ? league.currentSeasonType : parseInt(query.get("seasonType") || "");
+    const season = query.get("season") === null ? league.currentSeason : toInt(query.get("season"));
+    const week = query.get("week") === null ? league.currentWeek : toInt(query.get("week"));
+    const seasonType = query.get("seasonType") === null ? league.currentSeasonType : toInt(query.get("seasonType"));
     const user = query.get("user");
     const [weeksShown, setWeeksShown] = useState(false);
     const dispatch = useDispatch();
 
     const weekPrev = () => {
-        history.push(`/games/${view.slug}?season=${season}&seasonType=${seasonType}&week=${week - 1}&user=${user}`);
+        history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${week ? (week - 1) : 0}&user=${user}`);
     }
 
     const weekNext = () => {
-        history.push(`/games/${view.slug}?season=${season}&seasonType=${seasonType}&week=${week + 1}&user=${user}`);
+        history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${week ? (week + 1) : 0}&user=${user}`);
     }
 
-    const showWeeks = (weekNum: number) => {
+    const showWeeks = (weekNum: number | null) => {
         if(weeksShown) {
-            history.push(`/games/${view.slug}?season=${season}&seasonType=${seasonType}&week=${weekNum}&user=${user}`);
+            history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${weekNum}&user=${user}`);
             setWeeksShown(false);
             dispatch(publish(new PubSub(WEEK_SHOW_WEEKS, false)));
         } else {
@@ -61,7 +62,7 @@ export const WeekSwitcher = () => {
         </div>
     )
 
-    const weekButton = (weekNum: number) => {
+    const weekButton = (weekNum: number | null) => {
         return (
             <div className="week-header tiertary-light-background" onClick={() => showWeeks(weekNum)}>
                 <div className="week-title secondary-color">

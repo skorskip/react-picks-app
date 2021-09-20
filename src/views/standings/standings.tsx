@@ -38,7 +38,8 @@ export const Standings = () => {
 
     const standingCards = (standingsStatus === status.COMPLETE) && standings.map((standing) => {
         return (
-            <StandingsUserCard 
+            <StandingsUserCard
+                key={ standing.user_id + "-standings-card"}
                 standing={standing}
                 isCurrentUser={standing.user_id === currentUser.user_id}
             />

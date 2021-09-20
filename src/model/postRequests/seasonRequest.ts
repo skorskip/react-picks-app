@@ -1,12 +1,12 @@
 export class SeasonRequest {
-    season: number;
-    seasonType: number;
-    week: number;
+    season:     number | null;
+    seasonType: number | null;
+    week:       number | null;
 
     constructor(
-        season:     number,
-        seasonType: number,
-        week:       number
+        season:     number | null,
+        seasonType: number | null,
+        week:       number | null
         ) {
 
         this.season = season;

@@ -15,6 +15,7 @@ import { DateRequest } from '../../../../model/postRequests/dateRequest';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import { SHOW_MESSAGE } from '../../../../configs/topics';
 import { SnackMessage } from '../../../../components/message/messagePopup';
+import { endpoints } from '../../../../configs/endpoints';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
@@ -82,8 +83,9 @@ export const NavBar = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            let url = endpoints.MESSAGES.ACTIVE_CHAT;
             try {   
-                var response = await client.post(announcementsUrl, {lastCheckDate: getLiveThreadCheckLocal()});
+                var response = await client.post(url, {lastCheckDate: getLiveThreadCheckLocal()});
                 setIsActiveThread(response);
                 resetLiveThreadCheckLocal();
             } catch(error) {
@@ -94,7 +96,7 @@ export const NavBar = () => {
         if(userState === status.COMPLETE && leagueState === status.COMPLETE ) {
             fetchData();
         }
-    }, [userState, leagueState, announcementsUrl])
+    }, [userState, leagueState])
 
     useEffect(() => {
         if(announcementsStatus === status.ERROR){

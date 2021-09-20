@@ -31,8 +31,8 @@ export const resetStagedPicksLocal = () => {
 }
 
 export const getStagedPicksLocal = () => {
-    let staged = localStorage.getItem(localDataEnum.STAGED_PICKS)
-    if(staged != null){
+    let staged = localStorage.getItem(localDataEnum.STAGED_PICKS);
+    if(staged){
         return JSON.parse(staged);
     } else {
         return null;

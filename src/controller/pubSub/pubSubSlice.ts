@@ -17,7 +17,7 @@ const initialState = pubSubAdapter.getInitialState({
     pubSub: {} as PubSub 
 });
 
-export const publish = createAction('pubsSub/publish', function prepare(data: PubSub) {
+export const publish = createAction('pubsSub/publish', function prepare(data) {
     return {
         payload : data
     }
@@ -35,7 +35,7 @@ const pubsubSlice = createSlice({
                 state.pubSub = action.payload
             })
             .addCase(clear, (state, action) => {
-                state.pubSub = new PubSub("", {});
+                state.pubSub = {} as PubSub;
             })
     }
 });

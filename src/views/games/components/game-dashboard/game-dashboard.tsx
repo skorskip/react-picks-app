@@ -4,7 +4,6 @@ import { selectUser } from '../../../../controller/user/userSlice';
 import { addPicks, selectPicksGamesIds, selectPicksMessage } from '../../../../controller/picks/picksSlice';
 import { selectGameIds } from '../../../../controller/games/gamesSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
-import { GameDashboardWrapper } from './game-dashboard-wrapper';
 import { Button, Icon } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
@@ -18,6 +17,8 @@ import { Pick } from '../../../../model/pick/pick';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import { SnackMessage } from '../../../../components/message/messagePopup';
 import { SHOW_MESSAGE } from '../../../../configs/topics';
+import { GameCard } from '../../../../components/game-card/game-card';
+import { toInt } from '../../../../utils/tools';
 
 export const GameDashboard = () => {
     const dispatch = useDispatch();
@@ -33,7 +34,7 @@ export const GameDashboard = () => {
     const history = useHistory();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
-    const week = parseInt(query.get("week") || "");
+    const week = toInt(query.get("week"));
 
     const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() != null ? getStagedPicksLocal() : {});
     const [stagedCount, setStagedCount] = useState(getStagedPicksLocal() == null ? 0 : Object.keys(getStagedPicksLocal()).length);
@@ -60,21 +61,24 @@ export const GameDashboard = () => {
     
     const getSubmitClass = () => {
         return (stagedCount > 0 && 
-            (week === league.currentWeek
-            || week === null)) ? 
+            (week === league.currentWeek || week == null)) ? 
             "submit-container show-submit-button" : "submit-container hide-submit-button"
     };
 
-    const games = gamesIds.map((gameId, index) => {
+    const games = gamesIds.map((gameId, i) => {
         return(
-            <GameDashboardWrapper
-                key={"game-wrapper-" + gameId}
-                id={gameId} 
-                previousId={gamesIds[index - 1]}
-                index={index}
-                picked={stagedPicks === {} ? null : stagedPicks[gameId]}
+            <GameCard
+                key={"game-" + gameId}
+                index={i}
+                gameId={gameId}
+                pick={stagedPicks === {} ? null : stagedPicks[gameId]}
                 userId={user?.user_id}
-                onTeamSelected={teamSelected}
+                disabled={false}
+                onTeamSelected={(event: PickSelected) => teamSelected(event)}
+                editMode={false}
+                showDeleteButton={false}
+                remove={false}
+                onDeleteClicked={() => null}
             />
         )
     });
@@ -107,7 +111,7 @@ export const GameDashboard = () => {
                 dispatch(publish(request));
             }
         }
-    },[pickLoader, submitSent, stagedPicks, history, picksMessage]);
+    },[pickLoader, submitSent, stagedPicks, history, picksMessage, dispatch]);
 
     if(gameLoader === status.LOADING || 
         gamesIds === undefined || 

@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPicksIds, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/picks/picksSlice';
+import { selectPicks, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/picks/picksSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
-import { PicksDashboardWrapper } from './picks-dashboard-wrapper';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, SHOW_MESSAGE } from '../../../../configs/topics';
 import { status } from '../../../../configs/status';
 import { Icon } from 'semantic-ui-react';
@@ -15,10 +14,11 @@ import { PickRequest } from '../../../../model/postRequests/pickRequest';
 import { clear, publish, PubSub, subscribe } from '../../../../controller/pubSub/pubSubSlice';
 import './picks-dashboard.css';
 import { SnackMessage } from '../../../../components/message/messagePopup';
+import { GameCard } from '../../../../components/game-card/game-card';
 
 export const PicksDashboard = () => {
 
-    const pickIds = useSelector(selectPicksIds);
+    const picks = useSelector(selectPicks);
     const loader = useSelector((state: RootState) => state.picks.status);
     const sub = useSelector(subscribe);
     const user = useSelector(selectUser);
@@ -46,7 +46,7 @@ export const PicksDashboard = () => {
             dispatch(publish(request)); 
             setSubmitSent(false);
         }
-    },[loader, picksMessage, status]);
+    },[loader, picksMessage, dispatch, submitSent]);
 
     useEffect(() => {
 
@@ -69,9 +69,9 @@ export const PicksDashboard = () => {
             setInEditMode(false);
         }
 
-    }, [dispatch, sub]);
+    }, [dispatch, sub, updatePicksArray, deletePicksArray, user.user_id]);
 
-    if(loader === status.LOADING || pickIds === undefined) {
+    if(loader === status.LOADING) {
         return (
             <GameLoader height={110} count={8}/>
         )
@@ -99,7 +99,7 @@ export const PicksDashboard = () => {
         setUpdatePicks(tempUpdate);
     }
 
-    const noPicks = pickIds.length === 0 && (
+    const noPicks = (!picks.length) && (
         <div className="no-picks-set secondary-color">
             <div className="no-picks-set-content">No picks made</div>
             <br></br>
@@ -109,17 +109,22 @@ export const PicksDashboard = () => {
         </div>
     );
 
-    const games = pickIds.map((pickId, index) => {
+    const games = (picks.length) && picks.map((pick, i) => {
+        let removeGame = deletePicksArray.includes(pick.pick_id);
+
         return(
-            <PicksDashboardWrapper
-                key={"game-wrapper-" + pickId}
-                id={pickId} 
-                previousId={pickIds[index - 1]}
-                index={index}
-                userId={user?.user_id}
-                onTeamSelected={teamSelected}
-                inEditMode={inEditMode}
-                onDelete={onDelete}
+            <GameCard
+                key={"game-" + pick.pick_id}
+                index={i}
+                gameId={pick.game_id}
+                pick={pick}
+                userId={user.user_id}
+                disabled={(!inEditMode)}
+                editMode={inEditMode}
+                remove={removeGame}
+                showDeleteButton={(inEditMode && !removeGame)}
+                onTeamSelected={(event:PickSelected) => teamSelected(event)}
+                onDeleteClicked={() => onDelete(pick)}
             />
         )
     });

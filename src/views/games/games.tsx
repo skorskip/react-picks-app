@@ -21,9 +21,10 @@ import { RootState } from '../../store';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { publish, PubSub, subscribe } from '../../controller/pubSub/pubSubSlice';
 import { SnackMessage } from '../../components/message/messagePopup';
+import { toInt } from '../../utils/tools';
 
 interface RouteParams {
-    slug: string
+    view: string
 }
 
 type Props = {
@@ -46,12 +47,12 @@ export const Games = ({routes}: Props) => {
     let location = useLocation();
     let history = useHistory();
     const animationTime = { enter: 200, exit: 200};
-    let view = useParams<RouteParams>();
+    let param = useParams<RouteParams>();
     let { search } = useLocation();
     const query = new URLSearchParams(search);
-    const season = parseInt(query.get("season") || "");
-    const week = parseInt(query.get("week") || "" );
-    const seasonType = parseInt(query.get("seasonType")||"")
+    const season = toInt(query.get("season"));
+    const week = toInt(query.get("week"));
+    const seasonType = toInt(query.get("seasonType"))
     const other = query.get("user");
 
     const currSeason = league.currentSeason
@@ -95,12 +96,12 @@ export const Games = ({routes}: Props) => {
     const transitionGroup = (!weeksShown) && (
         <TransitionGroup component="div" className="route-container">
             <CSSTransition 
-                key={view.slug} 
+                key={param.view} 
                 timeout={animationTime} 
                 classNames="pageSlider" 
                 mountOnEnter={false} 
                 unmountOnExit={true}>
-                <div className={view.slug === "pick" ? "left" : "right"}>
+                <div className={param.view === "pick" ? "left" : "right"}>
                     <Switch location={location}>
                         {(routes) && routes.map((route, i) =>(
                             <Route
@@ -144,7 +145,7 @@ export const Games = ({routes}: Props) => {
                 dispatch(fetchPicks(request));
             }
         }
-    }, [dispatch, user, season, week, seasonType, view, currWeek, other, setWeek])
+    }, [dispatch, user, season, week, seasonType, param.view, currWeek, other, setWeek])
 
     useEffect(() => {
         if(gamesState === status.ERROR 
@@ -155,7 +156,7 @@ export const Games = ({routes}: Props) => {
             let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
             dispatch(publish(request));
         }
-    }, [gamesState, dispatch]);
+    }, [gamesState, dispatch, pickForUserState, picksState, userPickDataState]);
 
     useEffect(() => {
         if(sub.topic === WEEK_SHOW_WEEKS) {

@@ -12,6 +12,8 @@ export class User {
     status:             string;
     type:               string;
     last_login_date:    Date;
+    user_inits:         string;
+    slack_user_id:      string;
 
     constructor(
         user_id :           number,
@@ -21,7 +23,9 @@ export class User {
         last_name:          string,
         status:             string,
         type:               string,
-        last_login_date:    Date
+        last_login_date:    Date,
+        user_inits:         string,
+        slack_user_id:      string
     ){
         this.user_id = user_id;
         this.user_name = user_name;
@@ -31,5 +35,7 @@ export class User {
         this.status = status;
         this.type = type;
         this.last_login_date = last_login_date;
+        this.user_inits = user_inits;
+        this.slack_user_id = slack_user_id;
     }
 }

@@ -4,19 +4,27 @@ import { TeamCard } from './components/team-card/team-card';
 import { PickStatus } from './components/pick-staus/pick-status';
 import { Icon, Button } from 'semantic-ui-react';
 import './game-card.css';
-import { GameWinStatusEnum, GameStatusEnum, Game } from '../../model/game/game';
+import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
 import { UsersPickData } from './components/users-pick-data/users-pick-data';
 import { Pick } from '../../model/pick/pick';
-import { Team, TeamSelect } from '../../model/team/team';
+import { TeamSelect } from '../../model/team/team';
 import { PickSelected } from '../../model/pickSelected/pickSelected';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectGamesById, selectTeamById, showSubmitByIndex } from '../../controller/games/gamesSlice';
+import { RootState } from '../../store';
+import { client } from '../../utils/client';
+import { endpoints } from '../../configs/endpoints';
+import { selectUser } from '../../controller/user/userSlice';
+import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
+import { SHOW_MESSAGE } from '../../configs/topics';
+import { SnackMessage } from '../message/messagePopup';
+import { status } from '../../configs/status';
 
 type Props = {
-    game: Game,
-    homeTeam: Team,
-    awayTeam: Team,
+    index: number,
+    gameId: number,
     pick: Pick,
     userId: number,
-    showSubmitTime: boolean,
     disabled: boolean,
     editMode: boolean,
     showDeleteButton: boolean,
@@ -25,13 +33,11 @@ type Props = {
     onDeleteClicked: () => void
 }
 
-export const GameCard = ({ 
-    game, 
-    homeTeam, 
-    awayTeam, 
+export const GameCard = ({
+    index,
+    gameId,
     pick,
     userId,
-    showSubmitTime, 
     disabled,
     editMode,
     showDeleteButton,
@@ -39,9 +45,15 @@ export const GameCard = ({
     onTeamSelected,
     onDeleteClicked }: Props) => {
 
+    const game = useSelector((state: RootState) => selectGamesById(state, gameId));
+    const homeTeam = useSelector((state: RootState) => selectTeamById(state, game?.home_team_id));
+    const awayTeam = useSelector((state: RootState) => selectTeamById(state, game?.away_team_id));
     const [highlightHome, setHighlightHome] = useState(false);
     const [highlightAway, setHighlightAway] = useState(false);
     const gameLocked = new Date(game?.pick_submit_by_date) <= new Date();
+    const showSubmitTime = useSelector((state: RootState) => showSubmitByIndex(state, index));
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
 
     const pickResult = () => {
         if(game.game_status === GameStatusEnum.completed && pick != null){
@@ -85,13 +97,31 @@ export const GameCard = ({
         }
     }
 
+    const setReminder = async () => {
+        try {
+            let url = endpoints.MESSAGES.SET_REMINDER;
+            await client.post(url, {
+                pick_submit_by_date: game.pick_submit_by_date,
+                slack_user_id: user.slack_user_id
+            });
+
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.EDIT_SUCCESS));
+            dispatch(publish(request)); 
+
+        } catch(error) {
+            console.error(error);
+            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            dispatch(publish(request));
+        }
+    }
+
     const submitBy = showSubmitTime && (
         <div className='full-row'>
             <div className="game-card-date">
-                <div className="date-text primary-color">
+                <Button className="date-text primary-color" onClick={setReminder}>
                     <Icon name="calendar alternate outline"/>
-                    Submit by: { formatDate(new Date(game.pick_submit_by_date)) }
-                </div>
+                    Submit by: { formatDate(new Date(game?.pick_submit_by_date)) }
+                </Button>
             </div>
         </div>
     );
@@ -113,7 +143,7 @@ export const GameCard = ({
         return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
     }
 
-    const deleteButton = (showDeleteButton) && (
+    const deleteButton = (showDeleteButton && !gameLocked) && (
         <Button className="delete-button bottom-margin failure-color base-background" onClick={() => onDeleteClicked()}>
         <Icon name= "trash alternate outline" />
             Delete

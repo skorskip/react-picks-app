@@ -9,6 +9,8 @@ type Props = {
 
 export const GameLoader = ({height, count}: Props) => {
 
+    const fill = Array(count).fill("");
+
     const game = (
         <div className="game-card">
             <div className="team-group">
@@ -22,9 +24,17 @@ export const GameLoader = ({height, count}: Props) => {
         </div>
     );
 
+    const gameLoader = fill.map((item, i) => {
+        return (
+            <div key={i + "-game-loader"}>
+                { game }
+            </div>
+        )
+    })
+
     return (
         <>
-            { Array(count).fill(game) }
+            { gameLoader }
         </>
     )
 }

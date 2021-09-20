@@ -8,7 +8,7 @@ import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import './games-tab-bar.css';
 
 interface RouteParams {
-    slug: string
+    view: string
 }
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
 }
 
 export const GamesTabBar = ({pickCount}:Props) => {
-    let view = useParams<RouteParams>();
+    let param = useParams<RouteParams>();
     const league = useSelector(selectLeague);
     const history = useHistory();
     const [isEditSelected, setIsEditSelected] = useState(false);
@@ -38,7 +38,7 @@ export const GamesTabBar = ({pickCount}:Props) => {
     }
 
     const getButtonClass = (selectedView: string) => {
-        if(view.slug === selectedView) {
+        if(param.view === selectedView) {
             return "toggle-button primary-background base-color";
         } else {
             return "toggle-button tiertary-light-background secondary-color";
@@ -56,14 +56,14 @@ export const GamesTabBar = ({pickCount}:Props) => {
     }
 
     const editButton = (
-        view.slug === "pick" && 
+        param.view === "pick" && 
         !isEditSelected && 
         pickCount > 0 && 
         week === currentWeek) && (
         <Button className="tiertary-light-background secondary-color" onClick={() => selectEdit()}>Edit</Button>
     )
 
-    const doneButton = (view.slug === "pick" && isEditSelected) && (
+    const doneButton = (param.view === "pick" && isEditSelected) && (
         <Button className="primary-background base-color" onClick={() => selectDone()}>Done</Button>
     )
 

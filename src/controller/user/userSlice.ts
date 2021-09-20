@@ -5,10 +5,7 @@ import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
 import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
 import { RootState } from '../../store';
-import { useDispatch } from 'react-redux';
-import { publish, PubSub } from '../pubSub/pubSubSlice';
-import { SHOW_MESSAGE } from '../../configs/topics';
-import { SnackMessage } from '../../components/message/messagePopup';
+import { User } from '../../model/user/user';
 
 const userAdapter = createEntityAdapter();
 
@@ -104,7 +101,7 @@ const userSlice = createSlice({
     },
 });
 
-export const selectUser = (state: RootState) => state.user.user;
+export const selectUser = (state: RootState) => state.user.user as User;
 
 export default userSlice.reducer
 

@@ -119,11 +119,7 @@ export const GameDashboard = () => {
 
         return (<GameLoader height={110} count={8}/>)
     }
-
-    const handleRefresh = () => {
-        location.reload
-    }
-
+    
     return (
         <>
             <div className="games-container page">

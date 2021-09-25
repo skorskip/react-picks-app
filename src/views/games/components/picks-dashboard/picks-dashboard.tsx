@@ -109,7 +109,7 @@ export const PicksDashboard = () => {
         </div>
     );
 
-    const games = (picks.length) && picks.map((pick, i) => {
+    const games = (picks.length > 0) && picks.map((pick, i) => {
         let removeGame = deletePicksArray.includes(pick.pick_id);
 
         return(

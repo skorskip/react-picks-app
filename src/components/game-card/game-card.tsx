@@ -129,7 +129,7 @@ export const GameCard = ({
         <div className='full-row'>
             <div className="game-card-date">
                 <Button className="date-text tiertary-light-background secondary-color" onClick={setReminder}>
-                    <Icon name="calendar alternate outline"/>
+                    <Icon className="primary-color" name="calendar alternate outline"/>
                     Submit by: { formatDate(new Date(game?.pick_submit_by_date)) }
                 </Button>
             </div>
@@ -139,7 +139,7 @@ export const GameCard = ({
     const timeStatus = (gameLocked && game.game_status !== GameStatusEnum.completed) && (
         <div className="game-card-date">
             <div className="date-text accent">
-                <Icon name="stopwatch"/>
+                <Icon className="primary-color" name="stopwatch"/>
                 { gameTimeStatusQuarters(game) }
             </div>
         </div>

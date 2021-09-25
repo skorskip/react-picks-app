@@ -1,19 +1,30 @@
 import { Game, GameStatusEnum } from '../model/game/game';
 
 const months = ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-const days = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
 
 export const formatDate = (date: Date) => {
     var formattedDate = "";
 
-    formattedDate += days[date.getDay()];
-    formattedDate += ", " +  months[date.getMonth()];
-    formattedDate += " " + (date.getDate());
-    if(date.getMinutes() < 10) {
-      formattedDate += " at " + date.getHours() + ":" + 0+ date.getMinutes();
+    switch(date.getDate()) {
+      case new Date().getDate():
+        formattedDate += "Today";
+        break;
+      case new Date().getDate() + 1:
+          formattedDate += "Tomorrow";
+          break;
+      default:
+        formattedDate += new Intl.DateTimeFormat('en-US', {weekday: 'long'}).format(date)
+        break; 
+    }
 
+    formattedDate += " at "
+
+    let minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+
+    if(date.getHours() > 12) {
+      formattedDate += (date.getHours() - 12) + ":" + minutes + "PM"
     } else {
-      formattedDate += " at " + date.getHours() + ":" + date.getMinutes();
+      formattedDate += date.getHours() + ":" + minutes + "AM"
     }
 
     return formattedDate;

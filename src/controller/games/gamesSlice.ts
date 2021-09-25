@@ -11,6 +11,7 @@ const gamesAdapter = createEntityAdapter();
 
 const initialState = gamesAdapter.getInitialState({
     status: status.IDLE,
+    setWeek: null as number | null,
     games: [] as Game[],
     teams: [] as Team[]
 });
@@ -19,10 +20,10 @@ export const fetchGames = createAsyncThunk('user/fetchGames',  async (param: Sea
     try {
         const url = `${endpoints.GAMES.BASE}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
         const response = await client.get(url);
-        return response;
+        return { response: response, week: param.week };
     } catch(error) {
         console.error(error);
-        return {status: status.ERROR, message: error}
+        return {status: status.ERROR, message: error, week: null}
     }
 })
 
@@ -34,12 +35,11 @@ const gamesSlice = createSlice({
         builder
             .addCase(fetchGames.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    state.games = [] as Game[];
-                    state.teams = [] as Team[];
                     state.status = status.ERROR;
                 } else {
-                    state.games = action.payload.games as Game[];
-                    state.teams = action.payload.teams as Team[];
+                    state.games = action.payload.response.games as Game[];
+                    state.teams = action.payload.response.teams as Team[];
+                    state.setWeek = action.payload.week;
                     state.status = status.COMPLETE;
                 }
             })
@@ -61,15 +61,19 @@ export const selectTeams = (state: RootState) => state.games.teams as Team[]
 
 export const selectTeamById = (state: RootState, teamId: number) => state.games.teams.find((team: Team) => team.team_id === teamId) as Team; 
 
-export const showSubmitByIndex = (state: RootState, index: number ) => {
-    let submitTime1 = state.games.games[index]?.pick_submit_by_date;
-    if(index && index === 0) {
+export const getSetWeek = (state: RootState) => state.games.setWeek;
+
+export const showSubmitByGameId = (state: RootState, gameId: number, prevGameId: number | null ) => {
+    let currGame = state.games.games.find(game => game.game_id === gameId);
+    let submitTime1 = currGame == null ? null : currGame.pick_submit_by_date;
+    
+    if(submitTime1 != null && prevGameId == null) {
         return (new Date(submitTime1) > new Date()) as boolean;
-    } else if(index){
-        let submitTime2 = state.games.games[index - 1].pick_submit_by_date;
+    } else if(submitTime1 != null && prevGameId != null){
+        let submitTime2 = state.games.games.find(game => game.game_id === prevGameId)?.pick_submit_by_date;
         return ((submitTime1 !== submitTime2) && (new Date(submitTime1) > new Date())) as boolean;
     } else {
-        return true;
+        return false;
     }
 }
 

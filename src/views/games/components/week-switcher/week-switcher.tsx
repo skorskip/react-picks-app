@@ -64,7 +64,7 @@ export const WeekSwitcher = () => {
 
     const weekButton = (weekNum: number | null) => {
         return (
-            <div className="week-header tiertary-light-background" onClick={() => showWeeks(weekNum)}>
+            <div key={weekNum + "-week-number"} className="week-header tiertary-light-background" onClick={() => showWeeks(weekNum)}>
                 <div className="week-title secondary-color">
                     Week {weekNum}
                 </div>

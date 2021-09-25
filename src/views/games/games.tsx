@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
-import { selectPicksIds, fetchPicks, getPicksSetWeek } from '../../controller/picks/picksSlice';
-import { fetchGames } from '../../controller/games/gamesSlice';
+import { selectPicksIds, fetchPicks } from '../../controller/picks/picksSlice';
+import { fetchGames, getSetWeek } from '../../controller/games/gamesSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { Switch, Route, useLocation, useParams, useHistory } from "react-router-dom";
 import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
@@ -38,9 +38,8 @@ export const Games = ({routes}: Props) => {
     const gamesState = useSelector((state: RootState) => state.games.status);
     const leagueState = useSelector((state: RootState) => state.league.status);
     const picksState = useSelector((state:RootState) => state.picks.status);
-    const pickForUserState = useSelector((state:RootState) => state.picksForUser.status);
     const userPickDataState = useSelector((state: RootState) => state.userPickData.status);
-    const setWeek = useSelector(getPicksSetWeek);
+    const setWeek = useSelector(getSetWeek);
     const sub = useSelector(subscribe);
     const dispatch = useDispatch();
 
@@ -59,13 +58,12 @@ export const Games = ({routes}: Props) => {
     const currWeek = league.currentWeek 
     const currSeasonType = league.currentSeasonType
     const [weeksShown, setWeeksShown] = useState(false);
-    const weekQuery = `?season=${season}&seasonType=${seasonType}&week=${week}`;
 
     const swipeView = (view: string) => {
         if(season === null) {
             history.push(`/games/${view}`);
         } else {
-            history.push(`/games/${view}${weekQuery}`);
+            history.push(`/games/${view}?season=${season}&seasonType=${seasonType}&week=${week}`);
         }
     }
 
@@ -117,46 +115,38 @@ export const Games = ({routes}: Props) => {
     );
 
     useEffect(() => {
-        if(gamesState === status.IDLE && 
-            leagueState === status.COMPLETE) {
-                let request = new SeasonRequest(currSeason, currSeasonType, currWeek)
-                dispatch(fetchGames(request));
-                dispatch(fetchUserPickData(request));
-                if(other === null || other === "null") {
-                    dispatch(fetchPicks(request));
-                }
-        }
-    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, dispatch, user, other])
 
-    useEffect(() => {
-        const shouldRefresh = () => {
-            if(season && week && seasonType) {
-                return week !== setWeek;
-            } else {
-                return false;
-            }
-        }
-
-        if(shouldRefresh()){
-            let request = new SeasonRequest(season, seasonType, week)
+        if(gamesState === status.IDLE && leagueState === status.COMPLETE) {
+            let request = new SeasonRequest(currSeason, currSeasonType, currWeek);
             dispatch(fetchGames(request));
             dispatch(fetchUserPickData(request));
-            if(other === null || other === "null") {
-                dispatch(fetchPicks(request));
-            }
+            dispatch(fetchPicks(request));
         }
-    }, [dispatch, user, season, week, seasonType, param.view, currWeek, other, setWeek])
+
+    }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, week, dispatch])
 
     useEffect(() => {
+
+        if((season && week && seasonType) && week !== setWeek) {
+            let request = new SeasonRequest(season, seasonType, week);
+            dispatch(fetchGames(request));
+            dispatch(fetchUserPickData(request));
+            dispatch(fetchPicks(request));
+        }
+
+    }, [season, week, seasonType, other, setWeek, dispatch])
+
+    useEffect(() => {
+
         if(gamesState === status.ERROR 
             || picksState === status.ERROR
-            || pickForUserState === status.ERROR
             || userPickDataState === status.ERROR){
                 
             let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
             dispatch(publish(request));
         }
-    }, [gamesState, dispatch, pickForUserState, picksState, userPickDataState]);
+
+    }, [gamesState, dispatch, picksState, userPickDataState]);
 
     useEffect(() => {
         if(sub.topic === WEEK_SHOW_WEEKS) {

@@ -69,8 +69,8 @@ export const GameDashboard = () => {
         return(
             <GameCard
                 key={"game-" + gameId}
-                index={i}
                 gameId={gameId}
+                prevGameId={i !== 0 ? gamesIds[i - 1] : null}
                 pick={stagedPicks === {} ? null : stagedPicks[gameId]}
                 userId={user?.user_id}
                 disabled={false}
@@ -120,15 +120,21 @@ export const GameDashboard = () => {
         return (<GameLoader height={110} count={8}/>)
     }
 
+    const handleRefresh = () => {
+        location.reload
+    }
+
     return (
-        <div className="games-container page">
-            { noGames }
-            { games }
+        <>
+            <div className="games-container page">
+                { noGames }
+                { games }
+            </div>
             <div className={getSubmitClass()}>
                 <Button className="primary-background base-color submit-button" onClick={submitPicks}>
                     <Icon name='send'/> Submit ({stagedCount})
                 </Button>
             </div>
-        </div>
+        </>
     );
 } 

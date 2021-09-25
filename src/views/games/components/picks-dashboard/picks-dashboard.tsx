@@ -115,8 +115,8 @@ export const PicksDashboard = () => {
         return(
             <GameCard
                 key={"game-" + pick.pick_id}
-                index={i}
                 gameId={pick.game_id}
+                prevGameId={i !== 0 ? picks[i - 1].game_id : null}
                 pick={pick}
                 userId={user.user_id}
                 disabled={(!inEditMode)}

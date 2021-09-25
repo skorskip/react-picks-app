@@ -16,9 +16,12 @@ export const status = {
         PICKS: {
             EDIT_SUCCESS: "Successfully editted picks.",
             ADD_SUCCESS: "Successfully added picks.",
-            PASS_SUBMIT_DATE: "Can't Submit Passed the Deadline",
+            PASS_SUBMIT_DATE: "Can't submit pass the deadline",
             TOO_MANY_PICKS: "You got too many picks, $OVER over $LIMIT",
             NO_PICKS: "Going to need more than that!"
+        },
+        REMINDERS: {
+            SET_SUCCESS: "Successfully set reminder!"
         }
     }
 }

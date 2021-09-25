@@ -15,6 +15,7 @@ import { ThemeSwitcher } from './components/theme-switcher/theme-switcher';
 import { RootState } from './store';
 import { publish, PubSub } from './controller/pubSub/pubSubSlice';
 import { SHOW_MESSAGE } from './configs/topics';
+import { fetchUser } from './controller/user/userSlice';
 
 Amplify.configure({...awsconfig, ssr: true});
 
@@ -24,6 +25,13 @@ function App() {
   const userState = useSelector((state: RootState) => state.user.status)
   const leagueState = useSelector((state: RootState) => state.league.status);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(userState === status.IDLE && 
+      tokenState === status.COMPLETE) {
+      dispatch(fetchUser());
+    }
+  }, [userState, tokenState]);
 
   useEffect(() => {
     if(userState === status.COMPLETE && 

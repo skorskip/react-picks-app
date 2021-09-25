@@ -38,9 +38,9 @@ export const Announcements = () => {
         )
     }
 
-    const messagesList = messages.map((message) => {
+    const messagesList = messages.map((message, i) => {
         return (
-            <div className="announcement-card base-background tiertary-color">
+            <div key={i + "-announcements"} className="announcement-card base-background tiertary-color">
                 <div className="date-title tiertary-color">
                     <span className="announcement-date-text primary-color">
                         { formatDate(new Date(message.date)) }

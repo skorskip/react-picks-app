@@ -21,13 +21,19 @@ export const Profile = () => {
     const [theme, setTheme] = useState(getThemeLocal() === null ? "light" : getThemeLocal());
 
     const signOutUser = () => {
-        dispatch(signOut());
+        let dialogConfirm = window.confirm("Are you sure you want to sign out?");
+        if(dialogConfirm) {
+            dispatch(signOut());
+        }
     }
 
     const changePassword = () => {
-        dispatch(signOut());
-        forgotPassword(user.email);
-        history.push("/login?type=newpassword")
+        let dialogConfirm = window.confirm("Are you sure you want to reset password?");
+        if(dialogConfirm) {
+            dispatch(signOut());
+            forgotPassword(user.email);
+            history.push("/login?type=newpassword");
+        }
     }
 
     const toggleTheme = (newTheme: string) => {

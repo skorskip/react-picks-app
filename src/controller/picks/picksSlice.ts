@@ -13,7 +13,6 @@ const picksAdapter = createEntityAdapter();
 const initialState = picksAdapter.getInitialState({
     status: status.IDLE,
     message: "" as string | null,
-    weekSet: null as number | null | undefined,
     picks: [] as Pick[]
 });
 
@@ -92,7 +91,6 @@ const picksSlice = createSlice({
                     state.status = status.ERROR;
                 } else {
                     state.picks = action.payload.response.picks as Pick[];
-                    state.weekSet = action.payload.week;
                     state.status = status.COMPLETE;
                 }
             })
@@ -141,8 +139,6 @@ const picksSlice = createSlice({
 export const selectPicks = (state: RootState) => state.picks.picks as Pick[];
 
 export const selectPicksMessage = (state: RootState) => state.picks.message;
-
-export const getPicksSetWeek = (state: RootState) => state.picks.weekSet;
 
 export const selectPicksById = (state: RootState, pickId: number) => state.picks.picks.find((pick: Pick) => pick.pick_id === pickId) as Pick;
 

@@ -39,6 +39,7 @@ export const PickPeekModal = () => {
 
     const closeClick = () => {
         setShowModal(false);
+        setUserData({user_id: null, first_name: '', last_name: '', user_inits: ''});
         dispatch(clear());
     }
 
@@ -102,7 +103,7 @@ export const PickPeekModal = () => {
 
     const userPicksContent = (userPicksState === 'complete') && userPicks.map((pick: PicksUser) => {
         return(
-            <div className="teams-container">
+            <div className="teams-container" key={pick.pick.pick_id + "-modal-picks"}>
                 <div className="team-picks">
                     <TeamCard
                         team={pick.awayTeam}

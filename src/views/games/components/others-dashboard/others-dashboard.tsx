@@ -24,7 +24,7 @@ export const OthersDashboard = () => {
     const season = toInt(query.get("season"));
     const week = toInt(query.get("week"));
     const seasonType = toInt(query.get("seasonType"));
-    const user = toInt(query.get("user")) || 0;
+    const user = toInt(query.get("user"));
 
     const userInfo = useSelector((state: RootState) => userStandingById(state, user));
     const standingsStatus = useSelector((state: RootState) => state.userStandings.status);
@@ -52,7 +52,7 @@ export const OthersDashboard = () => {
     useEffect(() => {
         if(user != null && week != null && season != null && seasonType != null) {
             let request = new PickRequest(season, seasonType, week, user, [])
-            dispatch(fetchPicksForUser(request))
+            dispatch(fetchPicksForUser(request));
         }
     }, [user, week, season, seasonType, dispatch]);
 
@@ -62,21 +62,29 @@ export const OthersDashboard = () => {
         )
     }
 
-    const noPicks = (!userPicks.length) && (
-        <div className="no-picks-set secondary-color">
-            <div className="no-picks-set-content">No picks made</div>
-            <br></br>
-            <div className="secondary-color empty-icon">
-                <Icon name='hand point left'/>
+    const userHeaderInfo = (userInfo) && (
+        <div className="other-user-info-container" onClick={goBack}>
+            <div className="other-user-info tiertary-light-background">
+                <Icon name="chevron left" className="secondary-color"/>
+                <div className="secondary-color other-user-name">
+                    <Icon name="user" className="secondary-color"/>
+                    {userInfo.first_name}&nbsp;{userInfo.last_name}
+                </div>
             </div>
+        </div>
+    )
+
+    const noPicks = (!userPicks.length) && (
+        <div className="no-games-set secondary-color">
+            No Picks for this user.
         </div>
     );
 
-    const games = (userPicks.length) && userPicks.map((userPick, i) => {
+    const games = (userPicks.length) && (user != null) && userPicks.map((userPick, i) => {
         return (<GameCard
             key={i + "-users-picks"}
-            index={i}
             gameId={userPick.game.game_id}
+            prevGameId={i !== 0 ? userPicks[i - 1].game.game_id : null}
             pick={userPick.pick}
             userId={user}
             disabled={true}
@@ -90,27 +98,9 @@ export const OthersDashboard = () => {
 
     return (
         <>
-            {
-                (user != null && week != null && season != null && seasonType != null && userInfo != null) ? (
-                    <>
-                        <div className="other-user-info-container" onClick={goBack}>
-                            <div className="other-user-info tiertary-light-background">
-                                <Icon name="chevron left" className="secondary-color"/>
-                                <div className="secondary-color other-user-name">
-                                    <Icon name="user" className="secondary-color"/>
-                                    {userInfo.first_name}&nbsp;{userInfo.last_name}
-                                </div>
-                            </div>
-                        </div>
-                        { noPicks }
-                        { games }
-                    </>
-                ) : (
-                    <div className="no-games-set secondary-color">
-                        No Picks for this user.
-                    </div>
-                )
-            }
+            { userHeaderInfo }
+            { noPicks }
+            { games }
         </>
     );
 }

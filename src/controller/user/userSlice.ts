@@ -3,15 +3,15 @@ import { client } from '../../utils/client'
 import { endpoints } from '../../configs/endpoints';
 import AmplifyAuth, { AmplifyEnum } from '../../utils/amplifyAuth';
 import { status } from '../../configs/status';
-import { getUserLocal, setUserLocal, clearAllLocal } from '../../utils/localData';
+import { clearAllLocal } from '../../utils/localData';
 import { RootState } from '../../store';
 import { User } from '../../model/user/user';
 
 const userAdapter = createEntityAdapter();
 
 const initialState = userAdapter.getInitialState({
-    status: getUserLocal() === null ? status.IDLE : status.COMPLETE,
-    user: getUserLocal() === null ? {} : getUserLocal()
+    status: status.IDLE,
+    user: {} as User
 });
 
 export const login = async (username: string, password: string) => {
@@ -68,7 +68,6 @@ export const fetchUser = createAsyncThunk('user/fetchUser',  async (token) => {
     const url = endpoints.USERS.LOGIN;
     try {
         const response = await client.get(url, {Authorization: token});
-        setUserLocal(response[0])
         return response[0];
     } catch(error) {
         console.error(error);
@@ -84,7 +83,6 @@ const userSlice = createSlice({
         builder
             .addCase(fetchUser.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
-                    state.user = {}
                     state.status = status.ERROR;
                 } else {
                     state.user = action.payload;
@@ -95,7 +93,7 @@ const userSlice = createSlice({
                 state.status = status.LOADING;
             })
             .addCase(signOut.fulfilled, (state, action) => {
-                state.user = {}
+                state.user = {} as User
                 state.status = status.IDLE;
             })
     },

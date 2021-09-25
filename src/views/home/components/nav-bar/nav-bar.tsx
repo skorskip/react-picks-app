@@ -8,7 +8,6 @@ import { selectAnnouncements,fetchAnnouncements } from '../../../../controller/a
 import './nav-bar.css';
 import { status } from '../../../../configs/status';
 import { client } from '../../../../utils/client';
-import { environment } from '../../../../configs/environment';
 import { getAnnouncementCheckLocal, getLiveThreadCheckLocal, resetAnnouncementCheckLocal, resetLiveThreadCheckLocal } from '../../../../utils/localData';
 import { RootState } from '../../../../store';
 import { DateRequest } from '../../../../model/postRequests/dateRequest';
@@ -29,7 +28,6 @@ export const NavBar = () => {
     const leagueState = useSelector((state:RootState) => state.league.status);
     const league = useSelector(selectLeague);
     const [isActiveThread, setIsActiveThread] = useState(false);
-    const announcementsUrl = environment.messageServiceURL + 'message/active-thread';
     const dispatch = useDispatch();
     
     const getIconClass = (link: string) => {

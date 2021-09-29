@@ -68,7 +68,7 @@ export const fetchUser = createAsyncThunk('user/fetchUser',  async (token) => {
     const url = endpoints.USERS.LOGIN;
     try {
         const response = await client.get(url, {Authorization: token});
-        return response[0];
+        return response;
     } catch(error) {
         console.error(error);
         return {status: status.ERROR, message: error}

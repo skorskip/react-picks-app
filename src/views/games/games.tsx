@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
-import { selectPicksIds, fetchPicks } from '../../controller/picks/picksSlice';
-import { fetchGames, getSetWeek } from '../../controller/games/gamesSlice';
+import { fetchWeek, getSetWeek} from '../../controller/week/weekSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { Switch, Route, useLocation, useParams, useHistory } from "react-router-dom";
 import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
@@ -10,9 +9,6 @@ import { WeekSwitcher } from './components/week-switcher/week-switcher';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Icon } from 'semantic-ui-react';
 import { WEEK_SHOW_WEEKS, SHOW_MESSAGE } from '../../configs/topics';
-import "./games.css";
-import "../../utils/slideTransition.scss";
-import { fetchUserPickData } from '../../controller/user-pick-data/userPickDataSlice';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { status } from '../../configs/status';
 import { UserTypeEnum } from '../../model/user/user';
@@ -22,6 +18,8 @@ import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { publish, PubSub, subscribe } from '../../controller/pubSub/pubSubSlice';
 import { SnackMessage } from '../../components/message/messagePopup';
 import { toInt } from '../../utils/tools';
+import "./games.css";
+import "../../utils/slideTransition.scss";
 
 interface RouteParams {
     view: string
@@ -34,11 +32,9 @@ type Props = {
 export const Games = ({routes}: Props) => {
     const user = useSelector(selectUser);
     const league = useSelector(selectLeague);
-    const pickIds = useSelector(selectPicksIds);
-    const gamesState = useSelector((state: RootState) => state.games.status);
+    
+    const gamesState = useSelector((state: RootState) => state.week.status);
     const leagueState = useSelector((state: RootState) => state.league.status);
-    const picksState = useSelector((state:RootState) => state.picks.status);
-    const userPickDataState = useSelector((state: RootState) => state.userPickData.status);
     const setWeek = useSelector(getSetWeek);
     const sub = useSelector(subscribe);
     const dispatch = useDispatch();
@@ -88,7 +84,7 @@ export const Games = ({routes}: Props) => {
     );
 
     const gamesTab = (user.type === UserTypeEnum.PARTICIPANT && (other === null || other === "null")) && (
-        <GamesTabBar pickCount={pickIds.length}/>
+        <GamesTabBar/>
     )
 
     const transitionGroup = (!weeksShown) && (
@@ -115,38 +111,26 @@ export const Games = ({routes}: Props) => {
     );
 
     useEffect(() => {
-
         if(gamesState === status.IDLE && leagueState === status.COMPLETE) {
             let request = new SeasonRequest(currSeason, currSeasonType, currWeek);
-            dispatch(fetchGames(request));
-            dispatch(fetchUserPickData(request));
-            dispatch(fetchPicks(request));
+            dispatch(fetchWeek(request));
         }
-
     }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, week, dispatch])
 
     useEffect(() => {
-
         if((season && week && seasonType) && week !== setWeek) {
             let request = new SeasonRequest(season, seasonType, week);
-            dispatch(fetchGames(request));
-            dispatch(fetchUserPickData(request));
-            dispatch(fetchPicks(request));
+            dispatch(fetchWeek(request));
         }
-
     }, [season, week, seasonType, other, setWeek, dispatch])
 
     useEffect(() => {
-
-        if(gamesState === status.ERROR 
-            || picksState === status.ERROR
-            || userPickDataState === status.ERROR){
-                
-            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+        if(gamesState === status.ERROR){          
+            let request = new PubSub(SHOW_MESSAGE, 
+                new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
             dispatch(publish(request));
         }
-
-    }, [gamesState, dispatch, picksState, userPickDataState]);
+    }, [gamesState, dispatch]);
 
     useEffect(() => {
         if(sub.topic === WEEK_SHOW_WEEKS) {

@@ -21,7 +21,8 @@ export const status = {
             NO_PICKS: "Going to need more than that!"
         },
         REMINDERS: {
-            SET_SUCCESS: "Successfully set reminder!"
+            SET_SUCCESS: "Successfully set reminder!",
+            ALREADY_SET: "Reminder has already been set."
         }
     }
 }

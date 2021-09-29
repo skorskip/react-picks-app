@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
-import { GameStatusEnum, GameWinStatusEnum } from '../../../../model/game/game';
+import { GameStatusEnum, GameWinStatusEnum } from '../../../../model/week/game';
 import './pick-status.css';
 
 type Props = {

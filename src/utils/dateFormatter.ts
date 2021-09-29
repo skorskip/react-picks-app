@@ -1,6 +1,4 @@
-import { Game, GameStatusEnum } from '../model/game/game';
-
-const months = ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+import { Game, GameStatusEnum } from '../model/week/game';
 
 export const formatDate = (date: Date) => {
     var formattedDate = "";
@@ -18,14 +16,7 @@ export const formatDate = (date: Date) => {
     }
 
     formattedDate += " at "
-
-    let minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
-
-    if(date.getHours() > 12) {
-      formattedDate += (date.getHours() - 12) + ":" + minutes + "PM"
-    } else {
-      formattedDate += date.getHours() + ":" + minutes + "AM"
-    }
+    formattedDate += date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
     return formattedDate;
 }

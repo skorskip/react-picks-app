@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPicks, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/picks/picksSlice';
+import { selectPicks, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/week/weekSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, SHOW_MESSAGE } from '../../../../configs/topics';
 import { status } from '../../../../configs/status';
@@ -8,7 +8,7 @@ import { Icon } from 'semantic-ui-react';
 import { selectUser } from '../../../../controller/user/userSlice';
 import { RootState } from '../../../../store';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
-import { Pick } from '../../../../model/pick/pick';
+import { Pick } from '../../../../model/week/pick';
 import { PickDeleteRequest } from '../../../../model/postRequests/pickDeleteRequest';
 import { PickRequest } from '../../../../model/postRequests/pickRequest';
 import { clear, publish, PubSub, subscribe } from '../../../../controller/pubSub/pubSubSlice';
@@ -19,7 +19,7 @@ import { GameCard } from '../../../../components/game-card/game-card';
 export const PicksDashboard = () => {
 
     const picks = useSelector(selectPicks);
-    const loader = useSelector((state: RootState) => state.picks.status);
+    const loader = useSelector((state: RootState) => state.week.status);
     const sub = useSelector(subscribe);
     const user = useSelector(selectUser);
     const picksMessage = useSelector(selectPicksMessage);

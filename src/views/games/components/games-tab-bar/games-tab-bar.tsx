@@ -6,18 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import './games-tab-bar.css';
+import { selectPicksCount } from '../../../../controller/week/weekSlice';
 
 interface RouteParams {
     view: string
 }
 
-type Props = {
-    pickCount: number
-}
-
-export const GamesTabBar = ({pickCount}:Props) => {
+export const GamesTabBar = () => {
     let param = useParams<RouteParams>();
     const league = useSelector(selectLeague);
+    const pickCount = useSelector(selectPicksCount);
     const history = useHistory();
     const [isEditSelected, setIsEditSelected] = useState(false);
     const currentWeek = league.currentWeek.toString();

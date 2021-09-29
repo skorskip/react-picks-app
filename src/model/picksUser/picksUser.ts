@@ -1,6 +1,6 @@
-import { Team } from '../team/team';
-import { Game } from '../game/game';
-import { Pick } from '../pick/pick';
+import { Team } from '../week/team';
+import { Game } from '../week/game';
+import { Pick } from '../week/pick';
 
 export class PicksUser {
     game: Game;

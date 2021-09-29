@@ -3,14 +3,13 @@ import { gameTimeStatusQuarters, formatDate } from '../../utils/dateFormatter';
 import { TeamCard } from './components/team-card/team-card';
 import { PickStatus } from './components/pick-staus/pick-status';
 import { Icon, Button } from 'semantic-ui-react';
-import './game-card.css';
-import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
+import { GameWinStatusEnum, GameStatusEnum } from '../../model/week/game';
 import { UsersPickData } from './components/users-pick-data/users-pick-data';
-import { Pick } from '../../model/pick/pick';
-import { TeamSelect } from '../../model/team/team';
+import { Pick } from '../../model/week/pick';
+import { TeamSelect } from '../../model/week/team';
 import { PickSelected } from '../../model/pickSelected/pickSelected';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectGamesById, selectTeamById, showSubmitByGameId } from '../../controller/games/gamesSlice';
+import { selectGamesById, selectTeamById, showSubmitByGameId } from '../../controller/week/weekSlice';
 import { RootState } from '../../store';
 import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
@@ -19,6 +18,8 @@ import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { SHOW_MESSAGE } from '../../configs/topics';
 import { SnackMessage } from '../message/messagePopup';
 import { status } from '../../configs/status';
+import './game-card.css';
+import { setRemindLocal } from '../../utils/localData';
 
 type Props = {
     gameId: number,
@@ -50,6 +51,7 @@ export const GameCard = ({
     const awayTeam = useSelector((state: RootState) => selectTeamById(state, game?.away_team_id));
     const [highlightHome, setHighlightHome] = useState(false);
     const [highlightAway, setHighlightAway] = useState(false);
+    const [remindLoading, setRemindLoading] = useState(false);
     const gameLocked = new Date(game?.pick_submit_by_date) <= new Date();
     const showSubmitTime = useSelector((state: RootState) => showSubmitByGameId(state, gameId, prevGameId));
     const user = useSelector(selectUser);
@@ -98,21 +100,27 @@ export const GameCard = ({
     }
 
     const callSetReminder = async () => {
+        setRemindLoading(true);
         try {
+
             let url = endpoints.MESSAGES.SET_REMINDER;
             let response = await client.post(url, {
                 pick_submit_by_date: game.pick_submit_by_date,
                 slack_user_id: user.slack_user_id
             });
 
-            if(!response.error) {
-                let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.REMINDERS.SET_SUCCESS));
+            if(!response?.error) {
+                setRemindLoading(false);
+                let request = new PubSub(SHOW_MESSAGE, 
+                    new SnackMessage(status.SUCCESS, status.MESSAGE.REMINDERS.SET_SUCCESS));
                 dispatch(publish(request)); 
             }
 
         } catch(error) {
+            setRemindLoading(false);
             console.error(error);
-            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+            let request = new PubSub(SHOW_MESSAGE, 
+                new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
             dispatch(publish(request));
         }
     }
@@ -121,17 +129,30 @@ export const GameCard = ({
         let dialogConfirm = window.confirm("Set slack reminder?");
 
         if(dialogConfirm) {
-            callSetReminder();
+            if(setRemindLocal(game.pick_submit_by_date)) {
+                callSetReminder();
+            } else {
+                let request = new PubSub(SHOW_MESSAGE, 
+                    new SnackMessage(status.SUCCESS, status.MESSAGE.REMINDERS.ALREADY_SET));
+                dispatch(publish(request)); 
+            }
         }
     }
 
     const submitBy = showSubmitTime && (
         <div className='full-row'>
             <div className="game-card-date">
-                <Button className="date-text tiertary-light-background secondary-color" onClick={setReminder}>
-                    <Icon className="primary-color" name="calendar alternate outline"/>
-                    Submit by: { formatDate(new Date(game?.pick_submit_by_date)) }
-                </Button>
+                {
+                    remindLoading ? (
+                        <Button className="date-text-loading tiertary-light-background secondary-color" width="200" loading />
+                    ) : (
+                        <Button className="date-text tiertary-light-background secondary-color" onClick={setReminder}>
+                            <Icon className="primary-color" name="calendar alternate outline"/>
+                            Submit by: { formatDate(new Date(game?.pick_submit_by_date)) }
+                        </Button>
+                    )
+                }
+
             </div>
         </div>
     );

@@ -11,7 +11,7 @@ import { GameLoader } from '../game-loader/game-loader';
 import { useHistory, useLocation } from 'react-router-dom';
 import { status } from '../../configs/status';
 import { PickStatus } from '../game-card/components/pick-staus/pick-status';
-import { GameWinStatusEnum, GameStatusEnum } from '../../model/game/game';
+import { GameWinStatusEnum, GameStatusEnum } from '../../model/week/game';
 import { RootState } from '../../store';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { PicksUser } from '../../model/picksUser/picksUser';

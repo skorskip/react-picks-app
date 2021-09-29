@@ -1,4 +1,4 @@
-import { Pick } from "../pick/pick"
+import { Pick } from "../week/pick"
 
 export class PickSelected {
     highlight: boolean

@@ -1,31 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Progress, Icon } from 'semantic-ui-react'
-import { selectUserDetails, fetchUserDetails } from '../../controller/user-details/userDetailsSlice';
-import { selectLeague } from '../../controller/league/leagueSlice';
 import { selectUser } from '../../controller/user/userSlice';
 import './user-stats.css';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { status } from "../../configs/status";
 import { RootState } from "../../store";
-import { PickRequest } from "../../model/postRequests/pickRequest";
-import { publish, PubSub } from "../../controller/pubSub/pubSubSlice";
-import { SHOW_MESSAGE } from "../../configs/topics";
-import { SnackMessage } from "../message/messagePopup";
 
 export const UserStats = () => {
-    
-    const dispatch = useDispatch();
-    const league = useSelector(selectLeague);
-    const leagueState = useSelector((state: RootState) => state.league.status);
+
     const user = useSelector(selectUser);
+    const userDetails = user.current_season_data;
     const userState = useSelector((state: RootState) => state.user.status);
-    const userDetails = useSelector(selectUserDetails);
-    const userDetailsState = useSelector((state: RootState) => state.userDetails.status);
-    
     const pickCount = userDetails?.picks || 0;
     const pendingCount = userDetails?.pending_picks || 0;
 
-    const picksStatLoading = (userDetailsState === status.LOADING) && (
+    const picksStatLoading = (userState === status.LOADING) && (
         <>
             <div className="pick-progress-group">
                 <div className="pick-progress-numbers">
@@ -40,7 +29,7 @@ export const UserStats = () => {
         </>
     );
 
-    const pickCountProgress = (userDetailsState === status.COMPLETE) && (
+    const pickCountProgress = (userState === status.COMPLETE) && (
         <div className="pick-progress-group">
             <div className="pick-progress-numbers">
                 <div>Pick Count</div>
@@ -50,7 +39,7 @@ export const UserStats = () => {
         </div>
     );
 
-    const pickStatInfo = (userDetailsState === status.COMPLETE) && (
+    const pickStatInfo = (userState === status.COMPLETE) && (
         <div className="picks-stat-card-group">
             <div className="pick-stat-card tiertary-color">
                 <div className='secondary-color pick-stat-icon'>
@@ -72,20 +61,6 @@ export const UserStats = () => {
             </div>
         </div>
     );
-
-    useEffect(() => {
-        if(userDetailsState === status.IDLE && leagueState === status.COMPLETE && userState === status.COMPLETE) {
-            let request = new PickRequest(0,0,0,user.user_id, [])
-            dispatch(fetchUserDetails(request));
-        }
-    }, [userDetailsState, leagueState, userState, league, user, dispatch]);
-
-    useEffect(() => {
-        if(userDetailsState === status.ERROR) {
-            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
-            dispatch(publish(request));
-        }
-    }, [userDetailsState, dispatch]);
 
     return (
         <div className="user-stat-card base-background tiertary-color">

@@ -1,31 +1,61 @@
 export const UserTypeEnum = {
     PARTICIPANT: "participant"
 }
+export class UserCurrentSeasonData {
+    max_picks       : number;
+    picks_penalty   : number;
+    pending_picks   : number;
+    picks           : number;
+    ranking         : number;
+    wins            : number;
+    win_pct         : number;
+
+    constructor(
+        max_picks       : number,
+        picks_penalty   : number,
+        pending_picks   : number,
+        picks           : number,
+        ranking         : number,
+        wins            : number,
+        win_pct         : number
+    ) {
+        this.max_picks    = max_picks    
+        this.picks_penalty= picks_penalty
+        this.pending_picks= pending_picks
+        this.picks        = picks        
+        this.ranking      = ranking
+        this.wins         = wins         
+        this.win_pct      = win_pct      
+    }
+}
+
 
 export class User {
 
-    user_id :           number;
-    user_name :         string;
-    email :             string;
-    first_name:         string;
-    last_name:          string;
-    status:             string;
-    type:               string;
-    last_login_date:    Date;
-    user_inits:         string;
-    slack_user_id:      string;
+    user_id :               number;
+    user_name :             string;
+    email :                 string;
+    first_name:             string;
+    last_name:              string;
+    status:                 string;
+    type:                   string;
+    last_login_date:        Date;
+    user_inits:             string;
+    slack_user_id:          string;
+    current_season_data:    UserCurrentSeasonData;
 
     constructor(
-        user_id :           number,
-        user_name :         string,
-        email :             string,
-        first_name:         string,
-        last_name:          string,
-        status:             string,
-        type:               string,
-        last_login_date:    Date,
-        user_inits:         string,
-        slack_user_id:      string
+        user_id :               number,
+        user_name :             string,
+        email :                 string,
+        first_name:             string,
+        last_name:              string,
+        status:                 string,
+        type:                   string,
+        last_login_date:        Date,
+        user_inits:             string,
+        slack_user_id:          string,
+        current_season_data:    UserCurrentSeasonData
     ){
         this.user_id = user_id;
         this.user_name = user_name;
@@ -37,5 +67,6 @@ export class User {
         this.last_login_date = last_login_date;
         this.user_inits = user_inits;
         this.slack_user_id = slack_user_id;
+        this.current_season_data = current_season_data;
     }
 }

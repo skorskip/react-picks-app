@@ -80,7 +80,7 @@ export const OthersDashboard = () => {
         </div>
     );
 
-    const games = (userPicks.length) && (user != null) && userPicks.map((userPick, i) => {
+    const games = (userPicks.length !== 0) && (user != null) && userPicks.map((userPick, i) => {
         return (<GameCard
             key={i + "-users-picks"}
             gameId={userPick.game.game_id}
@@ -97,10 +97,10 @@ export const OthersDashboard = () => {
     });
 
     return (
-        <>
+        <div className="games-container">
             { userHeaderInfo }
             { noPicks }
             { games }
-        </>
+        </div>
     );
 }

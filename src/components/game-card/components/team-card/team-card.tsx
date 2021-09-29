@@ -1,5 +1,5 @@
 import React from 'react';
-import { Team, TeamSelect } from '../../../../model/team/team';
+import { Team, TeamSelect } from '../../../../model/week/team';
 import './team-card.css'
 
 type Props = {

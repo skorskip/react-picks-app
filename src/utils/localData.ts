@@ -1,4 +1,4 @@
-import { Pick } from "../model/pick/pick";
+import { Pick } from "../model/week/pick";
 import { PickSelected } from "../model/pickSelected/pickSelected";
 import { User } from "../model/user/user";
 
@@ -7,8 +7,40 @@ const localDataEnum = {
     USER: "user",
     TOKEN: "token",
     THEME: "theme",
+    REMIND: "remind",
     ANNOUNCEMENT_CHECK: "announcementCheck",
     LIVE_THREAD_CHECK: "liveThreadCheck"
+}
+
+export const setRemindLocal = (remindDate: string) => {
+    let dates = localStorage.getItem(localDataEnum.REMIND)
+    if(dates) {
+
+        let reminders = JSON.parse(dates) as string[];
+
+        if(reminders.includes(remindDate)) {
+            return false;
+        }
+
+        let diff = Math.abs(new Date(reminders[0]).getTime() - new Date().getTime());
+        if((diff / (1000 * 60 * 60 *24) > 7)) {
+            reminders = [];
+        }
+
+        reminders.push(remindDate);
+        localStorage.setItem(localDataEnum.REMIND, JSON.stringify(reminders));
+        return true;
+
+
+    } else {
+        let newDates = [];
+        newDates.push(remindDate);
+        localStorage.setItem(localDataEnum.REMIND, JSON.stringify(newDates));
+    
+        return true;
+    }
+
+
 }
 
 export const setStagedPicksLocal = (stagedPicks: Pick[], newPick: PickSelected) => {

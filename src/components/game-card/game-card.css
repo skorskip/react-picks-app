@@ -25,6 +25,11 @@
 	padding-right: 10px;
 }
 
+.date-text-loading {
+	width: 200px;
+	height: 36px;
+}
+
 .tiny-text-middle{
 	font-size:.75em; 
 	margin:0; 

@@ -8,6 +8,7 @@ import { RootState } from '../../../../store';
 import { SHOW_MODAL } from '../../../../configs/topics';
 import './users-pick-data.css';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { ProfileImage } from '../../../profile-image/profile-image';
 
 type Props = {
     game: Game
@@ -62,46 +63,79 @@ export const UsersPickData = ({ game }:Props) => {
             }
         } else {
             return "accent";
-        }
-        
+        } 
     }
 
-    const picksDataButton = (
+    const picksChits = (pickList: PicksUserData[], colorType: string) => {
+        return (
+            <div className={getIconColor(colorType)  + " user-pick-font"}>
+                {
+                    (pickList.length === 0) && (
+                        <ProfileImage size="xs" content={pickList.length} image="" showImage={false}/>
+                    )
+                }
+                {
+                    (pickList.length > 0) && (
+                        <ProfileImage size="xs" content={pickList[0].user_inits} image={pickList[0].slack_user_image} showImage={true}/>
+                    )
+                }                
+                {
+                    (pickList.length > 1) && (
+                        <div className="user-data-images">
+                            <ProfileImage size="xs" content={pickList[1].user_inits} image={pickList[1].slack_user_image} showImage={true}/>
+                        </div>
+                    )
+                }
+                {
+                    (pickList.length === 3) && (
+                        <div className="user-data-images">
+                            <ProfileImage size="xs" content={pickList[2].user_inits} image={pickList[2].slack_user_image} showImage={true}/>
+                        </div>
+                    )
+                }
+                {
+                    (pickList.length > 3) && (
+                        <div className="user-data-images">
+                            <ProfileImage size="xs" content={pickList.length} image="" showImage={false}/>
+                        </div>
+                    )
+                }
+            </div>
+        )
+    }
+
+    const picksDataButton = (pickList: PicksUserData[], colorType: string) => {
+        return (
+            <div className="floating-users-pick-button" onClick={picksDataClick}>
+                <div className="user-pick-label-container">
+                    <div className="tiertary-color user-pick-label">
+                        { picksChits(pickList, colorType) }
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    const picksDataButtonGroup = (
         <div className={containerClass()}>
             <div className={groupClass()}>
-                <div className="floating-users-pick-button" onClick={picksDataClick}>
-                    <div className="user-pick-label-container">
-                        <div className="tiertary-color user-pick-label">
-                            <div className={getIconColor('away')  + " user-pick-font" }>{awayPicks.length}</div>
-                            <Icon name='user' className={getIconColor('away')}/>
-
-                        </div>
-                    </div>
-                </div>
-                <div className="floating-users-pick-button" onClick={picksDataClick}>
-                    <div className="user-pick-label-container">
-                        <div className="tiertary-color user-pick-label">
-                            <div className={getIconColor('home')  + " user-pick-font"}>{homePicks.length}</div>
-                            <Icon name='user' className={getIconColor('home')}/>
-                        </div>
-                    </div>
-                </div>
+                {picksDataButton(awayPicks, 'away')}
+                {picksDataButton(homePicks, 'home')}
             </div>
         </div>
     );
 
-    const buttonListAway = awayPicks.map((pick) => {
+    const buttonList = (picksList: PicksUserData[]) => picksList.map((pick) => {
         return (
-            <Button key={pick.pick_id + "-pick-data"} className="user-item secondary-color tiertary-light-background" onClick={() => setUserModal(pick)}>
-                <div>{ pick.first_name } {pick.last_name.substring(0,1)}.</div>
-            </Button>
-        );
-    });
+            <Button 
+                key={pick.pick_id + "-pick-data"} 
+                className="user-item secondary-color tiertary-light-background" 
+                onClick={() => setUserModal(pick)}>
 
-    const buttonListHome = homePicks.map((pick) => {
-        return (
-            <Button key={pick.pick_id + "-pick-data"} className="user-item secondary-color tiertary-light-background" onClick={() => setUserModal(pick)}>
-                <div>{ pick.first_name } {pick.last_name.substring(0,1)}.</div>
+                <div className="users-pick-button-content">
+                    <ProfileImage size="xs" content={pick.user_inits} image={pick.slack_user_image} showImage={true}/>
+                    &nbsp;{ pick.first_name } {pick.last_name.substring(0,1)}.
+                </div>
             </Button>
         ); 
     })
@@ -110,17 +144,15 @@ export const UsersPickData = ({ game }:Props) => {
         <div className="users-pick-list">
             <div className="picks-data-users">
                 <div className="users-column">
-                    { buttonListAway }
+                    { buttonList(awayPicks) }
                 </div>
                 <div className="users-column">
-                    { buttonListHome }
+                    { buttonList(homePicks) }
                 </div>
             </div>
             <Button onClick={closePicksData} className="show-less-button secondary-color base-background">
                 <div className="show-less-button-group">
-                    <div className="close-modal-icon">
-                        <Icon name="chevron up" />
-                    </div>
+                    <Icon name="chevron up" />
                     Show Less
                 </div>
             </Button>
@@ -130,7 +162,7 @@ export const UsersPickData = ({ game }:Props) => {
     return (
         <>
             { picksDataList }
-            { picksDataButton }
+            { picksDataButtonGroup }
         </>
     );
 }

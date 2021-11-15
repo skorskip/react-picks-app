@@ -80,15 +80,6 @@ export const GameDashboard = () => {
     });
 
     useEffect(() => {
-        if(Object.values(stagedPicks).find((initial:any) => 
-            new Date(initial.pick_submit_by_date) > new Date()) == null) {
-
-            setStagedCount(0);
-            setStagedPicks({});
-        }
-    },[]);
-
-    useEffect(() => {
         if(gameLoader === status.COMPLETE && submitSent) {
             setStagedPicks({});
             setStagedCount(0);

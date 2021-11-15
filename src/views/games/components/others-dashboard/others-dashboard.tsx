@@ -15,6 +15,7 @@ import { SnackMessage } from "../../../../components/message/messagePopup";
 import { toInt } from "../../../../utils/tools";
 import { GameCard } from "../../../../components/game-card/game-card";
 import { GameLoader } from "../../../../components/game-loader/game-loader";
+import { ProfileImage } from "../../../../components/profile-image/profile-image";
 
 export const OthersDashboard = () => {
 
@@ -67,8 +68,8 @@ export const OthersDashboard = () => {
             <div className="other-user-info tiertary-light-background">
                 <Icon name="chevron left" className="secondary-color"/>
                 <div className="secondary-color other-user-name">
-                    <Icon name="user" className="secondary-color"/>
-                    {userInfo.first_name}&nbsp;{userInfo.last_name}
+                    <ProfileImage size="s" content={userInfo.user_inits} image={userInfo.slack_user_image} showImage={true}/>
+                    &nbsp;{userInfo.first_name}&nbsp;{userInfo.last_name}
                 </div>
             </div>
         </div>

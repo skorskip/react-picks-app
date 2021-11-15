@@ -1,20 +1,21 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
-import { UserStanding } from '../../../../model/userStanding/userStanding';
 import { SHOW_MODAL } from '../../../../configs/topics';
 import '../../standings.css';
 import { useDispatch } from 'react-redux';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { ProfileImage } from '../../../../components/profile-image/profile-image';
+import { User } from '../../../../model/user/user';
 
 type Props = {
-    standing: UserStanding,
+    standing: User,
     isCurrentUser: boolean
 }
 
 export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
 
     const dispatch = useDispatch();
-    const bonusCount = Array(standing.bonus_nbr).fill("");
+    const bonusCount = Array(standing.current_season_data.bonus_nbr).fill("");
 
     const getItemClass = (addClass: string) => {
         return (isCurrentUser) ? `${addClass} base-color` : `${addClass} secondary-color`;
@@ -25,9 +26,9 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
     }
 
     const getRankStatusClass = () => {
-        if(standing.ranking < standing.prev_ranking) {
+        if(standing.current_season_data.ranking < standing.current_season_data.prev_ranking) {
             return "success-color rank-status-icon";
-        } else if (standing.ranking > standing.prev_ranking) {
+        } else if (standing.current_season_data.ranking > standing.current_season_data.prev_ranking) {
             return "failure-color rank-status-icon";
         } else {
             return;
@@ -36,9 +37,9 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
 
     const getRankStatusIcon = () => {
 
-        if(standing.ranking < standing.prev_ranking) {
+        if(standing.current_season_data.ranking < standing.current_season_data.prev_ranking) {
             return "caret up";
-        } else if (standing.ranking > standing.prev_ranking) {
+        } else if (standing.current_season_data.ranking > standing.current_season_data.prev_ranking) {
             return "caret down";
         } else {
             return "minus";
@@ -70,7 +71,7 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
     const rank = (
         <div className="rank tiertary-color">
             <div className={getItemClass("rank-content")}>
-                {rankingSymbol(standing.ranking)}
+                {rankingSymbol(standing.current_season_data.ranking)}
                 <div className={getRankStatusClass()}>
                     <Icon name={getRankStatusIcon()}/>
                 </div>
@@ -80,7 +81,10 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
 
     const user = (
         <div className={getItemClass("user")}>
-            { standing.user_inits }
+            <ProfileImage size="s" image={standing.slack_user_image} content={standing.user_inits} showImage={true}/>
+            <div className="user-content">
+                {standing.first_name}&nbsp;{standing.last_name[0]}.
+            </div>
         </div>
     )
 
@@ -94,21 +98,21 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
 
     const wins = (
         <div className={getItemClass("stacked-stats")}>
-            { standing.wins }
+            { standing.current_season_data.wins }
             <span className="stacked-stats-font">wins</span>
         </div>
     )
 
     const picks = (
         <div className={getItemClass("stacked-stats")}>
-            { standing.picks }
+            { standing.current_season_data.picks }
             <span className="stacked-stats-font">picks</span>
         </div>
     )
 
     const winPct = (
             <div className={getItemClass("win-pct")}>
-                { standing.win_pct.toFixed(3) }
+                { standing.current_season_data.win_pct.toFixed(3) }
             </div>
     )
 

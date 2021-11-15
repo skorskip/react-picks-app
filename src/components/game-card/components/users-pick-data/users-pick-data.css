@@ -78,6 +78,13 @@
 	margin: 5px !important;
 }
 
+.users-pick-button-content {
+	width: auto;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
 .show-less-button {
 	width: 100%;
 }
@@ -110,11 +117,15 @@
 	flex-direction: row;
 	width: auto;
 	background-color: transparent !important;
-	margin: 5px;
 }
 
 .user-pick-font {
 	margin-right: 5px;
+	display: flex;
+}
+
+.user-data-images {
+	margin-left:-8px;
 }
 
 @media only screen and (min-width: 650px) {

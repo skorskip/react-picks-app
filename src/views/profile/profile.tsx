@@ -12,6 +12,7 @@ import { SET_THEME, SHOW_MESSAGE } from '../../configs/topics';
 import { RootState } from '../../store';
 import { status } from '../../configs/status';
 import { SnackMessage } from '../../components/message/messagePopup';
+import { ProfileImage } from '../../components/profile-image/profile-image';
 
 export const Profile = () => {
     const user = useSelector(selectUser);
@@ -53,9 +54,7 @@ export const Profile = () => {
     const profileTitle = (
         <div className="card-title base-background tiertary-color">
             <div className="card-header-profile secondary-color">
-                <div className="init-header-icon primary-color">
-                    { user.user_inits }
-                </div>
+                <ProfileImage size="m" content={user.user_inits} image={user.slack_user_image} showImage={true}/>
                 <div className="card-header-text-profile">
                     { user.first_name } { user.last_name }
                 </div>

@@ -9,6 +9,8 @@ export class UserCurrentSeasonData {
     ranking         : number;
     wins            : number;
     win_pct         : number;
+    bonus_nbr       : number;
+    prev_ranking    : number;
 
     constructor(
         max_picks       : number,
@@ -17,7 +19,9 @@ export class UserCurrentSeasonData {
         picks           : number,
         ranking         : number,
         wins            : number,
-        win_pct         : number
+        win_pct         : number,
+        bonus_nbr       : number,
+        prev_ranking    : number
     ) {
         this.max_picks    = max_picks    
         this.picks_penalty= picks_penalty
@@ -25,7 +29,9 @@ export class UserCurrentSeasonData {
         this.picks        = picks        
         this.ranking      = ranking
         this.wins         = wins         
-        this.win_pct      = win_pct      
+        this.win_pct      = win_pct
+        this.bonus_nbr    = bonus_nbr
+        this.prev_ranking = prev_ranking
     }
 }
 
@@ -42,6 +48,7 @@ export class User {
     last_login_date:        Date;
     user_inits:             string;
     slack_user_id:          string;
+    slack_user_image:       string;
     current_season_data:    UserCurrentSeasonData;
 
     constructor(
@@ -55,6 +62,7 @@ export class User {
         last_login_date:        Date,
         user_inits:             string,
         slack_user_id:          string,
+        slack_user_image:       string,
         current_season_data:    UserCurrentSeasonData
     ){
         this.user_id = user_id;
@@ -67,6 +75,7 @@ export class User {
         this.last_login_date = last_login_date;
         this.user_inits = user_inits;
         this.slack_user_id = slack_user_id;
+        this.slack_user_image = slack_user_image;
         this.current_season_data = current_season_data;
     }
 }

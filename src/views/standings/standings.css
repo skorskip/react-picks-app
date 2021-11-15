@@ -75,9 +75,15 @@
 
 .user {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	width: 35px;
-	font-size: 1.3em;
+	padding-top: 5px;
+}
+
+.user-content {
+	font-size: .6em;
+	text-overflow: ellipsis;
 }
 
 .bonus {

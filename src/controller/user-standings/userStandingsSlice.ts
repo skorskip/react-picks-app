@@ -3,14 +3,14 @@ import { client } from '../../utils/client';
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
-import { UserStanding } from '../../model/userStanding/userStanding';
 import { RootState } from '../../store';
+import { User } from '../../model/user/user';
 
 const userStandingsAdapter = createEntityAdapter();
 
 const initialState = userStandingsAdapter.getInitialState({
     status: status.IDLE,
-    userStandings: [] as UserStanding[]
+    userStandings: [] as User[]
 });
 
 export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStandings', async (params: SeasonRequest) => {
@@ -44,8 +44,17 @@ const userStandingsSlice = createSlice({
     }
 });
 
-export const selectUserStandings = (state: RootState) => state.userStandings.userStandings as UserStanding[];
+export const selectUserStandings = (state: RootState) => 
+    state.userStandings.userStandings
+    .filter(standing => standing.current_season_data != null)
+    .sort((user1, user2) => {
+        if(user1.current_season_data.ranking < user2.current_season_data.ranking) {
+            return -1
+        } else {
+            return 1
+        }
+    }) as User[];
 
-export const userStandingById = (state: RootState, user_id: number | null) => state.userStandings.userStandings.find((standing) => standing.user_id === user_id) as UserStanding;
+export const userStandingById = (state: RootState, user_id: number | null) => state.userStandings.userStandings.find((standing) => standing.user_id === user_id) as User;
 
 export default userStandingsSlice.reducer

@@ -65,6 +65,11 @@ export const resetStagedPicksLocal = () => {
 export const getStagedPicksLocal = () => {
     let staged = localStorage.getItem(localDataEnum.STAGED_PICKS);
     if(staged){
+        if(Object.values(staged).find((initial:any) => 
+            new Date(initial.pick_submit_by_date) > new Date()) == null) {
+            resetStagedPicksLocal();
+            return null; 
+        }
         return JSON.parse(staged);
     } else {
         return null;

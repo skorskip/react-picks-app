@@ -18,6 +18,7 @@ import { PicksUser } from '../../model/picksUser/picksUser';
 import { clear, publish, PubSub, subscribe } from '../../controller/pubSub/pubSubSlice';
 import { SnackMessage } from '../message/messagePopup';
 import { toInt } from '../../utils/tools';
+import { ProfileImage } from '../profile-image/profile-image';
 
 export const PickPeekModal = () => {
     
@@ -26,7 +27,7 @@ export const PickPeekModal = () => {
     const leagueState = useSelector((state: RootState) => state.league.status);
     const userPicks = useSelector(selectPicksForUser);
     const userPicksState = useSelector((state: RootState) => state.picksForUser.status);
-    const [userData, setUserData] = useState({user_id: null, first_name: '', last_name: '', user_inits: ''});
+    const [userData, setUserData] = useState({user_id: null, first_name: '', last_name: '', user_inits: '', slack_user_image: null});
     const sub = useSelector(subscribe);
     const dispatch = useDispatch();
 
@@ -39,7 +40,7 @@ export const PickPeekModal = () => {
 
     const closeClick = () => {
         setShowModal(false);
-        setUserData({user_id: null, first_name: '', last_name: '', user_inits: ''});
+        setUserData({user_id: null, first_name: '', last_name: '', user_inits: '', slack_user_image: null});
         dispatch(clear());
     }
 
@@ -74,8 +75,8 @@ export const PickPeekModal = () => {
 
     const modalInitIcon = (
         <div className="modal-init">
-            <div className="init-icon base-color primary-background">
-                { userData.user_inits }
+            <div className="init-icon">
+                <ProfileImage size="l" content={userData.user_inits} image={userData.slack_user_image} showImage={true}/>
             </div>
         </div>
     );

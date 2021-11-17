@@ -14,7 +14,7 @@ const initialState = userStandingsAdapter.getInitialState({
 });
 
 export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStandings', async (params: SeasonRequest) => {
-    const url = `${endpoints.USERS.STANDINGS}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}`;
+    const url = endpoints.USERS.STANDINGS(params);
     try {
         const response = await client.get(url);
         return response;

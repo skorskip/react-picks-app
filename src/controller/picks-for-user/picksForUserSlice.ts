@@ -14,7 +14,7 @@ const initialState = picksForUserAdapter.getInitialState({
 });
 
 export const fetchPicksForUser = createAsyncThunk('picksForUser/fetchPicksForUser', async (params: PickRequest) => {
-    const url = `${endpoints.PICKS.OTHERS_BY_WEEK}?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&user=${params.user_id}`;
+    const url = endpoints.PICKS.OTHERS_BY_WEEK(params);
     try {
         const response = await client.get(url);
         return response;

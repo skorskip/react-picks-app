@@ -1,24 +1,24 @@
+import { PickRequest } from '../model/postRequests/pickRequest';
+import { SeasonRequest } from '../model/postRequests/seasonRequest';
 import {environment} from './environment';
 
 export const endpoints = {
     PICKS : {
         BASE: `${environment.picksServiceURL}picks/`,
-        ADD : `${environment.picksServiceURL}picks/create/`,
+        ADD : (param: PickRequest) => `${environment.picksServiceURL}picks/create/${param.user_id}`,
         DELETE : `${environment.picksServiceURL}picks/delete`,
         UPDATE: `${environment.picksServiceURL}picks/update`,
-        BY_WEEK: `${environment.picksServiceURL}picks/week`,
-        OTHERS_BY_WEEK: `${environment.picksServiceURL}picks/others`,
-        ALL_PICKS_BY_WEEK: `${environment.picksServiceURL}picks/games`
+        OTHERS_BY_WEEK: (params: PickRequest) => `${environment.picksServiceURL}picks/others?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&user=${params.user_id}`,
     },
     MESSAGES : {
         BASE: `${environment.messageServiceURL}message/`,
         ANNOUNCEMENTS: `${environment.messageServiceURL}message/announcements`,
         ACTIVE_CHAT: `${environment.messageServiceURL}message/active-thread`,
         SET_REMINDER: `${environment.messageServiceURL}message/set-reminder`
-
     },
     GAMES : {
-        BASE: `${environment.weekServiceURL}week`
+        BASE: `${environment.weekServiceURL}week`,
+        WEEK: (param: SeasonRequest) => `${environment.weekServiceURL}week?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
     },
     LEAGUE : {
         BASE : `${environment.leagueServiceURL}league`,
@@ -27,8 +27,6 @@ export const endpoints = {
     USERS : {
         BASE : `${environment.userServiceURL}users`,
         LOGIN : `${environment.userServiceURL}users/login`,
-        PICK_LIMIT : `${environment.userServiceURL}users/userPicksLimit`,
-        STANDINGS : `${environment.userServiceURL}users/standings`,
-        DETAILS : `${environment.userServiceURL}users/details`
+        STANDINGS : (params: SeasonRequest) => `${environment.userServiceURL}users/standings?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}`,
     }
 }

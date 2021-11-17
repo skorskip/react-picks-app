@@ -17,9 +17,7 @@ const getMessageFromError = (error: any) => {
         case PickSubmitEnum.PASS_SUBMIT_DATE :
             return status.MESSAGE.PICKS.PASS_SUBMIT_DATE;
         case PickSubmitEnum.TOO_MANY_PICKS :
-            let message = status.MESSAGE.PICKS.TOO_MANY_PICKS;
-            message = message.replace('$OVER', error.content.data.over)
-                .replace('$LIMIT', error.content.data.limit);
+            let message = status.MESSAGE.PICKS.TOO_MANY_PICKS(error.content.data.over, error.content.data.limit);
             return message;
         case PickSubmitEnum.NO_PICKS : 
             return status.MESSAGE.PICKS.NO_PICKS;
@@ -42,7 +40,7 @@ const initialState = weekAdapter.getInitialState({
 
 export const fetchWeek = createAsyncThunk('week/fetchGames',  async (param: SeasonRequest) => {
     try {
-        const url = `${endpoints.GAMES.BASE}?season=${param.season}&seasonType=${param.seasonType}&week=${param.week}`
+        const url = endpoints.GAMES.WEEK(param);
         const response = await client.get(url);
         return { response: response, week: param.week };
     } catch(error) {
@@ -53,7 +51,7 @@ export const fetchWeek = createAsyncThunk('week/fetchGames',  async (param: Seas
 
 export const addPicks = createAsyncThunk('week/addPicks', async (param: PickRequest) => {
     try {
-        const url = endpoints.PICKS.ADD + param.user_id;
+        const url = endpoints.PICKS.ADD(param);
         const response = await client.post(url, param.picks);
         return response;
     } catch(error) {

@@ -1,6 +1,7 @@
 export const UserTypeEnum = {
     PARTICIPANT: "participant"
 }
+
 export class UserCurrentSeasonData {
     max_picks       : number;
     picks_penalty   : number;

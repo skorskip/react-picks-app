@@ -1,7 +1,8 @@
 export const PickSubmitEnum = {
     NO_PICKS : 'NO_PICKS',
     PASS_SUBMIT_DATE : 'PASS_SUBMIT_DATE',
-    TOO_MANY_PICKS: 'TOO_MANY_PICKS'
+    TOO_MANY_PICKS: 'TOO_MANY_PICKS',
+    NOT_ALLOWED: 'NOT_ALLOWED'
 }
 
 export class Pick {

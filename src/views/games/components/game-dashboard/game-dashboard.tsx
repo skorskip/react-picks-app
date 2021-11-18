@@ -18,6 +18,7 @@ import { SHOW_MESSAGE } from '../../../../configs/topics';
 import { GameCard } from '../../../../components/game-card/game-card';
 import { toInt } from '../../../../utils/tools';
 import './game-dashboard.css';
+import { UserTypeEnum } from '../../../../model/user/user';
 
 export const GameDashboard = () => {
     const dispatch = useDispatch();
@@ -32,19 +33,16 @@ export const GameDashboard = () => {
     const query = new URLSearchParams(search);
     const week = toInt(query.get("week"));
 
-    const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() != null ? getStagedPicksLocal() : {});
-    const [stagedCount, setStagedCount] = useState(getStagedPicksLocal() == null ? 0 : Object.keys(getStagedPicksLocal()).length);
+    const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() != null ? getStagedPicksLocal() : [] as Pick[]);
     const [submitSent, setSubmitSent] = useState(false);
 
     const teamSelected = (event: PickSelected) => {
         let updated = setStagedPicksLocal(stagedPicks, event);
-        setStagedCount(Object.keys(updated).length);
         setStagedPicks(updated);
     }
 
     const submitPicks = () => {
-        let stagedPicksList = Object.values(stagedPicks) as Pick[];
-        let request = new PickRequest(0,0,0,user.user_id,stagedPicksList)
+        let request = new PickRequest(0,0,0,user.user_id,stagedPicks)
         dispatch(addPicks(request));
         setSubmitSent(true);
     }
@@ -56,7 +54,7 @@ export const GameDashboard = () => {
     );
     
     const getSubmitClass = () => {
-        return (stagedCount > 0 && 
+        return (stagedPicks.length > 0 && 
             (week === league.currentWeek || week == null)) ? 
             "submit-container show-submit-button" : "submit-container hide-submit-button"
     };
@@ -67,9 +65,9 @@ export const GameDashboard = () => {
                 key={"game-" + gameId}
                 gameId={gameId}
                 prevGameId={i !== 0 ? gamesIds[i - 1] : null}
-                pick={stagedPicks === {} ? null : stagedPicks[gameId]}
+                pick={stagedPicks.find(pick => pick.game_id === gameId)}
                 userId={user?.user_id}
-                disabled={false}
+                disabled={user.type !== UserTypeEnum.PARTICIPANT}
                 onTeamSelected={(event: PickSelected) => teamSelected(event)}
                 editMode={false}
                 showDeleteButton={false}
@@ -81,8 +79,7 @@ export const GameDashboard = () => {
 
     useEffect(() => {
         if(gameLoader === status.COMPLETE && submitSent) {
-            setStagedPicks({});
-            setStagedCount(0);
+            setStagedPicks([]);
             resetStagedPicksLocal();
             setSubmitSent(false);
 
@@ -116,7 +113,7 @@ export const GameDashboard = () => {
             </div>
             <div className={getSubmitClass()}>
                 <Button className="primary-background base-color submit-button" onClick={submitPicks}>
-                    <Icon name='send'/> Submit ({stagedCount})
+                    <Icon name='send'/> Submit ({stagedPicks.length})
                 </Button>
             </div>
         </>

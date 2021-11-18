@@ -24,7 +24,7 @@ import { setRemindLocal } from '../../utils/localData';
 type Props = {
     gameId: number,
     prevGameId: number | null,
-    pick: Pick,
+    pick: Pick | undefined,
     userId: number,
     disabled: boolean,
     editMode: boolean,
@@ -85,7 +85,7 @@ export const GameCard = ({
                 setHighlightAway(!highlightAway);
                 setHighlightHome(!highlightHome);
                 pickOpt.highlight = true;
-                pickOpt.pick.pick_id = pick.pick_id;
+                pickOpt.pick.pick_id = pick ? pick.pick_id : 0;
                 onTeamSelected(pickOpt);
             }
         } else if(event.team.team_id === awayTeam.team_id) {

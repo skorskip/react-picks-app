@@ -21,6 +21,8 @@ const getMessageFromError = (error: any) => {
             return message;
         case PickSubmitEnum.NO_PICKS : 
             return status.MESSAGE.PICKS.NO_PICKS;
+        case PickSubmitEnum.NOT_ALLOWED :
+            return status.MESSAGE.PICKS.NOT_ALLOWED;
         default :
             return null;
     }

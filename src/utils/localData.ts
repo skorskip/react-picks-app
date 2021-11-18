@@ -1,6 +1,7 @@
 import { Pick } from "../model/week/pick";
 import { PickSelected } from "../model/pickSelected/pickSelected";
 import { User } from "../model/user/user";
+import { PickDeleteRequest } from "../model/postRequests/pickDeleteRequest";
 
 const localDataEnum = {
     STAGED_PICKS: "stagedPicks",
@@ -46,15 +47,14 @@ export const setRemindLocal = (remindDate: string) => {
 export const setStagedPicksLocal = (stagedPicks: Pick[], newPick: PickSelected) => {
 
     let pickObject = newPick.pick;
-    let updated = stagedPicks;
+    let updated = stagedPicks.filter(pick => pick.game_id !== pickObject.game_id)
 
     if(newPick.highlight) {
-        updated[pickObject.game_id] = pickObject;
-    } else {
-        delete updated[pickObject.game_id];
+        updated.push(pickObject);
     }
 
     localStorage.setItem(localDataEnum.STAGED_PICKS, JSON.stringify(updated));
+    console.log(updated);
     return updated;
 }
 
@@ -63,16 +63,12 @@ export const resetStagedPicksLocal = () => {
 }
 
 export const getStagedPicksLocal = () => {
-    let staged = localStorage.getItem(localDataEnum.STAGED_PICKS);
-    if(staged){
-        if(Object.values(staged).find((initial:any) => 
-            new Date(initial.pick_submit_by_date) > new Date()) == null) {
-            resetStagedPicksLocal();
-            return null; 
-        }
-        return JSON.parse(staged);
+    let stagedStr = localStorage.getItem(localDataEnum.STAGED_PICKS);
+    if(stagedStr){
+        let staged = JSON.parse(stagedStr) as Pick[];
+        return staged.filter(pick => new Date(pick.pick_submit_by_date) > new Date())
     } else {
-        return null;
+        return [] as Pick[];
     }
 }
 

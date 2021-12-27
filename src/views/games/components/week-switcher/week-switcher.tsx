@@ -7,6 +7,7 @@ import { WEEK_SHOW_WEEKS } from '../../../../configs/topics';
 import './week-switcher.css';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import { toInt } from '../../../../utils/tools';
+import { PickButton } from '../../../../shared/PickButton/PickButton';
 
 interface RouteParams {
     view: string
@@ -47,31 +48,34 @@ export const WeekSwitcher = () => {
     }
 
     const prevButton = (week !== 1) && (
-        <div className="week-header-next tiertary-light-background" onClick={weekPrev}>
+        <PickButton clickEvent={weekPrev} styling={null} content={(
             <div className="week-arrow-next-icon secondary-color">
                 <Icon name="chevron left" />
             </div>
-        </div>
+        )}/>
     );
 
     const nextButton = (currentWeek !== week) && (
-        <div className="week-header-next tiertary-light-background" onClick={weekNext}>
+        <PickButton clickEvent={weekNext} styling={null} content={(
             <div className="week-arrow-next-icon secondary-color">
                 <Icon name="chevron right" />
             </div>
-        </div>
+        )}/>
     )
 
     const weekButton = (weekNum: number | null) => {
         return (
-            <div key={weekNum + "-week-number"} className="week-header tiertary-light-background" onClick={() => showWeeks(weekNum)}>
-                <div className="week-title secondary-color">
-                    Week {weekNum}
+            <PickButton key={weekNum + "-week-number"} clickEvent={() => showWeeks(weekNum)} styling="weeks-button-style" content={(
+                <div className="week-header">
+                    <div className="week-title secondary-color">
+                        Week {weekNum}
+                    </div>
+                    <div className="week-arrow-icon secondary-color">
+                        {(weeksShown) ? (<Icon name="chevron down"/>) : (<Icon name="chevron up" />)}
+                    </div>  
                 </div>
-                <div className="week-arrow-icon secondary-color">
-                    {(weeksShown) ? (<Icon name="chevron down"/>) : (<Icon name="chevron up" />)}
-                </div>
-            </div>);
+            )}/>
+        );
     };
 
     const weeksButton = () => {

@@ -20,8 +20,8 @@ const getMessageFromError = (error) => {
             return status.MESSAGE.PICKS.PASS_SUBMIT_DATE;
         case PickSubmitEnum.TOO_MANY_PICKS :
             let message = status.MESSAGE.PICKS.TOO_MANY_PICKS;
-            message = message.replace('$OVER', error.content.data.over)
-                .replace('$LIMIT', error.content.data.limit);
+            message = message.replace('$OVER', error.data.over)
+                .replace('$LIMIT', error.data.limit);
             return message;
         case PickSubmitEnum.NO_PICKS : 
             return status.MESSAGE.PICKS.NO_PICKS;

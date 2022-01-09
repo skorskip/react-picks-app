@@ -1,5 +1,4 @@
 import React from 'react'
-import { User } from '../../model/user/user';
 import "../profile-image/profile-image.css"
 
 type Props = {
@@ -30,7 +29,7 @@ export const ProfileImage = ({content, image, size, showImage}: Props) => {
 
     const imageProfile = (showImage && image != null) && (
         <div className="image-container">
-            <img className={"image-icon base-color " + sizeClass(size)} src={image}/>
+            <img className={"image-icon base-color " + sizeClass(size)} src={image} alt=""/>
         </div>
     );
 

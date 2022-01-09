@@ -1,15 +1,13 @@
 .picks-data-container {
-	position: absolute;
-	right: 0;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 10px;
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .picks-data-container-final {
-	position: absolute;
-	right: 0;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -22,7 +20,6 @@
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
-	margin-top: 20px;
 }
 
 .picks-data-group-final {
@@ -84,19 +81,23 @@
 }
 
 .show-less-button {
-	width: 100%;
+	padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    align-items: flex-end;
 }
 
 .floating-users-pick-button {
-	width: 150px;
-	height: 110px;
 	float: left;
 	border-radius: 1rem;
 	background-color: transparent;
-	padding: 5px;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
+	width: 150px;
+    padding-left: 10px;
 }
 
 .users-pick-list {
@@ -115,6 +116,7 @@
 	flex-direction: row;
 	width: auto;
 	background-color: transparent !important;
+	flex-wrap: wrap;
 }
 
 .user-pick-font {

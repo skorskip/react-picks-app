@@ -20,7 +20,7 @@ export const ThemeSwitcher = () => {
             setNewTheme(sub.data);
             dispatch(clear());
         }
-    }, [sub]);
+    }, [sub, dispatch]);
 
     return (
         <link rel="stylesheet" href={"assets/themes/" + theme + "/styles-" + theme + ".css"} />

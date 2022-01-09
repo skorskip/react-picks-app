@@ -15,6 +15,8 @@ import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import { SHOW_MESSAGE } from '../../../../configs/topics';
 import { SnackMessage } from '../../../../components/message/messagePopup';
 import { endpoints } from '../../../../configs/endpoints';
+import { selectUser } from '../../../../controller/user/userSlice';
+import { ProfileImage } from '../../../../components/profile-image/profile-image';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
@@ -24,6 +26,7 @@ export const NavBar = () => {
     const messagesSelect = useSelector(selectAnnouncements);
     const [messages, setMessages] = useState(messagesSelect.announcements);
     const announcementsStatus = useSelector((state:RootState) => state.announcements.status);
+    const user = useSelector(selectUser);
     const userState = useSelector((state:RootState) => state.user.status);
     const leagueState = useSelector((state:RootState) => state.league.status);
     const league = useSelector(selectLeague);
@@ -135,7 +138,7 @@ export const NavBar = () => {
                 </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/profile")}>
                     <div className={getIconClass("profile")}>
-                        <Icon size='large' name='user' className="nav-icon"/>
+                        <ProfileImage size="s" content={user.user_inits} image={user.slack_user_image} showImage={true}/>
                     </div>
                 </Button>
             </div>

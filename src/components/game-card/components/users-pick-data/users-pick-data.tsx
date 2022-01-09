@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { selectUserPickDataByGame } from '../../../../controller/week/weekSlice';
 import { Game, GameStatusEnum } from '../../../../model/week/game';
 import { PicksUserData } from '../../../../model/week/picksUserData';
@@ -9,6 +9,7 @@ import { SHOW_MODAL } from '../../../../configs/topics';
 import './users-pick-data.css';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import { ProfileImage } from '../../../profile-image/profile-image';
+import { PickButton } from '../../../../shared/PickButton/PickButton';
 
 type Props = {
     game: Game
@@ -66,57 +67,35 @@ export const UsersPickData = ({ game }:Props) => {
         } 
     }
 
-    const picksChits = (pickList: PicksUserData[], colorType: string) => {
-        return (
-            <div className={getIconColor(colorType)  + " user-pick-font"}>
-                {
-                    (pickList.length === 0) && (
-                        <ProfileImage size="xs" content={pickList.length} image="" showImage={false}/>
-                    )
-                }
-                {
-                    (pickList.length > 0) && (
-                        <ProfileImage size="xs" content={pickList[0].user_inits} image={pickList[0].slack_user_image} showImage={true}/>
-                    )
-                }                
-                {
-                    (pickList.length > 1) && (
-                        <div className="user-data-images">
-                            <ProfileImage size="xs" content={pickList[1].user_inits} image={pickList[1].slack_user_image} showImage={true}/>
-                        </div>
-                    )
-                }
-                {
-                    (pickList.length === 3) && (
-                        <div className="user-data-images">
-                            <ProfileImage size="xs" content={pickList[2].user_inits} image={pickList[2].slack_user_image} showImage={true}/>
-                        </div>
-                    )
-                }
-                {
-                    (pickList.length > 3) && (
-                        <div className="user-data-images">
-                            <ProfileImage size="xs" content={pickList.length} image="" showImage={false}/>
-                        </div>
-                    )
-                }
-            </div>
-        )
-    }
-
     const picksDataButton = (pickList: PicksUserData[], colorType: string) => {
         return (
             <div className="floating-users-pick-button" onClick={picksDataClick}>
                 <div className="user-pick-label-container">
                     <div className="tiertary-color user-pick-label">
-                        { picksChits(pickList, colorType) }
+                        {
+                            pickList.map((pick, i) => {
+                                return (
+                                    <div key={i + "-profile-chit-container"} className={getIconColor(colorType)  + " user-pick-font"}>
+                                        <div className="user-data-images">
+                                            <ProfileImage 
+                                                key={i + "-profile-chit"}
+                                                size="xs" 
+                                                content={pick.user_inits} 
+                                                image={pick.slack_user_image} 
+                                                showImage={true}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        }
                     </div>
                 </div>
             </div>
         )
     }
 
-    const picksDataButtonGroup = (
+    const picksDataButtonGroup = (!showPickers) && (
         <div className={containerClass()}>
             <div className={groupClass()}>
                 {picksDataButton(awayPicks, 'away')}
@@ -127,16 +106,17 @@ export const UsersPickData = ({ game }:Props) => {
 
     const buttonList = (picksList: PicksUserData[]) => picksList.map((pick) => {
         return (
-            <Button 
-                key={pick.pick_id + "-pick-data"} 
-                className="user-item secondary-color tiertary-light-background" 
-                onClick={() => setUserModal(pick)}>
-
-                <div className="users-pick-button-content">
-                    <ProfileImage size="xs" content={pick.user_inits} image={pick.slack_user_image} showImage={true}/>
-                    &nbsp;{ pick.first_name } {pick.last_name.substring(0,1)}.
-                </div>
-            </Button>
+            <PickButton 
+                styling="user-item"
+                clickEvent={() => setUserModal}
+                type="secondary"
+                content={
+                    <div className="users-pick-button-content">
+                        <ProfileImage size="xs" content={pick.user_inits} image={pick.slack_user_image} showImage={true}/>
+                        &nbsp;{ pick.first_name } {pick.last_name.substring(0,1)}.
+                    </div>
+                }
+            />
         ); 
     })
 
@@ -150,12 +130,19 @@ export const UsersPickData = ({ game }:Props) => {
                     { buttonList(homePicks) }
                 </div>
             </div>
-            <Button onClick={closePicksData} className="show-less-button secondary-color base-background">
-                <div className="show-less-button-group">
-                    <Icon name="chevron up" />
-                    Show Less
-                </div>
-            </Button>
+            <div className="show-less-button">
+                <PickButton 
+                    clickEvent={closePicksData}
+                    styling={null}
+                    type='secondary'
+                    content={
+                        <div className="show-less-button-group">
+                            <Icon name="chevron up" />
+                            Show Less
+                        </div>
+                    }
+                />
+            </div>
         </div>
     )
 

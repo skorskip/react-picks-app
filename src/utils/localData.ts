@@ -1,7 +1,6 @@
 import { Pick } from "../model/week/pick";
 import { PickSelected } from "../model/pickSelected/pickSelected";
 import { User } from "../model/user/user";
-import { PickDeleteRequest } from "../model/postRequests/pickDeleteRequest";
 
 const localDataEnum = {
     STAGED_PICKS: "stagedPicks",

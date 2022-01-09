@@ -48,16 +48,16 @@ export const WeekSwitcher = () => {
     }
 
     const prevButton = (week !== 1) && (
-        <PickButton clickEvent={weekPrev} styling={null} content={(
-            <div className="week-arrow-next-icon secondary-color">
+        <PickButton clickEvent={weekPrev} styling="next-button-style" type="secondary" content={(
+            <div className="week-arrow-next-icon">
                 <Icon name="chevron left" />
             </div>
         )}/>
     );
 
     const nextButton = (currentWeek !== week) && (
-        <PickButton clickEvent={weekNext} styling={null} content={(
-            <div className="week-arrow-next-icon secondary-color">
+        <PickButton clickEvent={weekNext} styling="next-button-style" type="secondary" content={(
+            <div className="week-arrow-next-icon">
                 <Icon name="chevron right" />
             </div>
         )}/>
@@ -65,12 +65,17 @@ export const WeekSwitcher = () => {
 
     const weekButton = (weekNum: number | null) => {
         return (
-            <PickButton key={weekNum + "-week-number"} clickEvent={() => showWeeks(weekNum)} styling="weeks-button-style" content={(
+            <PickButton 
+                key={weekNum + "-week-number"} 
+                clickEvent={() => showWeeks(weekNum)} 
+                styling="weeks-button-style" 
+                type="secondary"
+                content={(
                 <div className="week-header">
-                    <div className="week-title secondary-color">
+                    <div className="week-title">
                         Week {weekNum}
                     </div>
-                    <div className="week-arrow-icon secondary-color">
+                    <div className="week-arrow-icon">
                         {(weeksShown) ? (<Icon name="chevron down"/>) : (<Icon name="chevron up" />)}
                     </div>  
                 </div>

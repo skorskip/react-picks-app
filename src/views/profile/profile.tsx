@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { selectUser, signOut, forgotPassword} from '../../controller/user/userSlice';
 import './profile.css';
 import { UserStats } from '../../components/user-stats/user-stats';
@@ -13,6 +13,7 @@ import { RootState } from '../../store';
 import { status } from '../../configs/status';
 import { SnackMessage } from '../../components/message/messagePopup';
 import { ProfileImage } from '../../components/profile-image/profile-image';
+import { PickButton } from '../../shared/PickButton/PickButton';
 
 export const Profile = () => {
     const user = useSelector(selectUser);
@@ -41,14 +42,6 @@ export const Profile = () => {
         setThemeLocal(newTheme)
         setTheme(newTheme);
         dispatch(publish(new PubSub(SET_THEME, newTheme)));
-    }
-
-    const getThemeClass = (value: string) => {
-        if(theme === value) {
-            return "theme-button primary-background base-color";
-        } else {
-            return "theme-button secondary-color tiertary-light-background";
-        }
     }
 
     const profileTitle = (
@@ -102,9 +95,12 @@ export const Profile = () => {
                         </div>
                     </div>
                     <div className="change-password-button-container">
-                        <Button className="change-password-button secondary-color tiertary-light-background" onClick={changePassword}>
-                            Reset password
-                        </Button>
+                        <PickButton 
+                            clickEvent={changePassword} 
+                            styling="change-password-button" 
+                            type="secondary" 
+                            content="Reset password" 
+                        />
                     </div>
                 </div>
             </div>
@@ -113,9 +109,13 @@ export const Profile = () => {
 
     const themeListDisplay = themeList.map((item, i) => {
         return (
-            <Button key={i + item.value} className={getThemeClass(item.value)} onClick={() => toggleTheme(item.value)}>
-                {item.name}
-            </Button>
+            <PickButton 
+                key={i + item.value} 
+                clickEvent={() => toggleTheme(item.value)} 
+                styling="theme-button" 
+                type={(theme === item.value ? "primary" : "secondary")}
+                content={item.name}
+            />
         )
     });
 
@@ -150,9 +150,12 @@ export const Profile = () => {
             { profileInfo }
             { themes }
             <div className="logout-button-container">
-                <Button className="change-password-button failure-color failure-light-background" onClick={signOutUser}>
-                    Sign out
-                </Button>
+                <PickButton 
+                    clickEvent={signOutUser} 
+                    styling="change-password-button" 
+                    type="failure"
+                    content="Sign out"
+                />
             </div>
         </div>
     );

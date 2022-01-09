@@ -31,7 +31,7 @@ function App() {
       tokenState === status.COMPLETE) {
       dispatch(fetchUser());
     }
-  }, [userState, tokenState]);
+  }, [userState, tokenState, dispatch]);
 
   useEffect(() => {
     if(userState === status.COMPLETE && 

@@ -38,6 +38,11 @@
 
 .weeks-button-style {
 	width: 100%;
+	margin: 5px !important;
+}
+
+.next-button-style {
+	margin: 5px !important;
 }
 
 .week-arrow-icon {

@@ -11,6 +11,7 @@ import { selectLeague } from '../../../../controller/league/leagueSlice';
 import { status } from '../../../../configs/status';
 import { setStagedPicksLocal, resetStagedPicksLocal, getStagedPicksLocal } from '../../../../utils/localData';
 import './game-dashboard.css';
+import { UserTypeEnum } from '../../../../model/user/user';
 
 export const GameDashboard = () => {
     const dispatch = useDispatch();
@@ -66,6 +67,7 @@ export const GameDashboard = () => {
                 index={index}
                 picked={stagedPicks === {} ? null : stagedPicks[gameId]}
                 userId={user?.user_id}
+                disabled={user.type !== UserTypeEnum.PARTICIPANT}
                 onTeamSelected={teamSelected}
             />
         )

@@ -80,7 +80,7 @@ export const GamesTabBar = () => {
                 <PickButton 
                     type={(param.view === "pick") ? "primary" : "secondary"}
                     clickEvent={() => clickView("pick")}
-                    content={(<div><Icon name='hand point down' className='game-toggle-icon'/>Picks</div>)}
+                    content={(<div><Icon name='hand point down' className='game-toggle-icon'/>Picks ({pickCount})</div>)}
                     styling="toggle-button"
                 />
             </div>

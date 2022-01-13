@@ -17,7 +17,7 @@ const getMessageFromError = (error: any) => {
         case PickSubmitEnum.PASS_SUBMIT_DATE :
             return status.MESSAGE.PICKS.PASS_SUBMIT_DATE;
         case PickSubmitEnum.TOO_MANY_PICKS :
-            let message = status.MESSAGE.PICKS.TOO_MANY_PICKS(error.content.data.over, error.content.data.limit);
+            let message = status.MESSAGE.PICKS.TOO_MANY_PICKS(error.data.over, error.data.limit);
             return message;
         case PickSubmitEnum.NO_PICKS : 
             return status.MESSAGE.PICKS.NO_PICKS;

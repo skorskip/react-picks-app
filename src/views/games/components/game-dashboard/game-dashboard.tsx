@@ -46,18 +46,18 @@ export const GameDashboard = () => {
         dispatch(addPicks(request));
         setSubmitSent(true);
     }
-
-    const noGames = gamesIds.length === 0 && (
-        <div className="no-games-set secondary-color">
-            No Unpicked Games
-        </div>
-    );
     
     const getSubmitClass = () => {
         return (stagedPicks.length > 0 && 
             (week === league.currentWeek || week == null)) ? 
             "submit-container show-submit-button" : "submit-container hide-submit-button"
     };
+
+    const noGames = gamesIds.length === 0 && (
+        <div className="no-games-set secondary-color">
+            No Unpicked Games
+        </div>
+    );
 
     const games = gamesIds.map((gameId, i) => {
         return(

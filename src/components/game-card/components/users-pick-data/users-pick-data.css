@@ -97,7 +97,8 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	width: 150px;
-    padding-left: 10px;
+    padding-left: 15px;
+	padding-top: 5px;
 }
 
 .users-pick-list {

@@ -53,7 +53,6 @@ export const setStagedPicksLocal = (stagedPicks: Pick[], newPick: PickSelected) 
     }
 
     localStorage.setItem(localDataEnum.STAGED_PICKS, JSON.stringify(updated));
-    console.log(updated);
     return updated;
 }
 

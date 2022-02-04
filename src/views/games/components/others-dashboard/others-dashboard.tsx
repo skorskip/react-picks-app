@@ -16,6 +16,7 @@ import { toInt } from "../../../../utils/tools";
 import { GameCard } from "../../../../components/game-card/game-card";
 import { GameLoader } from "../../../../components/game-loader/game-loader";
 import { ProfileImage } from "../../../../components/profile-image/profile-image";
+import { selectGames, selectTeams } from "../../../../controller/week/weekSlice";
 
 export const OthersDashboard = () => {
 
@@ -31,8 +32,11 @@ export const OthersDashboard = () => {
     const standingsStatus = useSelector((state: RootState) => state.userStandings.status);
     const league = useSelector(selectLeague);
     const leagueStatus = useSelector((state:RootState) => state.league.status);
+    const teams = useSelector(selectTeams);
     const userPicks = useSelector(selectPicksForUser);
     const userPicksStatus = useSelector((state: RootState) => state.picksForUser.status);
+    const allGames = useSelector(selectGames);
+    const games = allGames.filter(game => userPicks.map(userPick => userPick.game.game_id).includes(game.game_id));
     const dispatch = useDispatch();
 
 
@@ -81,27 +85,37 @@ export const OthersDashboard = () => {
         </div>
     );
 
-    const games = (userPicks.length !== 0) && (user != null) && userPicks.map((userPick, i) => {
-        return (<GameCard
-            key={i + "-users-picks"}
-            gameId={userPick.game.game_id}
-            prevGameId={i !== 0 ? userPicks[i - 1].game.game_id : null}
-            pick={userPick.pick}
-            userId={user}
-            disabled={true}
-            editMode={false}
-            remove={false}
-            showDeleteButton={false}
-            onTeamSelected={() => null}
-            onDeleteClicked={() => null}
-        />)
+    const gameCards = (games.length) && (user != null) && games.map((game, i) => {
+        let userPick = userPicks.find(pick => pick.game.game_id === game.game_id);
+
+        return (
+            <div className="game-card">
+                <GameCard
+                    key={i + "-users-picks"}
+                    game={game}
+                    //@ts-ignore
+                    pick={userPick.pick}
+                    user={userInfo}
+                    disabled={true}
+                    editMode={false}
+                    remove={false}
+                    onTeamSelected={() => null}
+                    onDeleteClicked={() => null}
+                    showSubmitTime={false}
+                    //@ts-ignore
+                    homeTeam={teams.find(team => team.team_id === game.home_team_id)}
+                    //@ts-ignore
+                    awayTeam={teams.find(team => team.team_id === game.away_team_id)}
+                />
+            </div>
+        )
     });
 
     return (
         <div className="games-container">
             { userHeaderInfo }
             { noPicks }
-            { games }
+            { gameCards }
         </div>
     );
 }

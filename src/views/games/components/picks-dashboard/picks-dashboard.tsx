@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPicks, updatePicks, deletePicks, selectPicksMessage } from '../../../../controller/week/weekSlice';
+import { selectPicks, updatePicks, deletePicks, selectPicksMessage, selectGamesPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, SHOW_MESSAGE } from '../../../../configs/topics';
 import { status } from '../../../../configs/status';
@@ -15,13 +15,19 @@ import { clear, publish, PubSub, subscribe } from '../../../../controller/pubSub
 import './picks-dashboard.css';
 import { SnackMessage } from '../../../../components/message/messagePopup';
 import { GameCard } from '../../../../components/game-card/game-card';
+import { showSubmitTime } from '../../../../utils/dateFormatter';
+import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
+import { GameSubmitTime } from '../game-submit-time/game-submit-time';
 
 export const PicksDashboard = () => {
 
+    const games = useSelector(selectGamesPicks);
     const picks = useSelector(selectPicks);
+    const teams = useSelector(selectTeams);
     const loader = useSelector((state: RootState) => state.week.status);
     const sub = useSelector(subscribe);
     const user = useSelector(selectUser);
+    const pickData = useSelector(selectUserPickData);
     const picksMessage = useSelector(selectPicksMessage);
 
     const [updatePicksArray, setUpdatePicks] = useState([] as Pick[]);
@@ -49,7 +55,6 @@ export const PicksDashboard = () => {
     },[loader, picksMessage, dispatch, submitSent]);
 
     useEffect(() => {
-
         if(sub.topic === NAV_DONE_BUTTON) {
             if(deletePicksArray.length !== 0 ) {
                 let request = new PickDeleteRequest(0, 0, 0, user.user_id, deletePicksArray)
@@ -99,7 +104,11 @@ export const PicksDashboard = () => {
         setUpdatePicks(tempUpdate);
     }
 
-    const noPicks = (!picks.length) && (
+    const getGameContainerClass = (isRemoved: boolean) => {
+        return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
+    }
+
+    const noPicks = (!games.length) && (
         <div className="no-picks-set secondary-color">
             <div className="no-picks-set-content">No picks made</div>
             <br></br>
@@ -109,30 +118,49 @@ export const PicksDashboard = () => {
         </div>
     );
 
-    const games = (picks.length > 0) && picks.map((pick, i) => {
-        let removeGame = deletePicksArray.includes(pick.pick_id);
+    const gameCards = (games.length > 0) && games.map((game, i) => {
+        let pick = picks.find(pick => pick.game_id === game.game_id);
+        //@ts-ignore
+        let remove = deletePicksArray.includes(pick.pick_id);
 
         return(
-            <GameCard
-                key={"game-" + pick.pick_id}
-                gameId={pick.game_id}
-                prevGameId={i !== 0 ? picks[i - 1].game_id : null}
-                pick={pick}
-                userId={user.user_id}
-                disabled={(!inEditMode)}
-                editMode={inEditMode}
-                remove={removeGame}
-                showDeleteButton={(inEditMode && !removeGame)}
-                onTeamSelected={(event:PickSelected) => teamSelected(event)}
-                onDeleteClicked={() => onDelete(pick)}
-            />
+            <>
+                <GameSubmitTime 
+                    game={game} 
+                    prevGame={games[i - 1]} 
+                    user={user}
+                />
+                <div className={ getGameContainerClass(remove) }>
+                    <GameCard
+                        //@ts-ignore
+                        key={"game-" + pick.pick_id}
+                        game={game}
+                        pick={picks.find(pick => pick.game_id === game.game_id)}
+                        user={user}
+                        disabled={(!inEditMode)}
+                        editMode={inEditMode}
+                        remove={remove}
+                        //@ts-ignore
+                        homeTeam={teams.find(team => team.team_id === game.home_team_id)}
+                        //@ts-ignore
+                        awayTeam={teams.find(team => team.team_id === game.away_team_id)}
+                        onTeamSelected={(event:PickSelected) => teamSelected(event)}
+                        //@ts-ignore
+                        onDeleteClicked={() => onDelete(pick)}
+                    />
+                    <UsersPickData 
+                        game={game}
+                        picksData={pickData.filter(data => data.game_id === game.game_id)}
+                    />
+                </div>
+            </>
         )
     });
 
     return (
         <div className="games-container page">
             { noPicks }
-            { games }
+            { gameCards }
         </div>
     );
 } 

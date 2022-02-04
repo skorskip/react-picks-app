@@ -45,3 +45,17 @@ export const gameTimeStatusQuarters = (game: Game) => {
         }
     }
 }
+
+export const showSubmitTime = (game: Game, prevGame: Game  | null) => {
+  let currGame = game;
+  let submitTime1 = currGame == null ? null : currGame.pick_submit_by_date;
+  
+  if(submitTime1 != null && prevGame == null) {
+      return (new Date(submitTime1) > new Date()) as boolean;
+  } else if(submitTime1 != null && prevGame != null){
+      let submitTime2 = prevGame?.pick_submit_by_date;
+      return ((submitTime1 !== submitTime2) && (new Date(submitTime1) > new Date())) as boolean;
+  } else {
+      return false;
+  }
+}

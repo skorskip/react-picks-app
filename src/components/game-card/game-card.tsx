@@ -1,61 +1,44 @@
 import React,{ useEffect, useState } from 'react';
-import { gameTimeStatusQuarters, formatDate } from '../../utils/dateFormatter';
-import { TeamCard } from './components/team-card/team-card';
-import { PickStatus } from './components/pick-staus/pick-status';
+import { TeamCard } from '../team-card/team-card';
+import { PickStatus } from '../pick-staus/pick-status';
 import { Icon, Button } from 'semantic-ui-react';
-import { GameWinStatusEnum, GameStatusEnum } from '../../model/week/game';
-import { UsersPickData } from './components/users-pick-data/users-pick-data';
+import { GameWinStatusEnum, GameStatusEnum, Game } from '../../model/week/game';
 import { Pick } from '../../model/week/pick';
-import { TeamSelect } from '../../model/week/team';
+import { Team, TeamSelect } from '../../model/week/team';
 import { PickSelected } from '../../model/pickSelected/pickSelected';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectGamesById, selectTeamById, showSubmitByGameId } from '../../controller/week/weekSlice';
-import { RootState } from '../../store';
-import { client } from '../../utils/client';
-import { endpoints } from '../../configs/endpoints';
-import { selectUser } from '../../controller/user/userSlice';
-import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
-import { SHOW_MESSAGE } from '../../configs/topics';
-import { SnackMessage } from '../message/messagePopup';
-import { status } from '../../configs/status';
+import { User } from '../../model/user/user';
 import './game-card.css';
-import { setRemindLocal } from '../../utils/localData';
+import { gameTimeStatusQuarters } from '../../utils/dateFormatter';
 
 type Props = {
-    gameId: number,
-    prevGameId: number | null,
+    game: Game,
     pick: Pick | undefined,
-    userId: number,
+    user: User,
     disabled: boolean,
     editMode: boolean,
-    showDeleteButton: boolean,
     remove: boolean,
+    showSubmitTime: boolean,
+    homeTeam: Team,
+    awayTeam: Team,
     onTeamSelected: (selected: PickSelected) => void,
     onDeleteClicked: () => void
 }
 
 export const GameCard = ({
-    gameId,
-    prevGameId,
+    game,
     pick,
-    userId,
+    user,
     disabled,
     editMode,
-    showDeleteButton,
     remove,
+    homeTeam,
+    awayTeam,
     onTeamSelected,
     onDeleteClicked }: Props) => {
 
-    const game = useSelector((state: RootState) => selectGamesById(state, gameId));
-    const homeTeam = useSelector((state: RootState) => selectTeamById(state, game?.home_team_id));
-    const awayTeam = useSelector((state: RootState) => selectTeamById(state, game?.away_team_id));
     const [highlightHome, setHighlightHome] = useState(false);
     const [highlightAway, setHighlightAway] = useState(false);
-    const [remindLoading, setRemindLoading] = useState(false);
     const gameLocked = new Date(game?.pick_submit_by_date) <= new Date();
-    const showSubmitTime = useSelector((state: RootState) => showSubmitByGameId(state, gameId, prevGameId));
-    const user = useSelector(selectUser);
-    const dispatch = useDispatch();
 
     const pickResult = () => {
         if(game.game_status === GameStatusEnum.completed && pick != null){
@@ -72,12 +55,12 @@ export const GameCard = ({
           }
     }
 
-    const fillTeam = (teamId: number) => {
+    const fillTeam = (teamId: number): boolean => {
         return teamId === game.winning_team_id;
     }
 
     const teamSelected = (event: TeamSelect) => {
-        let selectedPick = new Pick(0, userId, game.game_id, event.team.team_id, game.pick_submit_by_date);
+        let selectedPick = new Pick(0, user.user_id, game.game_id, event.team.team_id, game.pick_submit_by_date);
         let pickOpt = new PickSelected(event.highlight, selectedPick);
 
         if(editMode) {
@@ -99,62 +82,11 @@ export const GameCard = ({
         }
     }
 
-    const callSetReminder = async () => {
-        setRemindLoading(true);
-        try {
-
-            let url = endpoints.MESSAGES.SET_REMINDER;
-            let response = await client.post(url, {
-                pick_submit_by_date: game.pick_submit_by_date,
-                slack_user_id: user.slack_user_id
-            });
-
-            if(!response?.error) {
-                setRemindLoading(false);
-                let request = new PubSub(SHOW_MESSAGE, 
-                    new SnackMessage(status.SUCCESS, status.MESSAGE.REMINDERS.SET_SUCCESS));
-                dispatch(publish(request)); 
-            }
-
-        } catch(error) {
-            setRemindLoading(false);
-            console.error(error);
-            let request = new PubSub(SHOW_MESSAGE, 
-                new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
-            dispatch(publish(request));
-        }
-    }
-
-    const setReminder = async () => {
-        let dialogConfirm = window.confirm("Set slack reminder?");
-
-        if(dialogConfirm) {
-            if(setRemindLocal(game.pick_submit_by_date)) {
-                callSetReminder();
-            } else {
-                let request = new PubSub(SHOW_MESSAGE, 
-                    new SnackMessage(status.SUCCESS, status.MESSAGE.REMINDERS.ALREADY_SET));
-                dispatch(publish(request)); 
-            }
-        }
-    }
-
-    const submitBy = showSubmitTime && (
-        <div className='full-row'>
-            <div className="game-card-date">
-                {
-                    remindLoading ? (
-                        <Button className="date-text-loading tiertary-light-background secondary-color" width="200" loading />
-                    ) : (
-                        <Button className="date-text tiertary-light-background secondary-color" onClick={setReminder}>
-                            <Icon className="primary-color" name="calendar alternate outline"/>
-                            Submit by: { formatDate(new Date(game?.pick_submit_by_date)) }
-                        </Button>
-                    )
-                }
-
-            </div>
-        </div>
+    const deleteButton = (editMode && !gameLocked && !remove) && (
+        <Button className="delete-button bottom-margin failure-color base-background" onClick={() => onDeleteClicked()}>
+        <Icon name= "trash alternate outline" />
+            Delete
+        </Button>
     );
 
     const timeStatus = (gameLocked && game.game_status !== GameStatusEnum.completed) && (
@@ -166,24 +98,16 @@ export const GameCard = ({
         </div>
     );
 
-    const pickData = gameLocked && (
-        <UsersPickData game={game}/>
-    )
+    useEffect(() => {
+        if(pick != null && game != null) {
+            setHighlightHome(game.home_team_id === pick.team_id)
+            setHighlightAway(game.away_team_id === pick.team_id)
+        }
+    }, [pick, game]);
 
-    const getGameContainerClass = (isRemoved: boolean) => {
-        return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
-    }
-
-    const deleteButton = (showDeleteButton && !gameLocked) && (
-        <Button className="delete-button bottom-margin failure-color base-background" onClick={() => onDeleteClicked()}>
-        <Icon name= "trash alternate outline" />
-            Delete
-        </Button>
-    )
-
-    const gameItem =  game !== undefined && (
-        <div className={ getGameContainerClass(remove) }>
-            { timeStatus }
+    return (
+        <>
+            {timeStatus}
             <div className="team-group secondary-color">
                 <TeamCard 
                     team={awayTeam}
@@ -213,22 +137,7 @@ export const GameCard = ({
                     size={null}
                 />
             </div>
-            { pickData }
             { deleteButton }
-        </div>
-    );
-
-    useEffect(() => {
-        if(pick != null && game != null) {
-            setHighlightHome(game.home_team_id === pick.team_id)
-            setHighlightAway(game.away_team_id === pick.team_id)
-        }
-    }, [pick, game]);
-
-    return (
-        <>
-            { submitBy }
-            { gameItem }
         </>
     )
 

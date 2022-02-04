@@ -11,22 +11,14 @@ export class PicksUser {
     game_status: string;
     pick_submit_by_date: string;
 
-    constructor(
-        game: Game, 
-        awayTeam: Team, 
-        homeTeam: Team, 
-        pick: Pick, 
-        winning_team_id: number, 
-        game_status: string,
-        pick_submit_by_date: string) {
-
-            this.game = game;
-            this.awayTeam = awayTeam;
-            this.homeTeam = homeTeam;
-            this.pick = pick;
-            this.winning_team_id = winning_team_id;
-            this.game_status = game_status;
-            this.pick_submit_by_date = pick_submit_by_date;
+    constructor() {
+            this.game = new Game();
+            this.awayTeam = new Team(0, "","","","","");
+            this.homeTeam = new Team(0, "","","","","");
+            this.pick = new Pick(0,0,0,0,"");
+            this.winning_team_id = 0
+            this.game_status = "";
+            this.pick_submit_by_date = "";
     }
 
 }

@@ -8,15 +8,14 @@ import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
 import { WeekSwitcher } from './components/week-switcher/week-switcher';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Icon } from 'semantic-ui-react';
-import { WEEK_SHOW_WEEKS, SHOW_MESSAGE } from '../../configs/topics';
+import { WEEK_SHOW_WEEKS } from '../../configs/topics';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { status } from '../../configs/status';
 import { UserTypeEnum } from '../../model/user/user';
 import { useSwipeable } from 'react-swipeable';
 import { RootState } from '../../store';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
-import { publish, PubSub, subscribe } from '../../controller/pubSub/pubSubSlice';
-import { SnackMessage } from '../../components/message/messagePopup';
+import { subscribe } from '../../controller/pubSub/pubSubSlice';
 import { toInt } from '../../utils/tools';
 import "./games.css";
 import "../../utils/slideTransition.scss";
@@ -118,25 +117,17 @@ export const Games = ({routes}: Props) => {
     }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, week, dispatch])
 
     useEffect(() => {
-        if((season && week && seasonType) && week !== setWeek) {
+        if((season && week && seasonType) && week !== setWeek && gamesState !== status.IDLE ) {
             let request = new SeasonRequest(season, seasonType, week);
             dispatch(fetchWeek(request));
         }
     }, [season, week, seasonType, other, setWeek, dispatch])
 
     useEffect(() => {
-        if(gamesState === status.ERROR){          
-            let request = new PubSub(SHOW_MESSAGE, 
-                new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
-            dispatch(publish(request));
-        }
-    }, [gamesState, dispatch]);
-
-    useEffect(() => {
         if(sub.topic === WEEK_SHOW_WEEKS) {
             setWeeksShown(sub.data);
         }
-    }, [sub, dispatch])
+    }, [sub])
 
     return (
         <div {...swipeHandlers} style={{ touchAction: 'pan-y' }}>

@@ -1,7 +1,7 @@
 import React, { useState,useEffect }  from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Modal } from 'semantic-ui-react';
-import { TeamCard } from '../game-card/components/team-card/team-card';
+import { TeamCard } from '../team-card/team-card';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { selectPicksForUser } from '../../controller/picks-for-user/picksForUserSlice';
 import { fetchPicksForUser } from '../../controller/picks-for-user/picksForUserSlice';
@@ -10,7 +10,7 @@ import "./pick-peek-modal.css";
 import { GameLoader } from '../game-loader/game-loader';
 import { useHistory, useLocation } from 'react-router-dom';
 import { status } from '../../configs/status';
-import { PickStatus } from '../game-card/components/pick-staus/pick-status';
+import { PickStatus } from '../pick-staus/pick-status';
 import { GameWinStatusEnum, GameStatusEnum } from '../../model/week/game';
 import { RootState } from '../../store';
 import { PickRequest } from '../../model/postRequests/pickRequest';

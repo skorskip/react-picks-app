@@ -1,4 +1,4 @@
-import {  createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit'
+import {  createSlice, createEntityAdapter, createAsyncThunk, createAction } from '@reduxjs/toolkit'
 import { client } from '../../utils/client'
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
@@ -84,6 +84,10 @@ export const deletePicks = createAsyncThunk('week/deletePicks', async (param: Pi
     }
  });
 
+ export const resetWeekStatus = createAction('week/resetStatus', function prepare() {
+    return {} as any
+});
+
 const weekSlice = createSlice({
     name: 'week',
     initialState,
@@ -144,6 +148,9 @@ const weekSlice = createSlice({
                     state.status = status.ERROR;
                 }
             })
+            .addCase(resetWeekStatus, (state, action) => {
+                state.status = status.COMPLETE;
+            })
     },
 });
 
@@ -168,24 +175,20 @@ export const selectGamesByIdNoPicks = (state: RootState) =>
         pick.game_id).includes(week.game_id)).map(game => 
             game.game_id) as number[];
 
+export const selectGamesNoPicks = (state: RootState) => 
+    state.week.games.filter(week => !state.week.picks.map((pick: Pick) => 
+        pick.game_id).includes(week.game_id)) as Game[];
+
+export const selectGamesPicks = (state: RootState) => 
+    state.week.games.filter(week => state.week.picks.map((pick: Pick) => 
+        pick.game_id).includes(week.game_id)) as Game[];
+
+export const selectUserPickData = (state: RootState) => state.week.userPicks as PicksUserData[];
+
 export const selectUserPickDataByGame = (state: RootState, gameId: number) => state.week.userPicks.filter(data => data.game_id === gameId) as PicksUserData[];
 
 export const selectPicksMessage = (state: RootState) => state.week.message;
 
 export const getSetWeek = (state: RootState) => state.week.setWeek;
-
-export const showSubmitByGameId = (state: RootState, gameId: number, prevGameId: number | null ) => {
-    let currGame = state.week.games.find(game => game.game_id === gameId);
-    let submitTime1 = currGame == null ? null : currGame.pick_submit_by_date;
-    
-    if(submitTime1 != null && prevGameId == null) {
-        return (new Date(submitTime1) > new Date()) as boolean;
-    } else if(submitTime1 != null && prevGameId != null){
-        let submitTime2 = state.week.games.find(game => game.game_id === prevGameId)?.pick_submit_by_date;
-        return ((submitTime1 !== submitTime2) && (new Date(submitTime1) > new Date())) as boolean;
-    } else {
-        return false;
-    }
-}
 
 export default weekSlice.reducer

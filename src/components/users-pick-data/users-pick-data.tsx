@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
-import { selectUserPickDataByGame } from '../../../../controller/week/weekSlice';
-import { Game, GameStatusEnum } from '../../../../model/week/game';
-import { PicksUserData } from '../../../../model/week/picksUserData';
-import { RootState } from '../../../../store';
-import { SHOW_MODAL } from '../../../../configs/topics';
+import { Game, GameStatusEnum } from '../../model/week/game';
+import { PicksUserData } from '../../model/week/picksUserData';
+import { SHOW_MODAL } from '../../configs/topics';
 import './users-pick-data.css';
-import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
-import { ProfileImage } from '../../../profile-image/profile-image';
-import { PickButton } from '../../../../shared/PickButton/PickButton';
+import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
+import { ProfileImage } from '../profile-image/profile-image';
+import { PickButton } from '../../shared/PickButton/PickButton';
 
 type Props = {
-    game: Game
+    game: Game,
+    picksData: PicksUserData[]
 }
 
-export const UsersPickData = ({ game }:Props) => {
+export const UsersPickData = ({ game, picksData }:Props) => {
 
-    const picksData = useSelector((state: RootState) => selectUserPickDataByGame(state, game.game_id));
     const awayPicks = picksData ? picksData.filter((pick) => pick.team_id === game.away_team_id): [];
     const homePicks = picksData ? picksData.filter((pick) => pick.team_id === game.home_team_id): [];
+    const gameLocked = new Date(game?.pick_submit_by_date) <= new Date();
     const [showPickers, setShowPickers] = useState(false);
     const dispatch = useDispatch();
 
     const picksDataClick = () => {
-        setShowPickers(!showPickers);
+        if(gameLocked) {
+            setShowPickers(!showPickers);
+        }
     }
 
     const closePicksData = () => {
@@ -51,23 +52,7 @@ export const UsersPickData = ({ game }:Props) => {
         }
     }
 
-    const getIconColor = (teamType: string) => {
-        if(game.game_status === GameStatusEnum.completed) {
-            if(game.winning_team_id === null) {
-                return "accent";
-            } else if(teamType === 'away' && game.winning_team_id === game.away_team_id) {
-                return "base-color"
-            } else if(teamType === 'home' && game.winning_team_id === game.home_team_id) {
-                return "base-color"
-            } else {
-                return "accent";
-            }
-        } else {
-            return "accent";
-        } 
-    }
-
-    const picksDataButton = (pickList: PicksUserData[], colorType: string) => {
+    const picksDataButton = (pickList: PicksUserData[]) => {
         return (
             <div className="floating-users-pick-button" onClick={picksDataClick}>
                 <div className="user-pick-label-container">
@@ -75,7 +60,7 @@ export const UsersPickData = ({ game }:Props) => {
                         {
                             pickList.map((pick, i) => {
                                 return (
-                                    <div key={i + "-profile-chit-container"} className={getIconColor(colorType)  + " user-pick-font"}>
+                                    <div key={i + "-profile-chit-container"} className={"user-pick-font"}>
                                         <div className="user-data-images">
                                             <ProfileImage 
                                                 key={i + "-profile-chit"}
@@ -98,8 +83,8 @@ export const UsersPickData = ({ game }:Props) => {
     const picksDataButtonGroup = (!showPickers) && (
         <div className={containerClass()}>
             <div className={groupClass()}>
-                {picksDataButton(awayPicks, 'away')}
-                {picksDataButton(homePicks, 'home')}
+                {picksDataButton(awayPicks)}
+                {picksDataButton(homePicks)}
             </div>
         </div>
     );
@@ -108,7 +93,7 @@ export const UsersPickData = ({ game }:Props) => {
         return (
             <PickButton 
                 styling="user-item"
-                clickEvent={() => setUserModal}
+                clickEvent={() => setUserModal(pick)}
                 type="secondary"
                 content={
                     <div className="users-pick-button-content">

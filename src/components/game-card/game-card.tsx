@@ -9,6 +9,7 @@ import { PickSelected } from '../../model/pickSelected/pickSelected';
 import { User } from '../../model/user/user';
 import './game-card.css';
 import { gameTimeStatusQuarters } from '../../utils/dateFormatter';
+import { PickButton } from '../../common/PickButton/PickButton';
 
 type Props = {
     game: Game,
@@ -83,10 +84,16 @@ export const GameCard = ({
     }
 
     const deleteButton = (editMode && !gameLocked && !remove) && (
-        <Button className="delete-button bottom-margin failure-color base-background" onClick={() => onDeleteClicked()}>
-        <Icon name= "trash alternate outline" />
-            Delete
-        </Button>
+        <PickButton 
+            styling="delete-button" 
+            type="failure"
+            clickEvent={() => onDeleteClicked()}
+            content={
+                <>
+                    <Icon name= "trash alternate outline" />
+                    Delete
+                </>}
+        />
     );
 
     const timeStatus = (gameLocked && game.game_status !== GameStatusEnum.completed) && (

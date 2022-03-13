@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
-import { selectLeague } from '../../../../controller/league/leagueSlice';
-import { WEEK_SHOW_WEEKS } from '../../../../configs/topics';
 import './week-switcher.css';
-import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import { toInt } from '../../../../utils/tools';
-import { PickButton } from '../../../../shared/PickButton/PickButton';
+import { PickButton } from '../../../../common/PickButton/PickButton';
+import { League } from '../../../../model/league/league';
 
 interface RouteParams {
     view: string
 }
 
-export const WeekSwitcher = () => {
+type Props = {
+    league: League,
+    showWeekEvent: (showWeek:boolean) => void,
+}
+
+export const WeekSwitcher = ({ league, showWeekEvent }: Props) => {
 
     const history = useHistory();
     let param = useParams<RouteParams>();
     let { search } = useLocation();
-    const league = useSelector(selectLeague);
     const query = new URLSearchParams(search);
     const currentWeek = league.currentWeek;
     const season = query.get("season") === null ? league.currentSeason : toInt(query.get("season"));
@@ -26,7 +27,6 @@ export const WeekSwitcher = () => {
     const seasonType = query.get("seasonType") === null ? league.currentSeasonType : toInt(query.get("seasonType"));
     const user = query.get("user");
     const [weeksShown, setWeeksShown] = useState(false);
-    const dispatch = useDispatch();
 
     const weekPrev = () => {
         history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${week ? (week - 1) : 0}&user=${user}`);
@@ -40,10 +40,10 @@ export const WeekSwitcher = () => {
         if(weeksShown) {
             history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${weekNum}&user=${user}`);
             setWeeksShown(false);
-            dispatch(publish(new PubSub(WEEK_SHOW_WEEKS, false)));
+            showWeekEvent(false)
         } else {
             setWeeksShown(true);
-            dispatch(publish(new PubSub(WEEK_SHOW_WEEKS, true)));
+            showWeekEvent(true);
         }
     }
 

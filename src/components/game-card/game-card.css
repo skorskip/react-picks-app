@@ -14,20 +14,11 @@
 	margin-left: 10px;
 }
 
-.game-card-date {
-	text-align:right;
-}
-
 .date-text {
 	font-size: 1em;
 	padding-bottom: 10px;
 	padding-left: 10px;
 	padding-right: 10px;
-}
-
-.date-text-loading {
-	width: 200px;
-	height: 36px;
 }
 
 .tiny-text-middle{

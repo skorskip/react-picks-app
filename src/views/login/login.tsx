@@ -243,13 +243,6 @@ export const Login = () => {
         }
     }, [tokenState, username, password, dispatch, history]);
 
-    useEffect(() => {
-        if(userState === status.ERROR) {
-            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
-            dispatch(publish(request));
-        }
-    }, [userState, dispatch]);
-
     return (
         <div className="loginContainer">
             <div className="loginHeader">

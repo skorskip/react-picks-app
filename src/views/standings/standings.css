@@ -17,12 +17,11 @@
 }
 
 .standing-card {
-	display: flex;
+	display: flex !important;
     justify-content: space-between;
     align-items: center;
-	border-radius: 4px;
-	margin: 4px;
-	box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    padding: 0px !important;
+    margin: 4px !important;
 }
 
 .bonus-card {

@@ -2,21 +2,24 @@ import React, { useState } from 'react';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON } from '../../../../configs/topics';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectLeague } from '../../../../controller/league/leagueSlice';
-import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { PickButton } from '../../../../common/PickButton/PickButton';
+import { League } from '../../../../model/league/league';
+
 import './games-tab-bar.css';
-import { selectPicksCount } from '../../../../controller/week/weekSlice';
-import { PickButton } from '../../../../shared/PickButton/PickButton';
 
 interface RouteParams {
     view: string
 }
 
-export const GamesTabBar = () => {
+type Props = {
+    league: League,
+    pickCount: number,
+    tabBarEvent: (publish: PubSub) =>  void
+}
+
+export const GamesTabBar = ({league, pickCount, tabBarEvent}: Props) => {
     let param = useParams<RouteParams>();
-    const league = useSelector(selectLeague);
-    const pickCount = useSelector(selectPicksCount);
     const history = useHistory();
     const [isEditSelected, setIsEditSelected] = useState(false);
     const currentWeek = league.currentWeek.toString();
@@ -26,7 +29,6 @@ export const GamesTabBar = () => {
     const week = query.get("week") ? query.get("week") : currentWeek;
     const seasonType = query.get("seasonType");
     const weekQuery = `?season=${season}&seasonType=${seasonType}&week=${week}`;
-    const dispatch = useDispatch();
 
     const clickView = (view: string) => {
         if(season === null) {
@@ -37,12 +39,12 @@ export const GamesTabBar = () => {
     }
 
     const selectEdit = () => {
-        dispatch(publish(new PubSub(NAV_EDIT_BUTTON, true)));
+        tabBarEvent(new PubSub(NAV_EDIT_BUTTON, true));
         setIsEditSelected(true);
     }
 
     const selectDone = () => {
-        dispatch(publish(new PubSub(NAV_DONE_BUTTON, true)));
+        tabBarEvent(new PubSub(NAV_DONE_BUTTON, true));
         setIsEditSelected(false);
     }
 
@@ -55,7 +57,6 @@ export const GamesTabBar = () => {
             type="secondary"
             clickEvent={selectEdit}
             content="Edit"
-            styling={null}
         />
     )
 
@@ -64,7 +65,6 @@ export const GamesTabBar = () => {
             type="primary"
             clickEvent={selectDone}
             content="Done"
-            styling={null}
         />
     )
 

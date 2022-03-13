@@ -1,8 +1,8 @@
 import { Games } from '../views/games/games';
 import { Login } from '../views/login/login';
-import { GameDashboard } from '../views/games/components/game-dashboard/game-dashboard';
-import { PicksDashboard } from '../views/games/components/picks-dashboard/picks-dashboard';
-import { OthersDashboard } from '../views/games/components/others-dashboard/others-dashboard';
+import { GameDashboard } from '../views/games/sub-view/game-dashboard/game-dashboard';
+import { PicksDashboard } from '../views/games/sub-view/picks-dashboard/picks-dashboard';
+import { OthersDashboard } from '../views/games/sub-view/others-dashboard/others-dashboard';
 import { Announcements } from '../views/announcements/announcements';
 import { Standings } from '../views/standings/standings';
 import { Profile } from '../views/profile/profile';

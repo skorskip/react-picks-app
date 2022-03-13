@@ -30,12 +30,12 @@ export const UserStats = () => {
     );
 
     const pickCountProgress = (userState === status.COMPLETE) && (
-        <div className="pick-progress-group">
-            <div className="pick-progress-numbers">
+        <div className="pick-progress-group tiertary-color">
+            <div className="pick-progress-numbers secondary-color">
                 <div>Pick Count</div>
                 <div className="medium-font">{ pendingCount + pickCount } / { userDetails?.max_picks }</div>
             </div>
-            <Progress className="progress-bar-stat" percent={ ((pendingCount + pickCount) / userDetails?.max_picks) * 100 } />
+            <Progress className="progress-bar-stat" size='tiny' percent={ ((pendingCount + pickCount) / userDetails?.max_picks) * 100 } />
         </div>
     );
 

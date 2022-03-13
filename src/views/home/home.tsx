@@ -62,9 +62,6 @@ export const Home = () => {
     const stickyStats = (location.pathname !== "/profile") && (location.pathname !== "/login") && (
         <Sticky contextref={contextRef}>
             <div className="home-side-content">
-                <div className="info-header-profile secondary-color">
-                    Stats
-                </div>
                 <UserStats />
             </div>
         </Sticky>

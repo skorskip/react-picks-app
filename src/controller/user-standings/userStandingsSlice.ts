@@ -5,6 +5,9 @@ import { status } from '../../configs/status';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { RootState } from '../../store';
 import { User } from '../../model/user/user';
+import { publish, PubSub } from '../pubSub/pubSubSlice';
+import { SnackMessage } from '../../components/message/messagePopup';
+import { SHOW_MESSAGE } from '../../configs/topics';
 
 const userStandingsAdapter = createEntityAdapter();
 
@@ -13,13 +16,16 @@ const initialState = userStandingsAdapter.getInitialState({
     userStandings: [] as User[]
 });
 
-export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStandings', async (params: SeasonRequest) => {
+export const fetchUserStandings = createAsyncThunk('userStandings/fetchUserStandings', async (params: SeasonRequest, {dispatch}) => {
     const url = endpoints.USERS.STANDINGS(params);
     try {
         const response = await client.get(url);
         return response;
     } catch(error) {
         console.error(error);
+        let request = new PubSub(SHOW_MESSAGE, 
+            new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+        dispatch(publish(request));
         return {status: status.ERROR, message: error};
     }
 })

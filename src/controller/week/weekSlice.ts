@@ -10,6 +10,9 @@ import { Pick, PickSubmitEnum } from '../../model/week/pick';
 import { PicksUserData } from '../../model/week/picksUserData';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { PickDeleteRequest } from '../../model/postRequests/pickDeleteRequest';
+import { publish, PubSub } from '../pubSub/pubSubSlice';
+import { SnackMessage } from '../../components/message/messagePopup';
+import { SHOW_MESSAGE } from '../../configs/topics';
 
 const getMessageFromError = (error: any) => {
     let message = error?.message;
@@ -29,9 +32,11 @@ const getMessageFromError = (error: any) => {
 }
 
 const weekAdapter = createEntityAdapter();
+const genericError = new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC);
 
 const initialState = weekAdapter.getInitialState({
     status: status.IDLE,
+    picksStatus: status.IDLE,
     setWeek: null as number | null,
     message: "" as string | null,
     games: [] as Game[],
@@ -40,46 +45,94 @@ const initialState = weekAdapter.getInitialState({
     userPicks: [] as PicksUserData[]
 });
 
-export const fetchWeek = createAsyncThunk('week/fetchGames',  async (param: SeasonRequest) => {
+export const fetchWeek = createAsyncThunk('week/fetchGames',  async (param: SeasonRequest, {dispatch}) => {
     try {
         const url = endpoints.GAMES.WEEK(param);
         const response = await client.get(url);
         return { response: response, week: param.week };
     } catch(error) {
         console.error(error);
+        let request = new PubSub(SHOW_MESSAGE, genericError);
+        dispatch(publish(request));
         return {status: status.ERROR, message: error, week: null}
     }
 });
 
-export const addPicks = createAsyncThunk('week/addPicks', async (param: PickRequest) => {
+export const addPicks = createAsyncThunk('week/addPicks', async (param: PickRequest, {dispatch}) => {
     try {
         const url = endpoints.PICKS.ADD(param);
         const response = await client.post(url, param.picks);
+
+        let message = new PubSub(SHOW_MESSAGE, 
+            new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.ADD_SUCCESS));
+        dispatch(publish(message));
+
         return response;
     } catch(error) {
         console.error(error);
-        return {status: status.ERROR, message: error}
+
+        let message = getMessageFromError(error);
+        
+        if(message) {
+            dispatch(resetWeekStatus());
+            alert(message);
+        } else {
+            let request = new PubSub(SHOW_MESSAGE, genericError);
+            dispatch(publish(request));
+        }
+
+        return {status: status.ERROR, message: error};
     }
 });
 
-export const updatePicks = createAsyncThunk('week/updatePicks', async (param: PickRequest) => {
+export const updatePicks = createAsyncThunk('week/updatePicks', async (param: PickRequest, {dispatch}) => {
     try {
         const url = endpoints.PICKS.UPDATE;
         const response = await client.post(url, param.picks);
+
+        let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.EDIT_SUCCESS));
+        dispatch(publish(request)); 
+
         return response;
     } catch(error) {
         console.error(error);
+
+        let message = getMessageFromError(error);
+        
+        if(message) {
+            dispatch(resetWeekStatus());
+            alert(message);
+        } else {
+            let request = new PubSub(SHOW_MESSAGE, genericError);
+            dispatch(publish(request));
+        }
+
         return {status: status.ERROR, message: error}
     }
 });
 
-export const deletePicks = createAsyncThunk('week/deletePicks', async (param: PickDeleteRequest) => {
+export const deletePicks = createAsyncThunk('week/deletePicks', async (param: PickDeleteRequest, {dispatch}) => {
     try {
         const url = endpoints.PICKS.DELETE;
         const response = await client.post(url, param.picks);
+
+        let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.EDIT_SUCCESS));
+        dispatch(publish(request)); 
+
         return response;
     } catch(error) {
         console.error(error);
+
+        let message = getMessageFromError(error);
+        
+        if(message) {
+            dispatch(resetWeekStatus());
+            alert(message);
+        } else {
+            let request = new PubSub(SHOW_MESSAGE, genericError);
+            dispatch(publish(request));
+        }
+
         return {status: status.ERROR, message: error}
     }
  });
@@ -110,42 +163,42 @@ const weekSlice = createSlice({
                 state.status = status.LOADING
             })
             .addCase(addPicks.pending, (state, action) => {
-                state.status = status.LOADING;
+                state.picksStatus = status.LOADING;
             })
             .addCase(addPicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
                     state.picks = action.payload as Pick[];
-                    state.status = status.COMPLETE;
+                    state.picksStatus = status.COMPLETE;
                 } else {
                     let error = action.payload.message.content;
                     state.message = getMessageFromError(error);
-                    state.status = status.ERROR;
+                    state.picksStatus = status.ERROR;
                 }
             })
             .addCase(updatePicks.pending, (state, action) => {
-                state.status = status.LOADING;
+                state.picksStatus = status.LOADING;
             })
             .addCase(updatePicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
                     state.picks = action.payload as Pick[];
-                    state.status = status.COMPLETE;
+                    state.picksStatus = status.COMPLETE;
                 } else {
                     let error = action.payload.message.content;
                     state.message = getMessageFromError(error);
-                    state.status = status.ERROR;
+                    state.picksStatus = status.ERROR;
                 }
             })
             .addCase(deletePicks.pending, (state, action) => {
-                state.status = status.LOADING;
+                state.picksStatus = status.LOADING;
             })
             .addCase(deletePicks.fulfilled, (state, action) => {
                 if(action.payload?.status !== status.ERROR) {
                     state.picks = action.payload as Pick[];
-                    state.status = status.COMPLETE;
+                    state.picksStatus = status.COMPLETE;
                 } else {
                     let error = action.payload.message.content;
                     state.message = getMessageFromError(error);
-                    state.status = status.ERROR;
+                    state.picksStatus = status.ERROR;
                 }
             })
             .addCase(resetWeekStatus, (state, action) => {

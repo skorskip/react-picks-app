@@ -1,11 +1,13 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { SHOW_MODAL } from '../../../../configs/topics';
-import '../../standings.css';
 import { useDispatch } from 'react-redux';
 import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
 import { ProfileImage } from '../../../../components/profile-image/profile-image';
 import { User } from '../../../../model/user/user';
+import { PickButton } from '../../../../common/PickButton/PickButton';
+
+import '../../standings.css';
 
 type Props = {
     standing: User,
@@ -19,10 +21,6 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
 
     const getItemClass = (addClass: string) => {
         return (isCurrentUser) ? `${addClass} base-color` : `${addClass} secondary-color`;
-    }
-
-    const getCardClass = () => {
-        return (isCurrentUser) ? 'standing-card primary-color primary-background' : 'standing-card primary-color quaternary-background'
     }
 
     const getRankStatusClass = () => {
@@ -117,13 +115,20 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
     )
 
     return (
-        <div className={getCardClass()} onClick={viewModal}>
-            { rank }
-            { user }
-            { wins }
-            { picks }
-            { winPct }
-            { bonus }
-        </div>
+        <PickButton
+            type={(isCurrentUser) ? 'primary' : 'secondary'}
+            styling='standing-card'
+            clickEvent={viewModal}
+            content={
+                <>
+                    { rank }
+                    { user }
+                    { wins }
+                    { picks }
+                    { winPct }
+                    { bonus }
+                </>
+            }
+        />
     )
 }

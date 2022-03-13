@@ -9,9 +9,6 @@ import "./others-dashboard.css";
 import { Icon } from "semantic-ui-react";
 import { RootState } from "../../../../store";
 import { PickRequest } from "../../../../model/postRequests/pickRequest";
-import { publish, PubSub } from "../../../../controller/pubSub/pubSubSlice";
-import { SHOW_MESSAGE } from "../../../../configs/topics";
-import { SnackMessage } from "../../../../components/message/messagePopup";
 import { toInt } from "../../../../utils/tools";
 import { GameCard } from "../../../../components/game-card/game-card";
 import { GameLoader } from "../../../../components/game-loader/game-loader";
@@ -47,11 +44,8 @@ export const OthersDashboard = () => {
     useEffect(() => {
         if(standingsStatus === status.IDLE && leagueStatus === status.COMPLETE) {
             dispatch(fetchUserStandings({season: league.currentSeason, seasonType: league.currentSeasonType, week: league.currentWeek}));
-        } else if(standingsStatus === status.ERROR || userPicksStatus === status.ERROR) {
-            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
-            dispatch(publish(request));
         }
-    }, [dispatch, standingsStatus, leagueStatus, league, userPicksStatus]);
+    }, [dispatch, standingsStatus, leagueStatus, league]);
 
 
     useEffect(() => {

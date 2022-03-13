@@ -5,6 +5,9 @@ import { status } from '../../configs/status';
 import { PickRequest } from '../../model/postRequests/pickRequest';
 import { PicksUser } from '../../model/picksUser/picksUser';
 import { RootState } from '../../store';
+import { publish, PubSub } from '../pubSub/pubSubSlice';
+import { SHOW_MESSAGE } from '../../configs/topics';
+import { SnackMessage } from '../../components/message/messagePopup';
 
 const picksForUserAdapter = createEntityAdapter();
 
@@ -13,13 +16,15 @@ const initialState = picksForUserAdapter.getInitialState({
     picksForUser: [] as PicksUser[]
 });
 
-export const fetchPicksForUser = createAsyncThunk('picksForUser/fetchPicksForUser', async (params: PickRequest) => {
+export const fetchPicksForUser = createAsyncThunk('picksForUser/fetchPicksForUser', async (params: PickRequest, {dispatch}) => {
     const url = endpoints.PICKS.OTHERS_BY_WEEK(params);
     try {
         const response = await client.get(url);
         return response;
     } catch(error) {
         console.error(error);
+        let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+        dispatch(publish(request));
         return {status: status.ERROR, message: error}
     }
 })

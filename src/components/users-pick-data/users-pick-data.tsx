@@ -7,7 +7,7 @@ import { SHOW_MODAL } from '../../configs/topics';
 import './users-pick-data.css';
 import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { ProfileImage } from '../profile-image/profile-image';
-import { PickButton } from '../../shared/PickButton/PickButton';
+import { PickButton } from '../../common/PickButton/PickButton';
 
 type Props = {
     game: Game,
@@ -118,7 +118,6 @@ export const UsersPickData = ({ game, picksData }:Props) => {
             <div className="show-less-button">
                 <PickButton 
                     clickEvent={closePicksData}
-                    styling={null}
                     type='secondary'
                     content={
                         <div className="show-less-button-group">

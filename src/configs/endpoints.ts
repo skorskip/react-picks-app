@@ -28,5 +28,6 @@ export const endpoints = {
         BASE : `${environment.userServiceURL}users`,
         LOGIN : `${environment.userServiceURL}users/login`,
         STANDINGS : (params: SeasonRequest) => `${environment.userServiceURL}users/standings?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}`,
+        UPDATE_PROFILE: `${environment.userServiceURL}users/update-user-profile`
     }
 }

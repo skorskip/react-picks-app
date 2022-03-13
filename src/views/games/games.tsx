@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
-import { fetchWeek, getSetWeek} from '../../controller/week/weekSlice';
+import { fetchWeek, getSetWeek, selectPicksCount} from '../../controller/week/weekSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
 import { Switch, Route, useLocation, useParams, useHistory } from "react-router-dom";
 import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
 import { WeekSwitcher } from './components/week-switcher/week-switcher';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Icon } from 'semantic-ui-react';
-import { WEEK_SHOW_WEEKS } from '../../configs/topics';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { status } from '../../configs/status';
 import { UserTypeEnum } from '../../model/user/user';
 import { useSwipeable } from 'react-swipeable';
 import { RootState } from '../../store';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
-import { subscribe } from '../../controller/pubSub/pubSubSlice';
+import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { toInt } from '../../utils/tools';
 import "./games.css";
 import "../../utils/slideTransition.scss";
+import { PickButton } from '../../common/PickButton/PickButton';
 
 interface RouteParams {
     view: string
@@ -35,7 +35,7 @@ export const Games = ({routes}: Props) => {
     const gamesState = useSelector((state: RootState) => state.week.status);
     const leagueState = useSelector((state: RootState) => state.league.status);
     const setWeek = useSelector(getSetWeek);
-    const sub = useSelector(subscribe);
+    const pickCount = useSelector(selectPicksCount);
     const dispatch = useDispatch();
 
     let location = useLocation();
@@ -53,6 +53,7 @@ export const Games = ({routes}: Props) => {
     const currWeek = league.currentWeek 
     const currSeasonType = league.currentSeasonType
     const [weeksShown, setWeeksShown] = useState(false);
+    const [showRefreshButton, setShowRefreshButton] = useState(false);
 
     const swipeView = (view: string) => {
         if(season === null) {
@@ -68,6 +69,15 @@ export const Games = ({routes}: Props) => {
         delta : 100,
     });
 
+    const tabBarEvent = (publishEvent: PubSub) => {
+        dispatch(publish(publishEvent));
+    }
+
+    const refreshPage = () => {
+        let request = new SeasonRequest(currSeason, currSeasonType, currWeek);
+        setShowRefreshButton(false)
+        dispatch(fetchWeek(request));
+    }
 
     const spectatorView = (user.type !== UserTypeEnum.PARTICIPANT) && (
         <div className="header-container">
@@ -82,8 +92,27 @@ export const Games = ({routes}: Props) => {
         </div>
     );
 
+    const refreshView = (showRefreshButton) && (
+        <div className="refresh-container">
+            <PickButton 
+                type='primary'
+                clickEvent={refreshPage}
+                content={
+                    <>
+                        <Icon className="spectator-icon" name="redo"/>
+                        Refresh
+                    </>
+                }
+            />
+        </div>
+    );
+
     const gamesTab = (user.type === UserTypeEnum.PARTICIPANT && (other === null || other === "null")) && (
-        <GamesTabBar/>
+        <GamesTabBar
+            league={league}
+            pickCount={pickCount}
+            tabBarEvent={tabBarEvent}
+        />
     )
 
     const transitionGroup = (!weeksShown) && (
@@ -121,21 +150,23 @@ export const Games = ({routes}: Props) => {
             let request = new SeasonRequest(season, seasonType, week);
             dispatch(fetchWeek(request));
         }
-    }, [season, week, seasonType, other, setWeek, dispatch])
+    }, [season, week, seasonType, other, setWeek, gamesState, dispatch]);
 
     useEffect(() => {
-        if(sub.topic === WEEK_SHOW_WEEKS) {
-            setWeeksShown(sub.data);
-        }
-    }, [sub])
+        setTimeout(() => {setShowRefreshButton(true)}, 900000)
+    });
 
     return (
         <div {...swipeHandlers} style={{ touchAction: 'pan-y' }}>
             { spectatorView }
+            { refreshView }
             { gamesTab }
             <div className="games-week-container">
                 <div className="week-switcher-container">
-                    <WeekSwitcher />
+                    <WeekSwitcher 
+                        league={league}
+                        showWeekEvent={setWeeksShown}
+                    />
                 </div>
                 { transitionGroup }
             </div>

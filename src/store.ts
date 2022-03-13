@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, ThunkDispatch, Action } from '@reduxjs/toolkit'
 
 import weekReducer from './controller/week/weekSlice'
 import userReducer from '../src/controller/user/userSlice'
@@ -8,6 +8,7 @@ import userStandingsReducer from '../src/controller/user-standings/userStandings
 import tokenReducer from '../src/controller/token/tokenSlice'
 import picksForUserReducer from '../src/controller/picks-for-user/picksForUserSlice'
 import PubSubReducer from '../src/controller/pubSub/pubSubSlice'
+import { useDispatch } from 'react-redux'
 
 const store = configureStore({
   reducer: {
@@ -29,6 +30,10 @@ const store = configureStore({
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+//export type AppDispatch = typeof store.dispatch
+export type ThunkAppDispatch = ThunkDispatch<RootState, void, Action>;
+
+export const useAppThunkDispatch = () => useDispatch<ThunkAppDispatch>();
+
 
 export default store

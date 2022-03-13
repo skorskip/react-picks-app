@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPicks, updatePicks, deletePicks, selectPicksMessage, selectGamesPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
+import { selectPicks, updatePicks, deletePicks, selectGamesPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
-import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON, SHOW_MESSAGE } from '../../../../configs/topics';
+import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON } from '../../../../configs/topics';
 import { status } from '../../../../configs/status';
 import { Icon } from 'semantic-ui-react';
 import { selectUser } from '../../../../controller/user/userSlice';
@@ -11,13 +11,11 @@ import { PickSelected } from '../../../../model/pickSelected/pickSelected';
 import { Pick } from '../../../../model/week/pick';
 import { PickDeleteRequest } from '../../../../model/postRequests/pickDeleteRequest';
 import { PickRequest } from '../../../../model/postRequests/pickRequest';
-import { clear, publish, PubSub, subscribe } from '../../../../controller/pubSub/pubSubSlice';
-import './picks-dashboard.css';
-import { SnackMessage } from '../../../../components/message/messagePopup';
+import { clear, subscribe } from '../../../../controller/pubSub/pubSubSlice';
 import { GameCard } from '../../../../components/game-card/game-card';
-import { showSubmitTime } from '../../../../utils/dateFormatter';
 import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
-import { GameSubmitTime } from '../game-submit-time/game-submit-time';
+import { GameSubmitTime } from '../../components/game-submit-time/game-submit-time';
+import './picks-dashboard.css';
 
 export const PicksDashboard = () => {
 
@@ -28,44 +26,25 @@ export const PicksDashboard = () => {
     const sub = useSelector(subscribe);
     const user = useSelector(selectUser);
     const pickData = useSelector(selectUserPickData);
-    const picksMessage = useSelector(selectPicksMessage);
 
     const [updatePicksArray, setUpdatePicks] = useState([] as Pick[]);
     const [deletePicksArray, setDeletePicks] = useState([] as number[]); 
     const [inEditMode, setInEditMode] = useState(false);
-    const [submitSent, setSubmitSent] = useState(false);
 
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        if(loader === status.ERROR) {
-            if(picksMessage != null) {
-                alert(picksMessage);
-            } else {
-                let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
-                dispatch(publish(request));
-            }
-        }
-
-        if(loader === status.COMPLETE && submitSent) {
-            let request = new PubSub(SHOW_MESSAGE, new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.EDIT_SUCCESS));
-            dispatch(publish(request)); 
-            setSubmitSent(false);
-        }
-    },[loader, picksMessage, dispatch, submitSent]);
 
     useEffect(() => {
         if(sub.topic === NAV_DONE_BUTTON) {
             if(deletePicksArray.length !== 0 ) {
                 let request = new PickDeleteRequest(0, 0, 0, user.user_id, deletePicksArray)
-                dispatch(deletePicks(request))
+                dispatch(deletePicks(request));
+                dispatch(clear());
             }
             if(updatePicksArray.length !== 0){
                 let request = new PickRequest(0,0,0, user.user_id, updatePicksArray)
                 dispatch(updatePicks(request));
+                dispatch(clear());
             }
-            setSubmitSent(true);
-            dispatch(clear());
         }
         
         if(sub.topic === NAV_EDIT_BUTTON) {
@@ -126,11 +105,16 @@ export const PicksDashboard = () => {
         return(
             <>
                 <GameSubmitTime 
+                    //@ts-ignore
+                    key={"time-" + pick.pick_id}
                     game={game} 
                     prevGame={games[i - 1]} 
                     user={user}
                 />
-                <div className={ getGameContainerClass(remove) }>
+                <div 
+                    key={"game-card-" + game.game_id}
+                    className={ getGameContainerClass(remove) }
+                >
                     <GameCard
                         //@ts-ignore
                         key={"game-" + pick.pick_id}
@@ -149,6 +133,8 @@ export const PicksDashboard = () => {
                         onDeleteClicked={() => onDelete(pick)}
                     />
                     <UsersPickData 
+                        //@ts-ignore
+                        key={"pick-data-" + pick.pick_id}
                         game={game}
                         picksData={pickData.filter(data => data.game_id === game.game_id)}
                     />

@@ -11,10 +11,7 @@
 }
 
 .toggle-button {
-    border-radius: 4px;
-	cursor: pointer;
     width: 100px;
-	box-shadow: none !important;
 	width: auto;
 }
 

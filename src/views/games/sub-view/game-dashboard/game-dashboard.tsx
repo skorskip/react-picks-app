@@ -1,36 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectUser } from '../../../../controller/user/userSlice';
-import { selectGamesNoPicks, selectPicksMessage, addPicks, selectTeams, resetWeekStatus, selectUserPickData } from '../../../../controller/week/weekSlice';
+import { selectGamesNoPicks, addPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
 import { status } from '../../../../configs/status';
 import { setStagedPicksLocal, resetStagedPicksLocal, getStagedPicksLocal } from '../../../../utils/localData';
-import { RootState } from '../../../../store';
+import { RootState, useAppThunkDispatch } from '../../../../store';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
 import { PickRequest } from '../../../../model/postRequests/pickRequest';
 import { Pick } from '../../../../model/week/pick';
-import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
-import { SnackMessage } from '../../../../components/message/messagePopup';
-import { SHOW_MESSAGE } from '../../../../configs/topics';
 import { GameCard } from '../../../../components/game-card/game-card';
 import { toInt } from '../../../../utils/tools';
-import './game-dashboard.css';
 import { UserTypeEnum } from '../../../../model/user/user';
 import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
-import { GameSubmitTime } from '../game-submit-time/game-submit-time';
-import { fetchToken } from '../../../../controller/token/tokenSlice';
+import { GameSubmitTime } from '../../components/game-submit-time/game-submit-time';
+import './game-dashboard.css';
+import { PickButton } from '../../../../common/PickButton/PickButton';
 
 export const GameDashboard = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppThunkDispatch();
     const user = useSelector(selectUser);
     const games = useSelector(selectGamesNoPicks);
     const teams = useSelector(selectTeams);
     const pickData = useSelector(selectUserPickData);
     const gameLoader = useSelector((state: RootState) => state.week.status);
-    const picksMessage = useSelector(selectPicksMessage);
+    const pickStatus = useSelector((state: RootState) => state.week.picksStatus);
     const league = useSelector(selectLeague);
     
     const history = useHistory();
@@ -39,7 +36,6 @@ export const GameDashboard = () => {
     const week = toInt(query.get("week"));
 
     const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() != null ? getStagedPicksLocal() : [] as Pick[]);
-    const [submitSent, setSubmitSent] = useState(false);
 
     const teamSelected = (event: PickSelected) => {
         let updated = setStagedPicksLocal(stagedPicks, event);
@@ -49,7 +45,6 @@ export const GameDashboard = () => {
     const submitPicks = () => {
         let request = new PickRequest(0,0,0,user.user_id,stagedPicks)
         dispatch(addPicks(request));
-        setSubmitSent(true);
     }
     
     const getSubmitClass = () => {
@@ -101,33 +96,12 @@ export const GameDashboard = () => {
     });
 
     useEffect(() => {
-        if(gameLoader === status.COMPLETE && submitSent) {
+        if(pickStatus === status.COMPLETE) {
             setStagedPicks([]);
             resetStagedPicksLocal();
-            setSubmitSent(false);
-
-            let request = new PubSub(SHOW_MESSAGE, 
-                new SnackMessage(status.SUCCESS, status.MESSAGE.PICKS.ADD_SUCCESS));
-            dispatch(publish(request));
-
             history.push("/games/pick");
         }
-
-    },[gameLoader, submitSent, stagedPicks, history, dispatch]);
-
-    useEffect(() => {
-        if(gameLoader === status.ERROR && submitSent) {
-            setSubmitSent(false);
-            if(picksMessage != null) {
-                dispatch(resetWeekStatus());
-                alert(picksMessage);
-            } else {
-                let request = new PubSub(SHOW_MESSAGE, 
-                    new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
-                dispatch(publish(request));
-            }
-        }
-    },[gameLoader, submitSent, stagedPicks, picksMessage, dispatch]);
+    },[pickStatus, dispatch, history]);
 
     if(gameLoader === status.LOADING) {
         return (<GameLoader height={110} count={8}/>)
@@ -140,9 +114,16 @@ export const GameDashboard = () => {
                 { gameCards }
             </div>
             <div className={getSubmitClass()}>
-                <Button className="primary-background base-color submit-button" onClick={submitPicks}>
-                    <Icon name='send'/> Submit ({stagedPicks.length})
-                </Button>
+                <PickButton 
+                    type="primary"
+                    styling="submit-button" 
+                    clickEvent={submitPicks}
+                    content={
+                        <>
+                            <Icon name='send'/> Submit ({stagedPicks.length})
+                        </>
+                    }
+                />
             </div>
         </>
     );

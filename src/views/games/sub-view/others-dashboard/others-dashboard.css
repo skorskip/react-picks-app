@@ -1,0 +1,36 @@
+.other-user-info-container {
+	position: fixed;
+    height: 45px;
+    z-index: 3;
+    top:0;
+    right: 0;
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+	width: 100%;
+}
+
+.other-user-info {
+	display: flex;
+    height: 45px;
+	padding: 5px;
+	align-items: center;
+	justify-content: space-between;
+	border-radius: 8px;
+    margin: 4px;
+	padding-right: 10px;
+    padding-left: 10px;
+    width: 100%;
+}
+.other-user-name {
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media only screen and (min-width: 650px) {
+	.other-user-info-container  {
+		top: 60px;
+	}
+}

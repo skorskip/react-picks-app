@@ -17,12 +17,11 @@
 }
 
 .standing-card {
-	display: flex;
+	display: flex !important;
     justify-content: space-between;
     align-items: center;
-	border-radius: 4px;
-	margin: 4px;
-	box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    padding: 0px !important;
+    margin: 4px !important;
 }
 
 .bonus-card {
@@ -75,16 +74,22 @@
 
 .user {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	width: 35px;
-	font-size: 1.3em;
+	padding-top: 5px;
+}
+
+.user-content {
+	font-size: .6em;
+	text-overflow: ellipsis;
 }
 
 .bonus {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width:30px;
+	width: 30px;
 }
 
 .standing-card-bonus-icon {

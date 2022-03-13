@@ -1,4 +1,6 @@
 
+@import '../public/assets/themes/light/styles-light.scss';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -36,7 +38,7 @@ body,html,span,div {
 }
 
 $success: 			rgb(27, 136, 52);
-$failure:			#d02020;
+$failure:			#d020208a;
 $warn:				#ca7220;
 $failure-light:		#f15d5d63;
 
@@ -58,4 +60,10 @@ $failure-light:		#f15d5d63;
 .success-snack {
 	border-left: 3px solid $success;
 	box-shadow: 0 0 8px rgba(0,0,0,.2);
+}
+
+.super-button {
+	color: $secondary;
+    box-shadow: -3px 3px $secondary, -2px 2px $secondary, -1px 1px $secondary !important;
+    border: 1px solid $secondary !important;
 }

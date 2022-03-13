@@ -22,34 +22,33 @@
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	border-radius: 8px;
-	margin: 5px;
-	cursor: pointer;
+	padding: 10px;
 	width: 100%;
-	/* box-shadow: 0 0 8px rgba(0,0,0,0.2); */
 }
 
 .week-header-next {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	border-radius: 8px;
-	margin: 5px;
-	cursor: pointer;
-	/* box-shadow: 0 0 8px rgba(0,0,0,0.2); */
 }
 
 .week-arrow-next-icon {
 	transform: scale(1);
-	margin:10px;
+}
+
+.weeks-button-style {
+	width: 100%;
+	margin: 5px !important;
+}
+
+.next-button-style {
+	margin: 5px !important;
 }
 
 .week-arrow-icon {
-	margin:15px;
 	transform: scale(1);
 }
 
 .week-title {
 	font-size:1.5em;
-    margin: 15px;
 }

@@ -43,7 +43,7 @@ export const NavBar = () => {
     }
 
     const clickNav = (location: string) => {
-        if(location === "/announcements") {
+        if(location === "/dashboard") {
             clickAnnouncements();
         }
         history.push(location)
@@ -114,6 +114,12 @@ export const NavBar = () => {
                 </div>
             </div>
             <div className="button-group">
+                <Button icon basic className="nav-button" onClick={() => clickNav("/dashboard")}>
+                    <div className={getIconClass("dashboard")}>
+                        <Icon size='large' name='home' className="nav-icon"/>
+                        { messageNotif }
+                    </div>
+                </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
                     <div className={getIconClass("games")}>
                         <Icon size='large' name='football ball' className="nav-icon"/>
@@ -122,12 +128,6 @@ export const NavBar = () => {
                 <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
                     <div className={getIconClass("standings")}>
                         <Icon size='large' name='list'/>
-                    </div>
-                </Button>
-                <Button icon basic className="nav-button" onClick={() => clickNav("/announcements")}>
-                    <div className={getIconClass("announcements")}>
-                        <Icon size='large' name='bullhorn' className="nav-icon"/>
-                        { messageNotif }
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={goToChat}>

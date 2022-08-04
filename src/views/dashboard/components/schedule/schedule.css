@@ -1,0 +1,30 @@
+.schedule-container {
+    display: flex;
+    align-items: flex-start;
+    padding-left: 10px;
+    flex-direction: column;
+}
+
+.schedule {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.schedule-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-left: solid 4px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.schedule-topic {
+    font-weight: bold;
+    font-size: large;
+}
+
+.schedule-subtopic {
+    font-size: 10px;
+}

@@ -52,14 +52,6 @@ export const TeamCard = ({
         }
     }
 
-    const getSpreadClass = () => {
-        if(/windows phone|android/i.test(navigator.userAgent)) {
-            return 'game-card-spread-android tiertary-color base-background'
-        } else {
-            return 'game-card-spread tiertary-color base-background'
-        }
-    }
-
     const getGameSpread = (number: number) => {
         if(number){
             if(number > 0) {
@@ -91,7 +83,7 @@ export const TeamCard = ({
     );
 
     const spreadIcon = (spread != null && spread !== 0) && (
-        <div className={getSpreadClass()}>
+        <div className='game-card-spread tiertary-color base-background'>
             <div className="game-card-spread-icon accent base-background">
                 <b>
                     { getGameSpread(spread) }

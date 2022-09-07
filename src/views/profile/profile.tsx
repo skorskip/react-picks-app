@@ -56,13 +56,6 @@ export const Profile = () => {
                         image={user.slack_user_image} 
                         showImage={true}
                     />
-                    <PickButton 
-                        type='secondary'
-                        content={(updateProfileState === status.LOADING) ? undefined : 'Update'}
-                        styling='update-profile-button'
-                        clickEvent={updateProfileImage}
-                        loading={updateProfileState === status.LOADING}
-                    />
                 </div>
                 <div className="card-header-text-profile">
                     { user.first_name } { user.last_name }
@@ -108,6 +101,13 @@ export const Profile = () => {
                         </div>
                     </div>
                     <div className="change-password-button-container">
+                        <PickButton 
+                            type='secondary'
+                            content={(updateProfileState === status.LOADING) ? undefined : 'Update Image From Slack'}
+                            styling='update-profile-button'
+                            clickEvent={updateProfileImage}
+                            loading={updateProfileState === status.LOADING}
+                        />
                         <PickButton 
                             clickEvent={changePassword} 
                             styling="change-password-button" 

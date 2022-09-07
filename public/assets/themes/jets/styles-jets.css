@@ -12,7 +12,7 @@
 }
 
 .tiertary-light-color {
-  color: #f5f3f3 !important;
+  color: #f6f4f4 !important;
 }
 
 .quaternary-color {
@@ -40,7 +40,7 @@
 }
 
 .tiertary-light-background {
-  background-color: white !important;
+  background-color: #f6f4f4 !important;
 }
 
 .quaternary-background {
@@ -53,6 +53,14 @@
 
 .accent-background {
   background-color: #125740 !important;
+}
+
+.primary-border {
+  border: solid 2px #053223 !important;
+}
+
+.tiertary-border {
+  border: solid 2px #e9e4e4 !important;
 }
 
 .primary-fill {

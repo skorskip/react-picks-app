@@ -6,7 +6,7 @@
 	width: 150px;
 	height: 110px;
 	float: left;
-	box-shadow: 0 0 8px rgba(0,0,0,0.2);
+	/* box-shadow: 0 0 8px rgba(0,0,0,0.2); */
 	border: none;
 	/* box-shadow: 1px 1px , 2px 2px , 3px 3px ;
 	transform: translateX(-3px); */
@@ -81,22 +81,6 @@
 .game-card-spread {
 	position: absolute;
 	float: left;
-	margin-left: 65px;
-	margin-top: -35px;
-    text-align: center;
-	border-radius: 50%;
-	padding: 5px;
-	border: solid 2px;
-	width: 60px;
-	height: 60px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.game-card-spread-android {
-	position: absolute;
-	float: left;
 	margin-left: 120px;
 	margin-top: -70px;
     text-align: center;
@@ -135,10 +119,5 @@
 @media only screen and (min-width: 650px) {
 	.team-info:hover {
 		border: solid 2px;
-	}
-
-	.game-card-spread {
-		margin-left: 120px;
-    	margin-top: -70px;
 	}
 }

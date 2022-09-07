@@ -5,6 +5,8 @@ $tiertary:      #8c0101;
 $quaternary:    #6b0101;
 $base:          #4a0101;
 $accent:        $secondary;
+$primary-dark:  #75643d;
+$tiertary-dark: #4d0000;
 
 .primary-color {
     color:  $primary !important;
@@ -60,6 +62,14 @@ $accent:        $secondary;
 
 .accent-background {
     background-color: $accent !important;
+}
+
+.primary-border {
+    border: solid 2px $primary-dark !important;
+}
+
+.tiertary-border {
+    border: solid 2px $tiertary-dark !important;
 }
 
 .primary-fill {

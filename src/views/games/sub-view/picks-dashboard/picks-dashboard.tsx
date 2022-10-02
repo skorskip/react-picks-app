@@ -1,6 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectPicks, updatePicks, deletePicks, selectGamesPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
+import { 
+    selectPicks, 
+    updatePicks, 
+    deletePicks, 
+    selectGamesPicks, 
+    selectTeams, 
+    selectUserPickData,
+    selectGamesNotComplete,
+    deleteWeek
+} from '../../../../controller/week/weekSlice';
 import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON } from '../../../../configs/topics';
 import { status } from '../../../../configs/status';
@@ -16,6 +25,8 @@ import { GameCard } from '../../../../components/game-card/game-card';
 import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
 import { GameSubmitTime } from '../../components/game-submit-time/game-submit-time';
 import './picks-dashboard.css';
+import { PickButton } from '../../../../common/PickButton/PickButton';
+import { selectLeague } from '../../../../controller/league/leagueSlice';
 
 export const PicksDashboard = () => {
 
@@ -26,6 +37,8 @@ export const PicksDashboard = () => {
     const sub = useSelector(subscribe);
     const user = useSelector(selectUser);
     const pickData = useSelector(selectUserPickData);
+    const incompleteGames = useSelector(selectGamesNotComplete);
+    const league = useSelector(selectLeague);
 
     const [updatePicksArray, setUpdatePicks] = useState([] as Pick[]);
     const [deletePicksArray, setDeletePicks] = useState([] as number[]); 
@@ -87,6 +100,25 @@ export const PicksDashboard = () => {
         return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
     }
 
+    const deleteWeekButton = (incompleteGames.length && !user.current_season_data.dropped_week) && (
+        <div className='delete-week-container'>
+            <PickButton
+                type="failure"
+                content="Delete Week"
+                styling="delete-week-button"
+                clickEvent={() => dispatch(deleteWeek(
+                    new PickRequest(
+                        league.currentSeason, 
+                        league.currentSeasonType, 
+                        league.currentWeek, 
+                        user.user_id, 
+                        [])
+                    )
+                )}
+            ></PickButton>
+        </div>
+    )
+
     const noPicks = (!games.length) && (
         <div className="no-picks-set secondary-color">
             <div className="no-picks-set-content">No picks made</div>
@@ -145,6 +177,7 @@ export const PicksDashboard = () => {
 
     return (
         <div className="games-container page">
+            { deleteWeekButton }
             { noPicks }
             { gameCards }
         </div>

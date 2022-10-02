@@ -35,6 +35,15 @@
 	font-size: 200%;
 }
 
+.delete-week-container {
+	padding-right: 20px;
+	padding-left: 20px;
+}
+
+.delete-week-button {
+	width: 100%;
+}
+
 @media only screen and (min-width: 650px) {
 	.games-container {
 		display: flex;

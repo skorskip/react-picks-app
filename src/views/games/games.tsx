@@ -74,9 +74,8 @@ export const Games = ({routes}: Props) => {
     }
 
     const refreshPage = () => {
-        let request = new SeasonRequest(currSeason, currSeasonType, currWeek);
-        setShowRefreshButton(false)
-        dispatch(fetchWeek(request));
+        setShowRefreshButton(false);
+        window.location.reload();
     }
 
     const spectatorView = (user.type !== UserTypeEnum.PARTICIPANT) && (

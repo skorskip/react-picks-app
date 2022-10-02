@@ -12,6 +12,7 @@ export class UserCurrentSeasonData {
     win_pct         : number;
     bonus_nbr       : number;
     prev_ranking    : number;
+    dropped_week    : number | null;
 
     constructor(
         max_picks       : number,
@@ -22,7 +23,8 @@ export class UserCurrentSeasonData {
         wins            : number,
         win_pct         : number,
         bonus_nbr       : number,
-        prev_ranking    : number
+        prev_ranking    : number,
+        dropped_week    : number | null,
     ) {
         this.max_picks    = max_picks    
         this.picks_penalty= picks_penalty
@@ -33,6 +35,7 @@ export class UserCurrentSeasonData {
         this.win_pct      = win_pct
         this.bonus_nbr    = bonus_nbr
         this.prev_ranking = prev_ranking
+        this.dropped_week = dropped_week
     }
 }
 

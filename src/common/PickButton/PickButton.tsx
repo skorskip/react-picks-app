@@ -31,6 +31,9 @@ export const PickButton = ({clickEvent, content, styling, type, loading}: Props)
 
     useEffect(() => {
         switch(type) {
+            case "toggle":
+                setTypeClass("tiertary-light-background secondary-color " + styling);
+                break;
             case "secondary":
                 setTypeClass("tiertary-light-background secondary-color tiertary-border " + styling);
                 break;

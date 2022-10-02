@@ -8,6 +8,7 @@ export const endpoints = {
         ADD : (param: PickRequest) => `${environment.picksServiceURL}picks/create/${param.user_id}`,
         DELETE : `${environment.picksServiceURL}picks/delete`,
         UPDATE: `${environment.picksServiceURL}picks/update`,
+        DELETE_WEEK: (params: PickRequest) => `${environment.picksServiceURL}picks/week/delete?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&user=${params.user_id}`,
         OTHERS_BY_WEEK: (params: PickRequest) => `${environment.picksServiceURL}picks/others?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}&user=${params.user_id}`,
     },
     MESSAGES : {

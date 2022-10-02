@@ -2,7 +2,7 @@ import {  createSlice, createEntityAdapter, createAsyncThunk, createAction } fro
 import { client } from '../../utils/client'
 import { endpoints } from '../../configs/endpoints';
 import { status } from '../../configs/status';
-import { Game } from '../../model/week/game';
+import { Game, GameStatusEnum } from '../../model/week/game';
 import { Team } from '../../model/week/team';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { RootState } from '../../store';
@@ -137,6 +137,19 @@ export const deletePicks = createAsyncThunk('week/deletePicks', async (param: Pi
     }
  });
 
+ export const deleteWeek = createAsyncThunk('week/deleteWeek',  async (param: PickRequest, {dispatch}) => {
+    try {
+        const url = endpoints.PICKS.DELETE_WEEK(param);
+        const response = await client.delete(url, {});
+        return { status: status.COMPLETE };
+    } catch(error) {
+        console.error(error);
+        let request = new PubSub(SHOW_MESSAGE, genericError);
+        dispatch(publish(request));
+        return {status: status.ERROR, message: error}
+    }
+});
+
  export const resetWeekStatus = createAction('week/resetStatus', function prepare() {
     return {} as any
 });
@@ -170,8 +183,6 @@ const weekSlice = createSlice({
                     state.picks = action.payload as Pick[];
                     state.picksStatus = status.COMPLETE;
                 } else {
-                    let error = action.payload.message.content;
-                    state.message = getMessageFromError(error);
                     state.picksStatus = status.ERROR;
                 }
             })
@@ -183,8 +194,6 @@ const weekSlice = createSlice({
                     state.picks = action.payload as Pick[];
                     state.picksStatus = status.COMPLETE;
                 } else {
-                    let error = action.payload.message.content;
-                    state.message = getMessageFromError(error);
                     state.picksStatus = status.ERROR;
                 }
             })
@@ -196,13 +205,22 @@ const weekSlice = createSlice({
                     state.picks = action.payload as Pick[];
                     state.picksStatus = status.COMPLETE;
                 } else {
-                    let error = action.payload.message.content;
-                    state.message = getMessageFromError(error);
                     state.picksStatus = status.ERROR;
                 }
             })
             .addCase(resetWeekStatus, (state, action) => {
                 state.status = status.COMPLETE;
+            })
+            .addCase(deleteWeek.pending, (state, action) => {
+                state.picksStatus = status.LOADING;
+            })
+            .addCase(deleteWeek.fulfilled, (state, action) => {
+                if(action.payload.status !== status.ERROR) {
+                    state.picks = [];
+                    state.picksStatus = status.COMPLETE;
+                } else {
+                    state.picksStatus = status.ERROR;
+                }
             })
     },
 });
@@ -243,5 +261,7 @@ export const selectUserPickDataByGame = (state: RootState, gameId: number) => st
 export const selectPicksMessage = (state: RootState) => state.week.message;
 
 export const getSetWeek = (state: RootState) => state.week.setWeek;
+
+export const selectGamesNotComplete = (state: RootState) => state.week.games.filter(game => game.game_status !== GameStatusEnum.completed);
 
 export default weekSlice.reducer

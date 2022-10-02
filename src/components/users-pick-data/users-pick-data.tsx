@@ -105,7 +105,7 @@ export const UsersPickData = ({ game, picksData }:Props) => {
         ); 
     })
 
-    const picksDataList = (showPickers) && (
+    const picksDataList = (showPickers && awayPicks.length && homePicks.length) && (
         <div className="users-pick-list">
             <div className="picks-data-users">
                 <div className="users-column">

@@ -47,6 +47,19 @@
     animation: heart-pulse 8s;
 }
 
+.main-circle {
+    border-radius: 50%;
+    height: 60px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 60px;
+    top: 10;
+    margin-top: -40px;
+    border: 2px solid;
+}
+
 
 @keyframes heart-pulse {
     0% {
@@ -128,6 +141,10 @@
 
     .circle-notify-container {
         padding-left: 30px;
+    }
+
+    .main-circle-container {
+        display: none !important;
     }
 }
 

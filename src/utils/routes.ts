@@ -6,6 +6,7 @@ import { OthersDashboard } from '../views/games/sub-view/others-dashboard/others
 import { Dashboard } from '../views/dashboard/dashboard';
 import { Standings } from '../views/standings/standings';
 import { Profile } from '../views/profile/profile';
+import { Announcements } from '../views/announcements/announcements';
 
 export const routes = [
 
@@ -26,6 +27,10 @@ export const routes = [
                 component: OthersDashboard
             }
         ]
+    },
+    {
+        path: '/announcements',
+        component: Announcements
     },
     {
         path: '/dashboard',

@@ -1,0 +1,46 @@
+@media only screen and (min-width: 650px) {
+	.standings-container {
+        height: 100%;
+	}
+}
+
+.standings-container {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	overflow-y: auto;
+	height: 100%;
+	width: 100%;
+}
+
+.bonus-card {
+	display: flex;
+    justify-content: flex-start;
+    align-items: center;
+	border-radius: 4px;
+	margin: 4px;
+	border: 1px solid;
+	font-size: 1.2em;
+
+	&-icon {
+		display: flex;
+		padding: 15px;
+	}
+
+	&-content {
+		display: flex;
+	}
+}
+
+.no-standings-set {
+	font-size: 2em;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	height: 250px;
+	margin-top:20%;
+	padding: 10px;
+	opacity: .4;
+}

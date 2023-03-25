@@ -120,14 +120,14 @@ export const NavBar = () => {
                         { messageNotif }
                     </div>
                 </Button>
-                <Button icon basic className="nav-button" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
-                    <div className={getIconClass("games")}>
-                        <Icon size='large' name='football ball' className="nav-icon"/>
-                    </div>
-                </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
                     <div className={getIconClass("standings")}>
                         <Icon size='large' name='list'/>
+                    </div>
+                </Button>
+                <Button icon basic className="nav-button main-circle-container" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
+                    <div className="main-circle base-background primary-color">
+                        <PickLogo sizeParam='xs'/>
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={goToChat}>

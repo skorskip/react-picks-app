@@ -38,9 +38,10 @@ body,html,span,div {
 }
 
 $success: 			rgb(27, 136, 52);
-$failure:			#d020208a;
+$failure:			#d02020;
 $warn:				#ca7220;
 $failure-light:		#f15d5d63;
+$failure-dark:		hsl(0, 73%, 32%);
 
 .success-color    					{ color: $success !important; }
 .failure-color    					{ color: $failure !important; }
@@ -51,6 +52,9 @@ $failure-light:		#f15d5d63;
 .warn-background  				{ background-color: $warn !important; }
 .failure-light-background		{ background-color: $failure-light !important; }
 
+.failure-border {
+	border: 2px solid $failure-dark !important;
+}
 
 .failure-snack {
 	border-left: 3px solid $failure;

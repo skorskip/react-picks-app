@@ -72,13 +72,13 @@ export const GamesTabBar = ({league, pickCount, tabBarEvent}: Props) => {
         <div className="toggle-picks-container base-background">
             <div className="toggle-container tiertary-light-background">
                 <PickButton 
-                    type={(param.view === "game") ? "primary" : "secondary"}
+                    type={(param.view === "game") ? "primary" : "toggle"}
                     clickEvent={() => clickView("game")}
                     content={(<div><Icon name='football ball' className='game-toggle-icon'/>Games</div>)}
                     styling="toggle-button"
                 />
                 <PickButton 
-                    type={(param.view === "pick") ? "primary" : "secondary"}
+                    type={(param.view === "pick") ? "primary" : "toggle"}
                     clickEvent={() => clickView("pick")}
                     content={(<div><Icon name='hand point down' className='game-toggle-icon'/>Picks ({pickCount})</div>)}
                     styling="toggle-button"

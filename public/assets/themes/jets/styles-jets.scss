@@ -2,10 +2,12 @@
 $primary:       #125740;
 $secondary:     black;
 $tiertary:      rgb(214, 214, 214);
-$tiertary-light:#f5f3f3;
+$tiertary-light:#f6f4f4;
 $quaternary:    white;
 $base:          white;
 $accent:        $primary;
+$primary-dark:  #053223;
+$tiertary-dark: #e9e4e4;
 
 .primary-color {
     color:  $primary !important;
@@ -48,7 +50,7 @@ $accent:        $primary;
 }
 
 .tiertary-light-background {
-    background-color: $quaternary !important;
+    background-color: $tiertary-light !important;
 }
 
 .quaternary-background {
@@ -61,6 +63,14 @@ $accent:        $primary;
 
 .accent-background {
     background-color: $accent !important;
+}
+
+.primary-border {
+    border: solid 2px $primary-dark !important;
+}
+
+.tiertary-border {
+    border: solid 2px $tiertary-dark !important;
 }
 
 .primary-fill {

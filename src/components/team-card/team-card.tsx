@@ -43,7 +43,7 @@ export const TeamCard = ({
             case 'card' : {
                 let classList = ""
                 classList += size === 'medium' ? 'team-card-medium ' : 'team-card ';
-                classList += fill ? team.display_color + '-background' : 'quaternary-background';
+                classList += fill ? team.display_color + '-background' : 'quaternary-background tiertary-border';
                 return classList;
             };
             default : {
@@ -83,7 +83,7 @@ export const TeamCard = ({
     );
 
     const spreadIcon = (spread != null && spread !== 0) && (
-        <div className='game-card-spread tiertary-color base-background'>
+        <div className="game-card-spread tiertary-color base-background">
             <div className="game-card-spread-icon accent base-background">
                 <b>
                     { getGameSpread(spread) }

@@ -3,9 +3,10 @@ import { Login } from '../views/login/login';
 import { GameDashboard } from '../views/games/sub-view/game-dashboard/game-dashboard';
 import { PicksDashboard } from '../views/games/sub-view/picks-dashboard/picks-dashboard';
 import { OthersDashboard } from '../views/games/sub-view/others-dashboard/others-dashboard';
-import { Announcements } from '../views/announcements/announcements';
+import { Dashboard } from '../views/dashboard/dashboard';
 import { Standings } from '../views/standings/standings';
 import { Profile } from '../views/profile/profile';
+import { Announcements } from '../views/announcements/announcements';
 
 export const routes = [
 
@@ -30,6 +31,10 @@ export const routes = [
     {
         path: '/announcements',
         component: Announcements
+    },
+    {
+        path: '/dashboard',
+        component: Dashboard
     },
     {
         path: '/standings',

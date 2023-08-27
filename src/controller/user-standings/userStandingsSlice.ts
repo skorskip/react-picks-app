@@ -62,5 +62,15 @@ export const selectUserStandings = (state: RootState) =>
     }) as User[];
 
 export const userStandingById = (state: RootState, user_id: number | null) => state.userStandings.userStandings.find((standing) => standing.user_id === user_id) as User;
+export const userStandingByIds = (state: RootState, user_ids: Array<number>) => 
+    state.userStandings.userStandings.filter((standing) => 
+    (user_ids.includes(standing.user_id))) as Array<User>;
+export const userStandingByCurrent = (state: RootState, currentUser: User) => state.userStandings.userStandings.filter((standing, i) => {
+    return (standing?.current_season_data?.ranking + 1) === currentUser.current_season_data?.ranking
+        || (standing?.current_season_data?.ranking - 1) === currentUser.current_season_data?.ranking
+        || (standing?.current_season_data?.ranking) === currentUser.current_season_data?.ranking
+        || standing.user_id === currentUser.user_id
+}) as Array<User>;
+
 
 export default userStandingsSlice.reducer

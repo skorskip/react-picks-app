@@ -36,7 +36,7 @@ export const TeamCard = ({
             };
             case 'score' : {
                 let classList = 'team-info disabled ';
-                classList += highlight ? 'highlight-team ' : '';
+                classList += highlight && !fill ? 'highlight-team ' : '';
                 classList += fill ? 'base-color team-info-result ' : team.display_color;
                 return classList;
             };

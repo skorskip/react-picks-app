@@ -1,164 +1,112 @@
 .profile-container {
     width: 100%;
-}
 
-.profile-card {
-	padding: 2px;
-	margin: 10px;
-    border-bottom: 1px solid;
-}
+    .card-title {
+        padding: 2px;
+        border-radius: 8px;
+        margin: 10px;
+        cursor: pointer;
+        border: 1px solid;
 
-.card-title {
-	padding: 2px;
-	border-radius: 8px;
-	margin: 10px;
-    cursor: pointer;
-    border: 1px solid;
-}
+        .card-header-profile {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            padding: 10px;
+            align-items: center;
+        }
 
-.card-bottom {
-	padding: 2px;
-	border-radius: 8px;
-	margin: 10px;
-	cursor: pointer;
-}
+        .card-header-text-profile {
+            margin-top: 20px;
+            font-size:2em;
+            margin: 10px;
+        }
+    }
 
-.card-header-profile {
-	display: flex;
-	flex-direction: row;
-    justify-content: flex-start;
-    padding: 10px;
-    align-items: center;
-}
+    .profile-card {
+        padding: 2px;
+        margin: 10px;
+        border-bottom: 1px solid;
 
-.card-header-text-profile {
-	margin-top: 20px;
-	font-size:2em;
-    margin: 10px;
-}
+        .info-header-profile {
+            display: flex;
+            font-size: 2em;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.card-section {
-    padding: 10px;
-}
+        .card-section {
+            padding: 10px;
 
-.info-header-profile {
-    display: flex;
-    font-size: 2em;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
+            .info-content {
+                display: flex;
+                flex-direction: column;
+                padding: 5px;
 
-.info-subheader {
-    font-size: 1.1em;
-    padding: 15px;
-}
+                .info-field-col {
+                    display: flex;
+                    flex-direction: column;
+                    padding: 5px;
+                    margin: 5px;
 
-.edit-button {
-    border-radius: 4px;
-	cursor: pointer;
-    border: solid 1px;
-}
+                    .slack-email-input {
+                        border: 1px solid;
+                        border-radius: 4px;
+                        height: 3em;
+                        margin-bottom: 10px;
+                        padding: 5px;
+                        width: 100%;
+                    }
 
-.info-content {
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-}
+                    .connect-slack-button {
+                        width: 100%;
+                    }
+                }
 
-.field {
-    font-size: 1.3em;
-    padding: 5px;
-    margin: 5px;
-}
+                .info-field {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
 
-.info-field {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
+                    .profile-icon-container {
+                        border-radius: 50%;
+                        height: 25px;
+                        padding: 10px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
 
-.profile-icon-container {
-    border-radius: 50%;
-    height: 25px;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+                    .field {
+                        font-size: 1.3em;
+                        padding: 5px;
+                        margin: 5px;
+                    }
+                }
 
-.init-header-icon {
-    display: flex;
-    justify-content: center;
-    border: solid 2px;
-    border-radius: 50%;
-    height: 45px;
-    width: 45px;
-    padding: 10px;
-    font-size: 1.5em;
-    align-items: center;
-}
-
-.toggle-button-profile {
-    border-radius: 4px;
-	cursor: pointer;
-    width: 100px;
-}
-
-.theme-content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding-top: 5px;
-    justify-content: center;
-}
-
-.theme-button {
-    margin: 5px !important;
-    width: 95px;
-    height: 45px;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-}
-
-.toggle-container {
-	border-radius: 4px;
-}
-
-.pick-progress-container {
-    padding: 5px;
-}
-
-.large-font {
-    font-size: 2em;
-}
-
-.medium-font {
-    font-size: 1.3em;
-}
-
-.content {
-    height: 100%;
-    overflow-y: auto;
-}
-
-.change-password-button {
-    width: 100%;
-}
-
-.change-password-button-container {
-   padding: 10px;
+                .change-password-button-container {
+                    padding: 10px;
+                 
+                    .change-password-button {
+                        width: 100%;
+                    }
+                 }
+            }
+        }
+    }
 }
 
 .logout-button-container {
     padding: 35px;
+    display: flex;
+
+    .update-profile-button {
+        margin-bottom: 10px !important;
+        width: 100%;
+    }
  }
 
- .update-profile-button {
-     margin-bottom: 10px !important;
-     width: 100%;
- }
 
 @media only screen and (min-width: 650px) {
 	.content {

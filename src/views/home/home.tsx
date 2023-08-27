@@ -33,7 +33,7 @@ export const Home = () => {
 
     const switchContent = (
         <Switch>
-            <Redirect exact from="/" to="/games/game"/>
+            <Redirect exact from="/" to="/dashboard"/>
             {
                 routes.map((route, i) => (
                     <Route

@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../controller/user/userSlice';
 import { fetchUserStandings, selectUserStandings } from '../../controller/user-standings/userStandingsSlice';
 import { selectLeague } from '../../controller/league/leagueSlice';
-import './standings.css';
+import './standings.scss';
 import { StandingsLoader } from './components/standings-loader/standings-loader';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { status } from '../../configs/status';
-import { StandingsUserCard } from './components/standings-user-card/standings-user-card';
+import { StandingsUserCard } from '../../components/standings-user-card/standings-user-card';
 import { Icon } from 'semantic-ui-react';
 import { RootState } from '../../store';
 

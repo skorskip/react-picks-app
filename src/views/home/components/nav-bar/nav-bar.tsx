@@ -38,12 +38,12 @@ export const NavBar = () => {
     }
 
     const goToChat = () => {
-        let url = `https://picks-league.slack.com/channels/${messageSource.chatChannel}`;
+        let url = `https://picks-league.slack.com/channels/${messageSource.channel}`;
         window.open(url, '_blank');
     }
 
     const clickNav = (location: string) => {
-        if(location === "/announcements") {
+        if(location === "/dashboard") {
             clickAnnouncements();
         }
         history.push(location)
@@ -114,9 +114,10 @@ export const NavBar = () => {
                 </div>
             </div>
             <div className="button-group">
-                <Button icon basic className="nav-button" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
-                    <div className={getIconClass("games")}>
-                        <Icon size='large' name='football ball' className="nav-icon"/>
+                <Button icon basic className="nav-button" onClick={() => clickNav("/dashboard")}>
+                    <div className={getIconClass("dashboard")}>
+                        <Icon size='large' name='home' className="nav-icon"/>
+                        { messageNotif }
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
@@ -124,10 +125,9 @@ export const NavBar = () => {
                         <Icon size='large' name='list'/>
                     </div>
                 </Button>
-                <Button icon basic className="nav-button" onClick={() => clickNav("/announcements")}>
-                    <div className={getIconClass("announcements")}>
-                        <Icon size='large' name='bullhorn' className="nav-icon"/>
-                        { messageNotif }
+                <Button icon basic className="nav-button main-circle-container" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
+                    <div className="main-circle base-background primary-color">
+                        <PickLogo sizeParam='xs'/>
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={goToChat}>

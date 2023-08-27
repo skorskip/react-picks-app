@@ -64,7 +64,7 @@ export const getStagedPicksLocal = () => {
     let stagedStr = localStorage.getItem(localDataEnum.STAGED_PICKS);
     if(stagedStr){
         let staged = JSON.parse(stagedStr) as Pick[];
-        return staged.filter(pick => new Date(pick.pick_submit_by_date) > new Date())
+        return staged?.filter(pick => new Date(pick.pick_submit_by_date) > new Date())
     } else {
         return [] as Pick[];
     }

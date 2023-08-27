@@ -1,7 +1,7 @@
-import React,{ useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TeamCard } from '../team-card/team-card';
 import { PickStatus } from '../pick-staus/pick-status';
-import { Icon, Button } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { GameWinStatusEnum, GameStatusEnum, Game } from '../../model/week/game';
 import { Pick } from '../../model/week/pick';
 import { Team, TeamSelect } from '../../model/week/team';
@@ -10,6 +10,7 @@ import { User } from '../../model/user/user';
 import './game-card.css';
 import { gameTimeStatusQuarters } from '../../utils/dateFormatter';
 import { PickButton } from '../../common/PickButton/PickButton';
+import { pickResult } from '../../utils/tools';
 
 type Props = {
     game: Game,
@@ -40,21 +41,6 @@ export const GameCard = ({
     const [highlightHome, setHighlightHome] = useState(false);
     const [highlightAway, setHighlightAway] = useState(false);
     const gameLocked = new Date(game?.pick_submit_by_date) <= new Date();
-
-    const pickResult = () => {
-        if(game.game_status === GameStatusEnum.completed && pick != null){
-            if(pick.team_id === game.winning_team_id) {
-              return GameWinStatusEnum.win;
-            } else if(game.winning_team_id === null) {
-              return GameWinStatusEnum.push;
-            } else {
-              return GameWinStatusEnum.loss;
-            }
-          }
-          else {
-            return null;
-          }
-    }
 
     const fillTeam = (teamId: number): boolean => {
         return teamId === game.winning_team_id;
@@ -129,7 +115,7 @@ export const GameCard = ({
                 />
                 <PickStatus
                     submitTime={game?.pick_submit_by_date}
-                    pickSuccess={pickResult()}
+                    pickSuccess={pickResult(game, pick)}
                     gameStatus={game?.game_status}
                 />
                 <TeamCard 

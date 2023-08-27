@@ -1,0 +1,26 @@
+.list-container {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    padding: 10px;
+}
+
+.user-pick-count {
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+    border: 3px solid;
+    margin-left: -20px;
+    margin-top: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-streak {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 24px;
+    width: 100%;
+}

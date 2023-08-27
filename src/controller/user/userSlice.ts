@@ -9,13 +9,17 @@ import { User } from '../../model/user/user';
 import { publish, PubSub } from '../pubSub/pubSubSlice';
 import { SnackMessage } from '../../components/message/messagePopup';
 import { SHOW_MESSAGE } from '../../configs/topics';
+import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 
 const userAdapter = createEntityAdapter();
 
 const initialState = userAdapter.getInitialState({
     status: status.IDLE,
     user: {} as User,
-    setProfileStatus: status.IDLE
+    setProfileStatus: status.IDLE,
+    bonus: [] as User[],
+    bonusState: status.IDLE,
+    slackIdState: status.IDLE
 });
 
 export const login = async (username: string, password: string) => {
@@ -99,12 +103,41 @@ export const fetchUpdateProfile = createAsyncThunk('user/fetchUpdateProfile', as
     }
 }); 
 
+export const fetchBonusEligible = createAsyncThunk('user/fetchBonusEligble', async (param: SeasonRequest, {dispatch}) => {
+    try {
+        const url = endpoints.USERS.BONUS_USERS(param);
+        const response = await client.get(url);
+        return response;
+    } catch(error) {
+        console.error(error);
+        let request = new PubSub(SHOW_MESSAGE, 
+            new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+        dispatch(publish(request));
+        return {status: status.ERROR, message: error}
+    }
+});
+
+export const setSlackUserId = createAsyncThunk('user/setSlackUserId', async (email: string, {dispatch}) => {
+    try {
+        const url = endpoints.USERS.UPDATE_SLACK_ID;
+        const response = await client.post(url, {email});
+        return response;
+    } catch(error) {
+        console.error(error);
+        let request = new PubSub(SHOW_MESSAGE, 
+        new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+        dispatch(publish(request));
+        return {status: status.ERROR, message: error}
+    }
+})
+
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {},
     extraReducers : (builder) => {
         builder
+            // GET USER
             .addCase(fetchUser.fulfilled, (state, action) => {
                 if(action.payload?.status === status.ERROR) {
                     state.status = status.ERROR;
@@ -116,10 +149,14 @@ const userSlice = createSlice({
             .addCase(fetchUser.pending, (state, action) => {
                 state.status = status.LOADING;
             })
+
+            // SIGN OUT USER
             .addCase(signOut.fulfilled, (state, action) => {
                 state.user = {} as User
                 state.status = status.IDLE;
             })
+
+            // UPDATE USER PROFILE
             .addCase(fetchUpdateProfile.pending, (state, action) => {
                 state.setProfileStatus = status.LOADING;
             })
@@ -130,10 +167,41 @@ const userSlice = createSlice({
                     state.setProfileStatus = status.COMPLETE;
                 }
             })
+
+            // GET BONUS ELIGIBLE
+            .addCase(fetchBonusEligible.pending, (state, action) => {
+                state.bonusState = status.LOADING
+            })
+            .addCase(fetchBonusEligible.fulfilled, (state, action) => {
+                if(action.payload?.status === status.ERROR) {
+                    state.bonusState = status.ERROR;
+                } else {
+                    state.bonus = action.payload;
+                    state.bonusState = status.COMPLETE;
+                }
+            })
+
+            // SET SLACK ID
+            .addCase(setSlackUserId.pending, (state, action) => {
+                state.slackIdState = status.LOADING;
+            })
+            .addCase(setSlackUserId.fulfilled, (state, action) => {
+                if(action.payload?.status === status.ERROR) {
+                    state.slackIdState = status.ERROR;
+                } else {
+                    state.slackIdState = status.COMPLETE;
+                    state.user = {
+                        ...state.user,
+                        slack_user_id: action.payload
+                    }
+                }
+            })
     },
 });
 
 export const selectUser = (state: RootState) => state.user.user as User;
+
+export const selectBonusEligible = (state: RootState) => state.user.bonus as User[];
 
 export default userSlice.reducer
 

@@ -1,6 +1,6 @@
 import { Game, GameStatusEnum } from '../model/week/game';
 
-export const formatDate = (date: Date) => {
+export const formatDate = (date: Date, justDay: boolean = false) => {
     var formattedDate = "";
 
     switch(date.getDate()) {
@@ -13,6 +13,10 @@ export const formatDate = (date: Date) => {
       default:
         formattedDate += new Intl.DateTimeFormat('en-US', {weekday: 'long'}).format(date)
         break; 
+    }
+
+    if (justDay) {
+      return formattedDate;
     }
 
     formattedDate += " at "

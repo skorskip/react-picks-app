@@ -29,6 +29,8 @@ export const endpoints = {
         BASE : `${environment.userServiceURL}users`,
         LOGIN : `${environment.userServiceURL}users/login`,
         STANDINGS : (params: SeasonRequest) => `${environment.userServiceURL}users/standings?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}`,
-        UPDATE_PROFILE: `${environment.userServiceURL}users/update-user-profile`
+        UPDATE_PROFILE: `${environment.userServiceURL}users/update-user-profile`,
+        BONUS_USERS:  (params: SeasonRequest) => `${environment.userServiceURL}users/bonus-streak?season=${params.season}&seasonType=${params.seasonType}&week=${params.week}`,
+        UPDATE_SLACK_ID: `${environment.userServiceURL}users/add-slack-id`
     }
 }

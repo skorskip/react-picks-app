@@ -88,7 +88,7 @@ export const GameDashboard = () => {
                     />
                     <UsersPickData 
                         game={game}
-                        picksData={pickData.filter(data => data.game_id === game.game_id)}
+                        picksData={pickData?.filter(data => data.game_id === game.game_id)}
                     />
                 </div>
             </>

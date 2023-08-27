@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PickButton } from '../../../common/PickButton/PickButton';
 import { getThemeLocal, setThemeLocal } from '../../../utils/localData';
 import { themeList } from '../../../configs/themes';
+import './themes.scss';
 
 type Props = {
     themeClickEvent: (newTheme: string) => void

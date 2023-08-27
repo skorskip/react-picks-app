@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
-import { selectUser, signOut, forgotPassword, fetchUpdateProfile, fetchUser} from '../../controller/user/userSlice';
-import './profile.scss';
-import { UserStats } from '../../components/user-stats/user-stats';
+import { selectUser, signOut, forgotPassword, fetchUpdateProfile, fetchUser, setSlackUserId} from '../../controller/user/userSlice';
 import { useHistory } from 'react-router-dom';
 import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { SET_THEME } from '../../configs/topics';
@@ -12,17 +10,23 @@ import { status } from '../../configs/status';
 import { ProfileImage } from '../../components/profile-image/profile-image';
 import { PickButton } from '../../common/PickButton/PickButton';
 import { Themes } from './components/themes';
+import { selectMessageSource } from '../../controller/league/leagueSlice';
+import './profile.scss';
 
 export const Profile = () => {
     const user = useSelector(selectUser);
     const updateProfileState = useSelector((state:RootState) => state.user.setProfileStatus);
+    const slackState = useSelector((state:RootState) => state.user.slackIdState);
+    const messageSource = useSelector(selectMessageSource);
     const history = useHistory();
     const dispatch = useAppThunkDispatch();
+    const [slackEmail, setSlackEmail] = useState('');
 
     const signOutUser = () => {
         let dialogConfirm = window.confirm("Are you sure you want to sign out?");
         if(dialogConfirm) {
             dispatch(signOut());
+            history.push("/login");
         }
     }
 
@@ -46,6 +50,14 @@ export const Profile = () => {
         }
     }
 
+    const setSlackEmailInput = (event: { target: { value: any } }) => {
+        setSlackEmail(event.target.value);
+    }
+
+    const connectSlack = () => {
+        dispatch(setSlackUserId(slackEmail));
+    }
+
     const profileTitle = (
         <div className="card-title base-background tiertary-color">
             <div className="card-header-profile secondary-color">
@@ -56,30 +68,12 @@ export const Profile = () => {
                         image={user.slack_user_image} 
                         showImage={true}
                     />
-                    <PickButton 
-                        type='secondary'
-                        content={(updateProfileState === status.LOADING) ? undefined : 'Update'}
-                        styling='update-profile-button'
-                        clickEvent={updateProfileImage}
-                        loading={updateProfileState === status.LOADING}
-                    />
                 </div>
                 <div className="card-header-text-profile">
                     { user.first_name } { user.last_name }
                 </div>
             </div>
         </div>
-    );
-
-    const profileStats = (
-        <div className="profile-card base-background tiertary-color">
-            <div className="card-section secondary-color">
-                <div className="info-content">
-                    <UserStats />
-                </div>
-            </div>
-        </div>
-
     );
 
     const profileInfo = (
@@ -120,16 +114,65 @@ export const Profile = () => {
         </div>
     );
 
+    const slackInfo = (
+        <div className="profile-card base-background tiertary-color">
+            <div className="card-section secondary-color">
+                <div className="info-header-profile">
+                    Slack
+                </div>
+                {
+                    (!user.slack_user_id) && (<div className="info-content">
+                        <div className="info-field-col">
+                            <div >Integrate with slack by joining the picksapp <a href={`https://picks-league.slack.com/channels/${messageSource.channel}`}>slack channel</a> and connecting your email to get access to awesome features:</div>
+                            <ul>
+                                <li>Be able to get notified to make picks</li>
+                                <li>Create a custom profile picture</li>
+                            </ul>
+                        </div>
+                        <div className="info-field-col">
+                            <input
+                                className='slack-email-input base-background secondary-color'
+                                placeholder='Slack Profile Email'
+                                onChange={setSlackEmailInput}>
+                            </input>
+                            <PickButton 
+                                type='secondary'
+                                content={(slackState === status.LOADING) ? undefined : 'Connect'}
+                                styling='connect-slack-button'
+                                clickEvent={connectSlack}
+                                loading={slackState === status.LOADING}
+                            />
+                        </div>
+                    </div>)
+                } 
+                {
+                    (user.slack_user_id) && (
+                        <div className="info-content">
+                            <div className="change-password-button-container">
+                                <PickButton 
+                                    type='secondary'
+                                    content={(updateProfileState === status.LOADING) ? undefined : 'Update Image From Slack'}
+                                    styling='change-password-button'
+                                    clickEvent={updateProfileImage}
+                                    loading={updateProfileState === status.LOADING}
+                                />
+                            </div>
+                    </div>)
+                }
+            </div>
+        </div>
+    )
+
     return (
         <div className="profile-container">
             { profileTitle }
-            { profileStats }
             { profileInfo }
+            { slackInfo }
             <Themes themeClickEvent={toggleTheme}/>
             <div className="logout-button-container">
                 <PickButton 
                     clickEvent={signOutUser} 
-                    styling="change-password-button" 
+                    styling="update-profile-button" 
                     type="failure"
                     content="Sign out"
                 />

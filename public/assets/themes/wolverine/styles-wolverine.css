@@ -16,7 +16,7 @@
 }
 
 .quaternary-color {
-  color: #001c38 !important;
+  color: #012a54 !important;
 }
 
 .base-color {
@@ -53,6 +53,14 @@
 
 .accent-background {
   background-color: white !important;
+}
+
+.primary-border {
+  border: solid 2px #c09a04 !important;
+}
+
+.tiertary-border {
+  border: solid 2px #023e7b !important;
 }
 
 .primary-fill {

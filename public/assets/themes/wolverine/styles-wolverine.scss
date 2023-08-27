@@ -1,3 +1,12 @@
+$primary:       #FFCB05;
+$secondary:     white;
+$tiertary:      #012a54;
+$quaternary:    #012a54;
+$base:          #001224;
+$accent:        $secondary;
+$primary-dark:  #c09a04;
+$tiertary-dark: #023e7b;
+
 /*<-------DARK COLORS-------->*/
 .primary-color {
   color: #FFCB05 !important;
@@ -16,7 +25,7 @@
 }
 
 .quaternary-color {
-  color: #001c38 !important;
+  color: #012a54 !important;
 }
 
 .base-color {
@@ -53,6 +62,14 @@
 
 .accent-background {
   background-color: white !important;
+}
+
+.primary-border {
+  border: solid 2px $primary-dark !important;
+}
+
+.tiertary-border {
+  border: solid 2px $tiertary-dark !important;
 }
 
 .primary-fill {

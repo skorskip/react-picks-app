@@ -55,6 +55,14 @@
   background-color: #041E42 !important;
 }
 
+.primary-border {
+  border: solid 2px #114d9f !important;
+}
+
+.tiertary-border {
+  border: solid 2px #bdb8b8 !important;
+}
+
 .primary-fill {
   fill: #041E42;
 }

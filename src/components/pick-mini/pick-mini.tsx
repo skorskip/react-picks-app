@@ -51,14 +51,14 @@ export const PickMini = ({picks, games, teams}: Props) => {
             <div className="pick-mini-card tiertary-color">
                 <div className="pick-mini-header secondary-color">
                     <div className="pick-mini-spread">
-                        {spread}
+                        {team?.abbreviation}
                     </div>
                     <div>
                         {pickStatus(pick, game)}
                     </div>
                 </div>
                 <div className="pick-mini-team secondary-color">
-                    {team?.team_name}
+                    {spread}
                 </div>
             </div>
         )

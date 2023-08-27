@@ -13,6 +13,7 @@ import { Game } from '../../../../model/week/game';
 import { RootState } from '../../../../store';
 import { formatDate, showSubmitTime } from '../../../../utils/dateFormatter';
 import './game-submit-time.scss';
+import { useHistory } from 'react-router-dom';
 
 type Props = {
     game: Game,
@@ -25,14 +26,26 @@ export const GameSubmitTime = ({game, prevGame, user}: Props) => {
     const showSubmitTimeBool = showSubmitTime(game, prevGame);
     const remindLoader = useSelector((state: RootState) => state.announcements.reminderStatus);
     const dispatch = useDispatch();
+    const history = useHistory();
+
 
     const setReminder = async () => {
-        let dialogConfirm = window.confirm("Set slack reminder?");
+        if (user.slack_user_id) {
+            let dialogConfirm = window.confirm("Set slack reminder?");
 
-        if(dialogConfirm) {
-            let request = new ReminderRequest(game.pick_submit_by_date, user.slack_user_id);
-            dispatch(fetchSetReminder(request));
+            if(dialogConfirm) {
+                let request = new ReminderRequest(game.pick_submit_by_date, user.slack_user_id);
+                dispatch(fetchSetReminder(request));
+            }
+
+        } else {
+            let dialogConfirm = window.confirm("Set slack reminder?/n/nTo do so go to the profile page in the Slack section and connect your slack email.");
+
+            if(dialogConfirm) {
+                history.push('/profile');
+            }
         }
+
     }
 
     const submitBy = showSubmitTimeBool && (

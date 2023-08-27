@@ -55,6 +55,14 @@
   background-color: white !important;
 }
 
+.primary-border {
+  border: solid 2px #75643d !important;
+}
+
+.tiertary-border {
+  border: solid 2px #4d0000 !important;
+}
+
 .primary-fill {
   fill: #B3995D;
 }
@@ -276,4 +284,4 @@ body {
   background-color: #B3995D !important;
 }
 
-/*# sourceMappingURL=49er.css.map */
+/*# sourceMappingURL=styles-49er.css.map */

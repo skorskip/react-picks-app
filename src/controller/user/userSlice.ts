@@ -18,7 +18,8 @@ const initialState = userAdapter.getInitialState({
     user: {} as User,
     setProfileStatus: status.IDLE,
     bonus: [] as User[],
-    bonusState: status.IDLE
+    bonusState: status.IDLE,
+    slackIdState: status.IDLE
 });
 
 export const login = async (username: string, password: string) => {
@@ -114,6 +115,20 @@ export const fetchBonusEligible = createAsyncThunk('user/fetchBonusEligble', asy
         dispatch(publish(request));
         return {status: status.ERROR, message: error}
     }
+});
+
+export const setSlackUserId = createAsyncThunk('user/setSlackUserId', async (email: string, {dispatch}) => {
+    try {
+        const url = endpoints.USERS.UPDATE_SLACK_ID;
+        const response = await client.post(url, {email});
+        return response;
+    } catch(error) {
+        console.error(error);
+        let request = new PubSub(SHOW_MESSAGE, 
+        new SnackMessage(status.ERROR, status.MESSAGE.ERROR_GENERIC));
+        dispatch(publish(request));
+        return {status: status.ERROR, message: error}
+    }
 })
 
 const userSlice = createSlice({
@@ -163,6 +178,22 @@ const userSlice = createSlice({
                 } else {
                     state.bonus = action.payload;
                     state.bonusState = status.COMPLETE;
+                }
+            })
+
+            // SET SLACK ID
+            .addCase(setSlackUserId.pending, (state, action) => {
+                state.slackIdState = status.LOADING;
+            })
+            .addCase(setSlackUserId.fulfilled, (state, action) => {
+                if(action.payload?.status === status.ERROR) {
+                    state.slackIdState = status.ERROR;
+                } else {
+                    state.slackIdState = status.COMPLETE;
+                    state.user = {
+                        ...state.user,
+                        slack_user_id: action.payload
+                    }
                 }
             })
     },

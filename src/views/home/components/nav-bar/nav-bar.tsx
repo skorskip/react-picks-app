@@ -38,7 +38,7 @@ export const NavBar = () => {
     }
 
     const goToChat = () => {
-        let url = `https://picks-league.slack.com/channels/${messageSource.chatChannel}`;
+        let url = `https://picks-league.slack.com/channels/${messageSource.channel}`;
         window.open(url, '_blank');
     }
 

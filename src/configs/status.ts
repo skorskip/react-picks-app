@@ -5,7 +5,7 @@ export const status = {
     COMPLETE: "complete",
     SUCCESS: "success",
     MESSAGE: {
-        ERROR_GENERIC: "There was a failure. Please try again later.",
+        ERROR_GENERIC: "There was a failure. Please try refreshing the page.",
         USER: {
             LOGIN_ERROR: "Something went wrong signing in user.",
             PASSWORD_ERROR: "Something went wrong creating password.",
@@ -17,7 +17,7 @@ export const status = {
             EDIT_SUCCESS: "Successfully editted picks.",
             ADD_SUCCESS: "Successfully added picks.",
             PASS_SUBMIT_DATE: "Can't submit pass the deadline",
-            TOO_MANY_PICKS: (over: any, limit: any) => `You got too many picks, ${over} over ${limit}`,
+            TOO_MANY_PICKS: (over: any, limit: any) => `You are ${over} pick(s) over the max of ${limit} picks. Change your picks and try again.`,
             NO_PICKS: "Going to need more than that!",
             NOT_ALLOWED: "Oops, looks like you can't do that."
         },

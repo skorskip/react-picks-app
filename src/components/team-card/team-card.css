@@ -61,7 +61,7 @@
 }
 
 .large-text-padding{
-	font-size:2em;
+	font-size:2.8em;
 	margin: 10px; 
 	text-align:center;
 	font-family: 'Roboto Mono';
@@ -79,19 +79,20 @@
 }
 
 .game-card-spread {
-	position: absolute;
-	float: left;
-	margin-left: 120px;
-	margin-top: -70px;
+    font-size: 18px;
+    position: absolute;
+    float: left;
+    margin-top: -78px;
     text-align: center;
-	border-radius: 50%;
-	padding: 5px;
-	border: solid 2px;
-	width: 60px;
-	height: 60px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    border-radius: 50%;
+    padding: 5px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-left: 90px;
 }
 
 .game-card-spread-icon {

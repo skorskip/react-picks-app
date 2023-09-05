@@ -13,6 +13,7 @@ export class UserCurrentSeasonData {
     bonus_nbr       : number;
     prev_ranking    : number;
     dropped_week    : number | null;
+    user_type       : string;
 
     constructor(
         max_picks       : number,
@@ -25,6 +26,7 @@ export class UserCurrentSeasonData {
         bonus_nbr       : number,
         prev_ranking    : number,
         dropped_week    : number | null,
+        user_type       : string
     ) {
         this.max_picks    = max_picks    
         this.picks_penalty= picks_penalty
@@ -36,6 +38,7 @@ export class UserCurrentSeasonData {
         this.bonus_nbr    = bonus_nbr
         this.prev_ranking = prev_ranking
         this.dropped_week = dropped_week
+        this.user_type    = user_type
     }
 }
 
@@ -54,6 +57,7 @@ export class User {
     slack_user_id:          string;
     slack_user_image:       string;
     current_season_data:    UserCurrentSeasonData;
+    wins?:                  number;
 
     constructor(
         user_id :               number,
@@ -67,6 +71,7 @@ export class User {
         user_inits:             string,
         slack_user_id:          string,
         slack_user_image:       string,
+        wins:                   number,
         current_season_data:    UserCurrentSeasonData
     ){
         this.user_id = user_id;
@@ -80,6 +85,7 @@ export class User {
         this.user_inits = user_inits;
         this.slack_user_id = slack_user_id;
         this.slack_user_image = slack_user_image;
+        this.wins = wins;
         this.current_season_data = current_season_data;
     }
 }

@@ -125,7 +125,6 @@ export const Profile = () => {
                         <div className="info-field-col">
                             <div >Integrate with slack by joining the picksapp <a href={`https://picks-league.slack.com/channels/${messageSource.channel}`}>slack channel</a> and connecting your email to get access to awesome features:</div>
                             <ul>
-                                <li>Be able to get notified to make picks</li>
                                 <li>Create a custom profile picture</li>
                             </ul>
                         </div>

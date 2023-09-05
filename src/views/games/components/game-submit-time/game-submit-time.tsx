@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from 'semantic-ui-react';
-import { PickButton } from '../../../../common/PickButton/PickButton';
 import { SnackMessage } from '../../../../components/message/messagePopup';
 import { status } from '../../../../configs/status';
 import { SHOW_MESSAGE } from '../../../../configs/topics';
@@ -51,19 +50,10 @@ export const GameSubmitTime = ({game, prevGame, user}: Props) => {
     const submitBy = showSubmitTimeBool && (
         <div className='full-row'>
             <div className="game-card-date">
-                <PickButton 
-                    styling={(remindLoader === status.LOADING) ? 'date-text-loading' : 'date-text'}
-                    clickEvent={setReminder}
-                    type='secondary'
-                    loading={remindLoader === status.LOADING}
-                    content={
-                        (remindLoader === status.LOADING) ? (undefined
-                        ) : (<>
-                            <Icon className="primary-color" name="calendar alternate outline"/>
-                            Submit by: { formatDate(new Date(game?.pick_submit_by_date)) }
-                        </>)
-                    }
-                />
+                <div className="date-text secondary-color">
+                    <Icon className="primary-color" name="calendar alternate outline"/>
+                    Submit by: { formatDate(new Date(game?.pick_submit_by_date)) }
+                </div>
             </div>
         </div>
     );

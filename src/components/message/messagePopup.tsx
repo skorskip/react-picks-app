@@ -36,7 +36,7 @@ export const MessagePopup = () => {
     );
 
     useEffect(() => {
-        if(sub.topic === SHOW_MESSAGE) {
+        if(sub?.topic === SHOW_MESSAGE) {
             setType(sub.data.type);
             setMessage(sub.data.message);
             setShowMessage(true);

@@ -21,6 +21,7 @@ export class League {
     maxTotalPicks:      number;
     currentSeasonType:  number;
     messageSource:      MessageSource;
+    maxSeasonWeek:      number;
     bonus:              Bonus;
 
     constructor(
@@ -29,6 +30,7 @@ export class League {
         maxTotalPicks:      number,
         currentSeasonType:  number,
         messageSource:      MessageSource,
+        maxSeasonWeek:      number,
         bonus:              Bonus
 
     ) {
@@ -36,6 +38,7 @@ export class League {
         this.currentSeason = currentSeason;
         this.maxTotalPicks = maxTotalPicks;
         this.currentSeasonType = currentSeasonType;
+        this.maxSeasonWeek = maxSeasonWeek;
         this.messageSource = messageSource;
         this.bonus = bonus;
     }

@@ -19,6 +19,7 @@ import { toInt } from '../../utils/tools';
 import "./games.css";
 import "../../utils/slideTransition.scss";
 import { PickButton } from '../../common/PickButton/PickButton';
+import { stat } from 'fs';
 
 interface RouteParams {
     view: string
@@ -78,7 +79,7 @@ export const Games = ({routes}: Props) => {
         window.location.reload();
     }
 
-    const spectatorView = (user.type !== UserTypeEnum.PARTICIPANT) && (
+    const spectatorView = (user.current_season_data.user_type !== UserTypeEnum.PARTICIPANT) && (
         <div className="header-container">
             <div className="spectator-container warn-background">
                 <div className="base-color spectator-icon">
@@ -106,7 +107,7 @@ export const Games = ({routes}: Props) => {
         </div>
     );
 
-    const gamesTab = (user.type === UserTypeEnum.PARTICIPANT && (other === null || other === "null")) && (
+    const gamesTab = (user.current_season_data.user_type === UserTypeEnum.PARTICIPANT && (other === null || other === "null")) && (
         <GamesTabBar
             league={league}
             pickCount={pickCount}
@@ -138,14 +139,14 @@ export const Games = ({routes}: Props) => {
     );
 
     useEffect(() => {
-        if(gamesState === status.IDLE && leagueState === status.COMPLETE) {
+        if(gamesState === status.IDLE && leagueState === status.COMPLETE && gamesState !== status.ERROR) {
             let request = new SeasonRequest(currSeason, currSeasonType, currWeek);
             dispatch(fetchWeek(request));
         }
     }, [gamesState, leagueState, currSeason, currWeek, currSeasonType, week, dispatch])
 
     useEffect(() => {
-        if((season && week && seasonType) && week !== setWeek && gamesState !== status.IDLE ) {
+        if((season && week && seasonType) && week !== setWeek && gamesState !== status.IDLE && gamesState !== status.ERROR) {
             let request = new SeasonRequest(season, seasonType, week);
             dispatch(fetchWeek(request));
         }

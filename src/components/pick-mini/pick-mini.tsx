@@ -12,10 +12,6 @@ type Props = {
 }
 
 export const PickMini = ({picks, games, teams}: Props) => {
-    if (!picks.length) {
-        return (<></>);
-    }
-
     const pickStatus = (pick: Pick, game: Game) => {
         const status = pickResult(game, pick);
         switch(status) {
@@ -36,7 +32,9 @@ export const PickMini = ({picks, games, teams}: Props) => {
         }
     }
 
-    const miniPicksCard = picks.map(pick => {
+    const miniPicksCard = ((picks.length > 0) ? 
+    (    
+        picks.map(pick => {
         const game = games.find(game => game.game_id === pick.game_id);
         const team = teams.find(team => team.team_id === pick.team_id);
         let spread = '';
@@ -58,11 +56,14 @@ export const PickMini = ({picks, games, teams}: Props) => {
                     </div>
                 </div>
                 <div className="pick-mini-team secondary-color">
-                    {spread}
+                    {parseFloat(spread).toFixed(1)}
                 </div>
             </div>
         )
-    });
+        })) : 
+    (
+        <div className="tiertary-color empty">No picks made.</div>
+    ));
 
     return (
         <div className="mini-pick-container">

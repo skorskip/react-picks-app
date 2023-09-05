@@ -38,10 +38,8 @@ export const Schedule = ({games, picks, teams} : Props) => {
             const firstGame = currentGames[0];
             const gameDay = new Date(firstGame.start_time);
             let filtered = currentGames.filter(game => {
-                console.log(new Date(game.start_time).getDate(), gameDay.getDate())
                 return new Date(game.start_time).getDate() === gameDay.getDate()
             });
-            console.log(gameDay, filtered);
             setEventDay(gameDay);
             setFilteredGames(filtered);
         }
@@ -114,11 +112,8 @@ export const Schedule = ({games, picks, teams} : Props) => {
         setSchedule([...liveSchedules, ...schedules.sort((a,b) => { if (a.time > b.time) {return 1;} else {return -1}})]);
     }, [pickSchedules, liveSchedules, submitSchedules]);
 
-    // if(!!schedules && !!schedules.length) {
-    //     return (<><div>Empty</div></>)
-    // }
-
-    const schedulesDisplay = schedules.map((schedule,i) => {
+    const schedulesDisplay = ((schedules.length > 0) ? 
+    (   schedules.map((schedule,i) => {
         return (
             <div key={i + '-schedule-card'} className={'schedule-card ' + schedule.type}>
                 <div className='schedule-header'>
@@ -135,7 +130,9 @@ export const Schedule = ({games, picks, teams} : Props) => {
                 </div>
             </div>
         );
-    })
+    })) :
+    (<div className="tiertary-color empty">No Events</div>));
+
     
     return (
         <div className='schedule-container'>

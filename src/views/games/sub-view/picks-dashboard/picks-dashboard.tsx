@@ -27,6 +27,8 @@ import { GameSubmitTime } from '../../components/game-submit-time/game-submit-ti
 import './picks-dashboard.css';
 import { PickButton } from '../../../../common/PickButton/PickButton';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
+import { useLocation } from 'react-router-dom';
+import { toInt } from '../../../../utils/tools';
 
 export const PicksDashboard = () => {
 
@@ -39,17 +41,22 @@ export const PicksDashboard = () => {
     const pickData = useSelector(selectUserPickData);
     const incompleteGames = useSelector(selectGamesNotComplete);
     const league = useSelector(selectLeague);
+    const pickStatus = useSelector((state: RootState) => state.week.picksStatus);
 
     const [updatePicksArray, setUpdatePicks] = useState([] as Pick[]);
-    const [deletePicksArray, setDeletePicks] = useState([] as number[]); 
+    const [deletePicksArray, setDeletePicks] = useState([] as Pick[]); 
     const [inEditMode, setInEditMode] = useState(false);
+
+    let { search } = useLocation();
+    const query = new URLSearchParams(search);
+    const week = toInt(query.get("week"));
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         if(sub.topic === NAV_DONE_BUTTON) {
             if(deletePicksArray.length !== 0 ) {
-                let request = new PickDeleteRequest(0, 0, 0, user.user_id, deletePicksArray)
+                let request = new PickRequest(0, 0, 0, user.user_id, deletePicksArray)
                 dispatch(deletePicks(request));
                 dispatch(clear());
             }
@@ -68,7 +75,7 @@ export const PicksDashboard = () => {
 
     }, [dispatch, sub, updatePicksArray, deletePicksArray, user.user_id]);
 
-    if(loader === status.LOADING) {
+    if(loader === status.LOADING || pickStatus === status.LOADING) {
         return (
             <GameLoader height={110} count={8}/>
         )
@@ -91,7 +98,7 @@ export const PicksDashboard = () => {
     const onDelete = (pickToDelete: Pick) => {
         let tempDelete = deletePicksArray;
         let tempUpdate = updatePicksArray.filter(pick => pick.pick_id !== pickToDelete.pick_id)
-        tempDelete.push(pickToDelete.pick_id);
+        tempDelete.push(pickToDelete);
         setDeletePicks(tempDelete);
         setUpdatePicks(tempUpdate);
     }
@@ -100,21 +107,34 @@ export const PicksDashboard = () => {
         return (isRemoved) ? "remove" : "game-card base-background tiertary-color"
     }
 
-    const deleteWeekButton = (incompleteGames.length && !user.current_season_data.dropped_week) && (
+    const deleteWeekDialog = () => {
+        let dialogConfirm = window.confirm("Are you sure you want to drop this weeks picks? (This is your only mulligan and cannot be undone)");
+        if(dialogConfirm) {
+            dispatch(deleteWeek(
+                new PickRequest(
+                    league.currentSeason, 
+                    league.currentSeasonType, 
+                    league.currentWeek, 
+                    user.user_id, 
+                    [])
+                )
+            )
+        } 
+    }
+
+    const deleteWeekButton = (
+        games.length !== 0 &&
+        (week === league.currentWeek || week == null) &&
+        incompleteGames.length === 0 && 
+        !user.current_season_data.dropped_week &&
+        league.maxSeasonWeek !== league.currentWeek &&
+        league.currentSeason !== 3) && (
         <div className='delete-week-container'>
             <PickButton
                 type="failure"
-                content="Delete Week"
+                content="Drop This Weeks Picks"
                 styling="delete-week-button"
-                clickEvent={() => dispatch(deleteWeek(
-                    new PickRequest(
-                        league.currentSeason, 
-                        league.currentSeasonType, 
-                        league.currentWeek, 
-                        user.user_id, 
-                        [])
-                    )
-                )}
+                clickEvent={() => deleteWeekDialog()}
             ></PickButton>
         </div>
     )
@@ -132,7 +152,7 @@ export const PicksDashboard = () => {
     const gameCards = (games.length > 0) && games.map((game, i) => {
         let pick = picks.find(pick => pick.game_id === game.game_id);
         //@ts-ignore
-        let remove = deletePicksArray.includes(pick.pick_id);
+        let remove = deletePicksArray.map(d => d.pick_id).includes(pick.pick_id);
 
         return(
             <>

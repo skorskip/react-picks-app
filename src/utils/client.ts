@@ -1,6 +1,9 @@
-import { getTokenLocal } from "./localData"
+import { getTokenLocal } from "./localData";
+import AmplifyAuth from './amplifyAuth';
 
 export async function client(endpoint: string, { body, ...customConfig } = {} as any) {
+    await AmplifyAuth.FetchCurrentSession();
+
     const headers = { 
       'Content-Type': 'application/json', 
       'Authorization': customConfig.Authorization ? customConfig.Authorization : getTokenLocal() 

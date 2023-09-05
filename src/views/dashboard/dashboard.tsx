@@ -5,18 +5,17 @@ import { HotStreak } from './components/hot-streak/hot-streak';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { selectLeague } from '../../controller/league/leagueSlice';
-import { fetchUserStandings, userStandingByCurrent } from '../../controller/user-standings/userStandingsSlice';
+import { fetchUserStandings } from '../../controller/user-standings/userStandingsSlice';
 import { status } from '../../configs/status';
 import { PickMini } from '../../components/pick-mini/pick-mini';
-import { fetchWeek, selectGames, selectPicks, selectTeams, getSetWeek, selectUserPickData } from '../../controller/week/weekSlice';
+import { fetchWeek, selectGames, selectPicks, selectTeams, getSetWeek, selectIsAllGamesCompleted } from '../../controller/week/weekSlice';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
 import { fetchAnnouncements, selectAnnouncements } from '../../controller/announcements/announcementsSlice';
 import { getAnnouncementCheckLocal, resetAnnouncementCheckLocal } from '../../utils/localData';
 import { DateRequest } from '../../model/postRequests/dateRequest';
-import { fetchBonusEligible, selectBonusEligible, selectUser } from '../../controller/user/userSlice';
-import { StandingsUserCard } from '../../components/standings-user-card/standings-user-card';
+import { fetchBonusEligible, selectBonusEligible } from '../../controller/user/userSlice';
 import { UserStats } from '../../components/user-stats/user-stats';
 
 export const Dashboard = () => {
@@ -25,9 +24,9 @@ export const Dashboard = () => {
     const league = useSelector(selectLeague);
     const weekState = useSelector((state: RootState) => state.week.status);
     const games = useSelector(selectGames);
+    const allGamesCompleted = useSelector(selectIsAllGamesCompleted);
     const teams = useSelector(selectTeams);
     const picks = useSelector(selectPicks);
-    const pickData = useSelector(selectUserPickData);
     const announcementsStatus = useSelector((state:RootState) => state.announcements.status);
     const messagesSelect = useSelector(selectAnnouncements);
     const [messages, setMessages] = useState(messagesSelect.announcements);
@@ -35,21 +34,18 @@ export const Dashboard = () => {
     const history = useHistory();
     const bonusState = useSelector((state: RootState) => state.user.bonusState);
     const bonusUsers = useSelector(selectBonusEligible);
-    const currentUser = useSelector(selectUser);
-    const standings = useSelector((state: RootState) => userStandingByCurrent(state, currentUser));
     const dispatch = useDispatch();
 
     const header = () => {
         const today = new Date();
-        return (today.getHours() >= 12) ? (
+        return (
+            <div className="header">
                 <div className="title secondary-color">
-                    Good Afternoon.
+                    {(today.getHours() >= 12) ? 'Good Afternoon!' : 'Good Morning!'}
                 </div>
-            ) : (
-                <div className="title secondary-color">
-                    Good Morning!
-                </div>
-            )
+                <span className="secondary-color">It's Week {league.currentWeek} of the {league.currentSeason} {league.currentSeasonType === 3 ? 'Postseason' : 'Season'}</span>
+            </div>
+        );
     };
 
     const clickNav = (location: string) => {
@@ -70,16 +66,6 @@ export const Dashboard = () => {
         </Label>
     );
 
-    const standingCards = (standingsStatus === status.COMPLETE) && standings.map((standing) => {
-        return (
-            <StandingsUserCard
-                key={ standing.user_id + "-standings-card"}
-                standing={standing}
-                isCurrentUser={standing.user_id === currentUser.user_id}
-            />
-        )
-    });
-
     useEffect(() => {
         if(standingsStatus === status.IDLE && leagueStatus === status.COMPLETE) {
             dispatch(fetchUserStandings({
@@ -91,7 +77,7 @@ export const Dashboard = () => {
     }, [dispatch, standingsStatus, leagueStatus, league]);
 
     useEffect(() => {
-        if((weekState === status.IDLE || setWeek !== league.currentWeek) && leagueStatus === status.COMPLETE) {
+        if((weekState === status.IDLE || setWeek !== league.currentWeek) && leagueStatus === status.COMPLETE && weekState !== status.ERROR) {
             let request = new SeasonRequest(league.currentSeason, league.currentSeasonType, league.currentWeek);
             dispatch(fetchWeek(request));
         }
@@ -140,18 +126,28 @@ export const Dashboard = () => {
                 </div>
             </div>
             <div className="dashboard-content">
-                <div className="sub-title secondary-color">Streak</div>
-                <HotStreak users={bonusUsers} pickData={pickData}/>
+                <div className="sub-title secondary-color">Weekly Bonus <div className="success-color count">${league.bonus.currentPotAmt.toFixed(2)}</div></div>
+                {
+                    (bonusUsers.length && !allGamesCompleted) 
+                    ? (<span className="secondary-color">Players currently in the running...</span>) 
+                    : (bonusUsers.length && allGamesCompleted)
+                    ? (<span className="secondary-color">Bonus winner(s)</span>) 
+                    : (<></>)
+                }
+                {
+                    (!allGamesCompleted && bonusUsers.length === 0) 
+                    ? <></> 
+                    : (
+                        <HotStreak 
+                            users={bonusUsers} 
+                            allGamesCompleted={allGamesCompleted}
+                        />
+                    )
+                }
             </div>
             <div className="dashboard-content">
                 <div className="sub-title secondary-color">Picks</div>
                 <PickMini games={games} picks={picks} teams={teams}/>
-            </div>
-            <div className="dashboard-content">
-                <div className="sub-title secondary-color">Standings</div>
-                <div className="streak-standings">
-                    { standingCards }
-                </div>
             </div>
             <Schedule games={games} picks={picks} teams={teams}></Schedule>
         </>

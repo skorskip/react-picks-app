@@ -55,9 +55,9 @@ export const TeamCard = ({
     const getGameSpread = (number: number) => {
         if(number){
             if(number > 0) {
-                return '+' + number;
+                return '+' + number.toFixed(1);
             } else {
-                return number;
+                return number.toFixed(1);
             }
         } 
     }
@@ -67,6 +67,16 @@ export const TeamCard = ({
             onTeamSelected(new TeamSelect(team, !highlight))
         }
     }
+
+    const spreadIcon = (
+        (spread != null && spread !== 0) ? (
+            <div className={"game-card-spread " + ((fill) ? "base-color" : parseFloat(spread.toString()) > 0 ? "success-color" : "failure-color") }>
+                { getGameSpread(parseFloat(spread.toString())) }
+            </div>
+        ) : (
+            <div className="game-card-spread"></div>
+        )
+    );
 
     const teamWithScore = locked && (
         <div className={ getClass('score') }>
@@ -82,22 +92,12 @@ export const TeamCard = ({
         </div>
     );
 
-    const spreadIcon = (spread != null && spread !== 0) && (
-        <div className="game-card-spread tiertary-color base-background">
-            <div className="game-card-spread-icon accent base-background">
-                <b>
-                    { getGameSpread(spread) }
-                </b>
-            </div>
-        </div>
-    )
-
     return (
         <>
             <div className={ getClass('card') } onClick={teamSelected}>
+                { spreadIcon }
                 { teamWithScore }
                 { teamWithName }
-                { spreadIcon }
             </div>
         </>
     ); 

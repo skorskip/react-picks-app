@@ -2,15 +2,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 10px;
 
-    .title {
-        font-size: 35px;
-        font-weight: bold;
-        width: auto;
-        display: flex;
-        align-items: flex-start;
+    .header {
         padding: 10px;
+
+        .title {
+            font-size: 35px;
+            font-weight: bold;
+            width: auto;
+            display: flex;
+            align-items: flex-start;
+            line-height: 1em;
+            padding-bottom: 10px;
+        }
+
     }
 }
 
@@ -24,6 +29,11 @@
         font-size: 25px;
         font-weight: bold;
         padding: 10px 0px 10px 0px;
+        display: flex;
+
+        .count {
+            margin-left: 10px;
+        }
     }
 
     .streak-standings {

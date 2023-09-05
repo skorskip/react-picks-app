@@ -111,7 +111,7 @@ export const updatePicks = createAsyncThunk('week/updatePicks', async (param: Pi
     }
 });
 
-export const deletePicks = createAsyncThunk('week/deletePicks', async (param: PickDeleteRequest, {dispatch}) => {
+export const deletePicks = createAsyncThunk('week/deletePicks', async (param: PickRequest, {dispatch}) => {
     try {
         const url = endpoints.PICKS.DELETE;
         const response = await client.post(url, param.picks);
@@ -263,5 +263,7 @@ export const selectPicksMessage = (state: RootState) => state.week.message;
 export const getSetWeek = (state: RootState) => state.week.setWeek;
 
 export const selectGamesNotComplete = (state: RootState) => state.week.games.filter(game => game.game_status !== GameStatusEnum.completed);
+
+export const selectIsAllGamesCompleted = (state: RootState) => (state.week.games.filter(game => game.game_status === GameStatusEnum.unplayed || game.game_status === GameStatusEnum.live ).length === 0);
 
 export default weekSlice.reducer

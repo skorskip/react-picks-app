@@ -89,7 +89,7 @@ export const UsersPickData = ({ game, picksData }:Props) => {
         </div>
     );
 
-    const buttonList = (picksList: PicksUserData[]) => picksList.map((pick) => {
+    const buttonList = (picksList: PicksUserData[]) => picksList?.map((pick) => {
         return (
             <PickButton 
                 styling="user-item"
@@ -105,7 +105,7 @@ export const UsersPickData = ({ game, picksData }:Props) => {
         ); 
     })
 
-    const picksDataList = (showPickers && awayPicks.length && homePicks.length) && (
+    const picksDataList = (showPickers) && (
         <div className="users-pick-list">
             <div className="picks-data-users">
                 <div className="users-column">

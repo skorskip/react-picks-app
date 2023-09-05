@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../../../controller/user/userSlice';
 import { selectGamesNoPicks, addPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
@@ -34,6 +34,7 @@ export const GameDashboard = () => {
     let { search } = useLocation();
     const query = new URLSearchParams(search);
     const week = toInt(query.get("week"));
+    const isInitialMount = useRef(true);
 
     const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() != null ? getStagedPicksLocal() : [] as Pick[]);
 
@@ -59,7 +60,7 @@ export const GameDashboard = () => {
         </div>
     );
 
-    const gameCards = games.length && games.map((game, i) => {
+    const gameCards = (games.length > 0) && games.map((game, i) => {
         return(
             <>
                 <GameSubmitTime 
@@ -76,7 +77,7 @@ export const GameDashboard = () => {
                         game={game}
                         pick={stagedPicks.find(pick => pick.game_id === game.game_id)}
                         user={user}
-                        disabled={user.type !== UserTypeEnum.PARTICIPANT}
+                        disabled={user.current_season_data.user_type !== UserTypeEnum.PARTICIPANT}
                         editMode={false}
                         remove={false}
                         //@ts-ignore
@@ -96,12 +97,14 @@ export const GameDashboard = () => {
     });
 
     useEffect(() => {
-        if(pickStatus === status.COMPLETE) {
+        if(isInitialMount.current) {
+            isInitialMount.current = false;
+        } else if(!isInitialMount.current && pickStatus === status.COMPLETE) {
             setStagedPicks([]);
             resetStagedPicksLocal();
             history.push("/games/pick");
         }
-    },[pickStatus, dispatch, history]);
+    },[pickStatus, history]);
 
     if(gameLoader === status.LOADING) {
         return (<GameLoader height={110} count={8}/>)
@@ -118,6 +121,7 @@ export const GameDashboard = () => {
                     type="primary"
                     styling="submit-button" 
                     clickEvent={submitPicks}
+                    loading={pickStatus === status.LOADING}
                     content={
                         <>
                             <Icon name='send'/> Submit ({stagedPicks.length})

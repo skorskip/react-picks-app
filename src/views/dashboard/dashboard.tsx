@@ -38,19 +38,14 @@ export const Dashboard = () => {
 
     const header = () => {
         const today = new Date();
-        return (today.getHours() >= 12) ? (
+        return (
             <div className="header">
                 <div className="title secondary-color">
-                    Good Afternoon!
+                    {(today.getHours() >= 12) ? 'Good Afternoon!' : 'Good Morning!'}
                 </div>
                 <span className="secondary-color">It's Week {league.currentWeek} of the {league.currentSeason} {league.currentSeasonType === 3 ? 'Postseason' : 'Season'}</span>
             </div>
-
-            ) : (
-                <div className="title secondary-color">
-                    Good Morning!
-                </div>
-            )
+        );
     };
 
     const clickNav = (location: string) => {

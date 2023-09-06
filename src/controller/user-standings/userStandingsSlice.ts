@@ -51,15 +51,7 @@ const userStandingsSlice = createSlice({
 });
 
 export const selectUserStandings = (state: RootState) => 
-    state.userStandings.userStandings
-    .filter(standing => standing.current_season_data != null)
-    .sort((user1, user2) => {
-        if(user1.current_season_data.ranking < user2.current_season_data.ranking) {
-            return -1
-        } else {
-            return 1
-        }
-    }) as User[];
+    state.userStandings.userStandings.filter(standing => standing.current_season_data != null) as User[];
 
 export const userStandingById = (state: RootState, user_id: number | null) => state.userStandings.userStandings.find((standing) => standing.user_id === user_id) as User;
 export const userStandingByIds = (state: RootState, user_ids: Array<number>) => 

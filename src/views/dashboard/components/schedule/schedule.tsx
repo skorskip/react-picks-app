@@ -80,7 +80,7 @@ export const Schedule = ({games, picks, teams} : Props) => {
                 type: 'warn-color',
                 subTitle: `${submitMap[key].length} games`,
                 time: new Date(key).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
-                title: 'Submit deadline(s)',
+                title: 'Picks deadline(s)',
                 icon: 'clock'
             });
         });

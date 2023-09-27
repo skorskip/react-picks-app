@@ -18,7 +18,6 @@ import { selectUser } from '../../../../controller/user/userSlice';
 import { RootState } from '../../../../store';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
 import { Pick } from '../../../../model/week/pick';
-import { PickDeleteRequest } from '../../../../model/postRequests/pickDeleteRequest';
 import { PickRequest } from '../../../../model/postRequests/pickRequest';
 import { clear, subscribe } from '../../../../controller/pubSub/pubSubSlice';
 import { GameCard } from '../../../../components/game-card/game-card';
@@ -108,7 +107,7 @@ export const PicksDashboard = () => {
     }
 
     const deleteWeekDialog = () => {
-        let dialogConfirm = window.confirm("Are you sure you want to drop this weeks picks? (This is your only mulligan and cannot be undone)");
+        let dialogConfirm = window.confirm("Are you sure you want to drop this week's picks? (This is your only mulligan and cannot be undone)");
         if(dialogConfirm) {
             dispatch(deleteWeek(
                 new PickRequest(
@@ -132,7 +131,7 @@ export const PicksDashboard = () => {
         <div className='delete-week-container'>
             <PickButton
                 type="failure"
-                content="Drop This Weeks Picks"
+                content="Drop This Week's Picks"
                 styling="delete-week-button"
                 clickEvent={() => deleteWeekDialog()}
             ></PickButton>

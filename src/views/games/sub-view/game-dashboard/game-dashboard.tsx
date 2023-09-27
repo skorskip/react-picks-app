@@ -23,7 +23,6 @@ import { PickButton } from '../../../../common/PickButton/PickButton';
 export const GameDashboard = () => {
     const dispatch = useAppThunkDispatch();
     const user = useSelector(selectUser);
-    const games = useSelector(selectGamesNoPicks);
     const teams = useSelector(selectTeams);
     const pickData = useSelector(selectUserPickData);
     const gameLoader = useSelector((state: RootState) => state.week.status);
@@ -34,7 +33,10 @@ export const GameDashboard = () => {
     let { search } = useLocation();
     const query = new URLSearchParams(search);
     const week = toInt(query.get("week"));
+    const filter = query.get("status") === "" ? null : query.get("status");
     const isInitialMount = useRef(true);
+
+    const games = useSelector(selectGamesNoPicks).filter(g => {if(!!filter) return g.game_status === filter; else return g});
 
     const [stagedPicks, setStagedPicks] = useState(getStagedPicksLocal() != null ? getStagedPicksLocal() : [] as Pick[]);
 
@@ -56,7 +58,7 @@ export const GameDashboard = () => {
 
     const noGames = games.length === 0 && (
         <div className="no-games-set secondary-color">
-            No Unpicked Games
+            No Games
         </div>
     );
 

@@ -4,20 +4,30 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { NavBar } from './components/nav-bar/nav-bar';
 import { Login } from '../login/login';
 import { useSelector } from 'react-redux';
-import { Grid, Sticky } from 'semantic-ui-react';
+import { Grid, Icon, Sticky } from 'semantic-ui-react';
 import './home.css';
 import { UserStats } from '../../components/user-stats/user-stats';
 import { useLocation } from 'react-router-dom';
 import { status } from '../../configs/status';
 import { RootState } from '../../store';
+import { PickButton } from '../../common/PickButton/PickButton';
+import { seletctWeekLastFetch } from '../../controller/week/weekSlice';
 
 export const Home = () => {   
     const token = useSelector((state: RootState) => state.token.status);
     const user = useSelector((state: RootState) => state.user.status);
     const league = useSelector((state: RootState) => state.league.status);
+    const lastFetched = useSelector(seletctWeekLastFetch);
     const contextRef = createRef();
     const [width, setWidth] = useState(window.innerWidth);
+    const [showRefreshButton, setShowRefreshButton] = useState(false);
+
     const location = useLocation();
+
+    const refreshPage = () => {
+        setShowRefreshButton(false);
+        window.location.reload();
+    }
 
     useEffect(() => {
         const updateWidth = () => {
@@ -26,10 +36,40 @@ export const Home = () => {
         window.addEventListener("resize", updateWidth);
         return () => window.removeEventListener("resize", updateWidth);
     }, []);
+
+    useEffect(() => {
+        const checkForRefresh = () => {
+            const currDate = new Date();
+            if((currDate.getTime() - lastFetched.getTime()) > 900000) {
+                setShowRefreshButton(true);
+            } else {
+                const min = lastFetched.getMinutes();
+                const currMin = currDate.getMinutes();
+                const lastDataDump = Math.floor(currMin / 15) * 15;
+                setShowRefreshButton(!((min >= lastDataDump) && (min <= currMin)));
+            }
+        }
+        setInterval(() => checkForRefresh(), 1000);
+    }, []);
     
     if(token === status.IDLE || user === status.IDLE || league === status.IDLE || location.pathname === "/login") {
         return (<Login />)
     }
+
+    const refreshView = (showRefreshButton) && (
+        <div className="refresh-container">
+            <PickButton 
+                type='primary'
+                clickEvent={refreshPage}
+                content={
+                    <>
+                        <Icon className="spectator-icon" name="redo"/>
+                        Refresh
+                    </>
+                }
+            />
+        </div>
+    );
 
     const switchContent = (
         <Switch>
@@ -82,6 +122,7 @@ export const Home = () => {
 
     return (
         <div className="home-container">
+            { refreshView }
             <Grid className="home-main" >
                 {
                     (width > 1000) ? largeView : mobileView

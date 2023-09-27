@@ -5,6 +5,7 @@ import './week-switcher.css';
 import { toInt } from '../../../../utils/tools';
 import { PickButton } from '../../../../common/PickButton/PickButton';
 import { League } from '../../../../model/league/league';
+import { filter } from 'rxjs/operators';
 
 interface RouteParams {
     view: string
@@ -12,10 +13,11 @@ interface RouteParams {
 
 type Props = {
     league: League,
+    filterList?: Array<{id: string, label: string}>, 
     showWeekEvent: (showWeek:boolean) => void,
 }
 
-export const WeekSwitcher = ({ league, showWeekEvent }: Props) => {
+export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
 
     const history = useHistory();
     let param = useParams<RouteParams>();
@@ -26,6 +28,7 @@ export const WeekSwitcher = ({ league, showWeekEvent }: Props) => {
     const week = query.get("week") === null ? league.currentWeek : toInt(query.get("week"));
     const seasonType = query.get("seasonType") === null ? league.currentSeasonType : toInt(query.get("seasonType"));
     const user = query.get("user");
+    const filter = query.get("status");
     const [weeksShown, setWeeksShown] = useState(false);
 
     const weekPrev = () => {
@@ -34,6 +37,11 @@ export const WeekSwitcher = ({ league, showWeekEvent }: Props) => {
 
     const weekNext = () => {
         history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${week ? (week + 1) : 0}&user=${user}`);
+    }
+
+    const filterClick = (filter: string) => {
+        console.log('filter:::', filter);
+        history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${week}&user=${user}&status=${filter}`);
     }
 
     const showWeeks = (weekNum: number | null) => {
@@ -60,6 +68,27 @@ export const WeekSwitcher = ({ league, showWeekEvent }: Props) => {
             <div className="week-arrow-next-icon">
                 <Icon name="chevron right" />
             </div>
+        )}/>
+    );
+
+    const filterButton = ((currentWeek === week || week === null) && (user === 'null' || user === null)) && (
+        <PickButton styling="next-button-style" type="secondary" content={(
+            <>
+                <div className="week-arrow-next-icon">
+                    <Icon name="filter" />
+                </div>
+                <select className="week-filter-icon" onChange={e => filterClick(e.target.value)}>
+                    <option value="">--Select Status--</option>
+                    {
+                        filterList?.map(f => (
+                            <option key={f.id} value={f.id} selected={filter === f.id}>
+                                {f.label}
+                            </option>
+                        ))
+                    }
+                </select>
+                { (filter) ? (<div className="week-filter-notif failure-background"></div>) : (<></>)}
+            </>
         )}/>
     )
 
@@ -105,6 +134,7 @@ export const WeekSwitcher = ({ league, showWeekEvent }: Props) => {
             { prevButton }
             { weekButton(week) }
             { nextButton }
+            { filterButton }
         </div>
     )
 }

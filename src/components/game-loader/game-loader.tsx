@@ -4,29 +4,36 @@ import "./game-loader.css";
 
 type Props = {
     height: number,
+    borderRadius?: string,
+    width?: number,
+    rowCount?: number,
     count: number
 }
 
-export const GameLoader = ({height, count}: Props) => {
+export const GameLoader = ({height, width=150, count, rowCount=2, borderRadius = "1rem", }: Props) => {
 
     const fill = Array(count).fill("");
+    const row = Array(rowCount).fill("");
+
+    const rowLoader = row.map(i => {
+        return (
+            <Placeholder className="tiertary-light-background" style={{ height, width, borderRadius, margin: 0}}>
+                <Placeholder.Image />
+            </Placeholder>
+        );
+    })
 
     const game = (
         <div className="game-card">
             <div className="team-group">
-                <Placeholder className="tiertary-light-background" style={{ height: height, width: 150, borderRadius: "1em", margin: 0}}>
-                    <Placeholder.Image />
-                </Placeholder>
-                <Placeholder className="tiertary-light-background" style={{ height: height, width: 150, borderRadius: "1em", margin: 0}}>
-                    <Placeholder.Image />
-                </Placeholder>
+                { rowLoader }
             </div>
         </div>
     );
 
     const gameLoader = fill.map((item, i) => {
         return (
-            <div key={i + "-game-loader"}>
+            <div key={i + "-game-loader"} className='container'>
                 { game }
             </div>
         )

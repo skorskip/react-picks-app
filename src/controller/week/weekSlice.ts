@@ -9,7 +9,6 @@ import { RootState } from '../../store';
 import { Pick, PickSubmitEnum } from '../../model/week/pick';
 import { PicksUserData } from '../../model/week/picksUserData';
 import { PickRequest } from '../../model/postRequests/pickRequest';
-import { PickDeleteRequest } from '../../model/postRequests/pickDeleteRequest';
 import { publish, PubSub } from '../pubSub/pubSubSlice';
 import { SnackMessage } from '../../components/message/messagePopup';
 import { SHOW_MESSAGE } from '../../configs/topics';
@@ -42,7 +41,8 @@ const initialState = weekAdapter.getInitialState({
     games: [] as Game[],
     teams: [] as Team[],
     picks: [] as Pick[],
-    userPicks: [] as PicksUserData[]
+    userPicks: [] as PicksUserData[],
+    weekLastFetched: new Date()
 });
 
 export const fetchWeek = createAsyncThunk('week/fetchGames',  async (param: SeasonRequest, {dispatch}) => {
@@ -170,6 +170,7 @@ const weekSlice = createSlice({
                     state.userPicks = action.payload.response.userPicks as PicksUserData[];
                     state.setWeek = action.payload.week;
                     state.status = status.COMPLETE;
+                    state.weekLastFetched = new Date();
                 }
             })
             .addCase(fetchWeek.pending, (state, action) => {
@@ -240,6 +241,8 @@ export const selectTeamById = (state: RootState, teamId: number) => state.week.t
 export const selectPicks = (state: RootState) => state.week.picks;
 
 export const selectPicksCount = (state: RootState) => state.week.picks.length as number;
+
+export const seletctWeekLastFetch = (state: RootState) => state.week.weekLastFetched as Date;
 
 export const selectGamesByIdNoPicks = (state: RootState) => 
     state.week.games.filter(week => !state.week.picks.map((pick: Pick) => 

@@ -78,7 +78,7 @@ export const PickMini = ({picks, games, teams, isLoading}: Props) => {
             }
 
             return (game) && (
-                <div className="pick-mini-card tiertary-color" onClick={() => history.push('/games/pick')}>
+                <div className="pick-mini-card tiertary-color" onClick={() => history.push(`/games/pick?status=${game.game_status}`)}>
                     <div className="pick-mini-header secondary-color">
                         <div className="pick-mini-spread">
                             {team?.abbreviation}

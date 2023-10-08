@@ -78,7 +78,7 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
                     <Icon name="filter" />
                 </div>
                 <select className="week-filter-icon" onChange={e => filterClick(e.target.value)}>
-                    <option value="">--Select Status--</option>
+                    <option value="">All Statuses</option>
                     {
                         filterList?.map(f => (
                             <option key={f.id} value={f.id} selected={filter === f.id}>

@@ -137,6 +137,10 @@ export const Games = ({routes}: Props) => {
         }
     }, [season, week, seasonType, other, setWeek, gamesState, dispatch]);
 
+    useEffect(() => {
+        window.scrollTo(0,0);
+    },[]);
+
     return (
         <div {...swipeHandlers} style={{ touchAction: 'pan-y' }}>
             { spectatorView }

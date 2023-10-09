@@ -18,8 +18,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
         with:
-          node-version: 6
+          node-version: 14
           registry-url: https://npm.pkg.github.com/
+      
+      - name: Install natives
+        run: npm install natives
 
       - name: Install dependencies
         run: npm i

@@ -16,6 +16,10 @@ jobs:
     env: ${{ github.event.inputs.update }}
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://npm.pkg.github.com/
 
       - name: Install dependencies
         run: npm i

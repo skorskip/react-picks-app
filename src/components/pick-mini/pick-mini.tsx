@@ -46,7 +46,7 @@ export const PickMini = ({picks, games, teams}: Props) => {
         }
 
         return (game) && (
-            <div className="pick-mini-card tiertary-color">
+            <div key={game.game_id + '-pick-mini'} className="pick-mini-card tiertary-color">
                 <div className="pick-mini-header secondary-color">
                     <div className="pick-mini-spread">
                         {team?.abbreviation}

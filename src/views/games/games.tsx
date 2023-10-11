@@ -19,7 +19,6 @@ import { toInt } from '../../utils/tools';
 import "./games.css";
 import "../../utils/slideTransition.scss";
 import { PickButton } from '../../common/PickButton/PickButton';
-import { stat } from 'fs';
 
 interface RouteParams {
     view: string

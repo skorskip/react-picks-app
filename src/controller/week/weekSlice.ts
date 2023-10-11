@@ -9,7 +9,6 @@ import { RootState } from '../../store';
 import { Pick, PickSubmitEnum } from '../../model/week/pick';
 import { PicksUserData } from '../../model/week/picksUserData';
 import { PickRequest } from '../../model/postRequests/pickRequest';
-import { PickDeleteRequest } from '../../model/postRequests/pickDeleteRequest';
 import { publish, PubSub } from '../pubSub/pubSubSlice';
 import { SnackMessage } from '../../components/message/messagePopup';
 import { SHOW_MESSAGE } from '../../configs/topics';
@@ -140,7 +139,7 @@ export const deletePicks = createAsyncThunk('week/deletePicks', async (param: Pi
  export const deleteWeek = createAsyncThunk('week/deleteWeek',  async (param: PickRequest, {dispatch}) => {
     try {
         const url = endpoints.PICKS.DELETE_WEEK(param);
-        const response = await client.delete(url, {});
+        await client.delete(url, {});
         return { status: status.COMPLETE };
     } catch(error) {
         console.error(error);

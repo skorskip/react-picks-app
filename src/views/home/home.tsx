@@ -50,7 +50,7 @@ export const Home = () => {
             }
         }
         setInterval(() => checkForRefresh(), 1000);
-    }, []);
+    }, [lastFetched]);
     
     if(token === status.IDLE || user === status.IDLE || league === status.IDLE || location.pathname === "/login") {
         return (<Login />)

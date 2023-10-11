@@ -50,7 +50,7 @@ export const PickMini = ({picks, games, teams, isLoading}: Props) => {
                     'No score yet' : 
                     (score === 0) ?
                     'All tied up' :
-                    (score < 0 && isHomeTeam || score > 0 && !isHomeTeam) ?
+                    ((score < 0 && isHomeTeam) || (score > 0 && !isHomeTeam)) ?
                     (<div className="secondary-color pick-mini-score-time"><div className="pick-mini-score-icon"><Icon name="caret down"/></div>{Math.abs(score)}</div>) :
                     (<div className="secondary-color pick-mini-score-time"><div className="pick-mini-score-icon"><Icon name="caret up"/></div>{Math.abs(score)}</div>)
                 }

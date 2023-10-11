@@ -5,7 +5,6 @@ import './week-switcher.css';
 import { toInt } from '../../../../utils/tools';
 import { PickButton } from '../../../../common/PickButton/PickButton';
 import { League } from '../../../../model/league/league';
-import { filter } from 'rxjs/operators';
 
 interface RouteParams {
     view: string

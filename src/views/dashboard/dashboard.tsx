@@ -97,7 +97,7 @@ export const Dashboard = () => {
             let request = new SeasonRequest(league.currentSeason, league.currentSeasonType, league.currentWeek);
             dispatch(fetchWeek(request));
         }
-    }, [weekState, leagueStatus, league, dispatch]);
+    }, [weekState, leagueStatus, league, setWeek, dispatch]);
 
     useEffect(() => {
         if(announcementsStatus === status.IDLE) {
@@ -117,7 +117,7 @@ export const Dashboard = () => {
             let request = new SeasonRequest(league.currentSeason, league.currentSeasonType, league.currentWeek);
             dispatch(fetchBonusEligible(request));
         }
-    },[bonusState, bonusUsers, league, leagueStatus]);
+    },[dispatch, bonusState, bonusUsers, league, leagueStatus]);
 
     useEffect(() => {
         if(standingsStatus === status.IDLE) {

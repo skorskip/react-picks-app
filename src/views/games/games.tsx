@@ -18,8 +18,7 @@ import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { toInt } from '../../utils/tools';
 import "./games.css";
 import "../../utils/slideTransition.scss";
-import { PickButton } from '../../common/PickButton/PickButton';
-import { Game, GameStatusEnum } from '../../model/week/game';
+import { GameStatusEnum } from '../../model/week/game';
 
 interface RouteParams {
     view: string

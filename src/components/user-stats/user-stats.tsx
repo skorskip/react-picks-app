@@ -13,7 +13,7 @@ export const UserStats = () => {
     const user = useSelector(selectUser);
     const userDetails = user.current_season_data;
     const userState = useSelector((state: RootState) => state.user.status);
-    const pendingCount = useSelector(selectGamesPicks).filter(p => p.game_status != GameStatusEnum.completed).length || 0;
+    const pendingCount = useSelector(selectGamesPicks).filter(p => p.game_status !== GameStatusEnum.completed).length || 0;
     const pickCount = userDetails?.picks || 0;
 
     const picksStatLoading = (userState === status.LOADING) && (

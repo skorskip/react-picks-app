@@ -133,7 +133,7 @@ export const Schedule = ({games, picks, teams} : Props) => {
             });
         });
         setPickSchedules([...pickSchedule]);
-    }, [filteredGames]);
+    }, [filteredGames, picks, teams]);
 
     useEffect(() => {
         const schedules = [...pickSchedules, ...submitSchedules];

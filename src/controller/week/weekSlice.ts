@@ -140,7 +140,7 @@ export const deletePicks = createAsyncThunk('week/deletePicks', async (param: Pi
  export const deleteWeek = createAsyncThunk('week/deleteWeek',  async (param: PickRequest, {dispatch}) => {
     try {
         const url = endpoints.PICKS.DELETE_WEEK(param);
-        const response = await client.delete(url, {});
+        await client.delete(url, {});
         return { status: status.COMPLETE };
     } catch(error) {
         console.error(error);

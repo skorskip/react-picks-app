@@ -55,7 +55,7 @@ export const Dashboard = () => {
                         'Good Morning!'
                     }
                 </div>
-                <span className="secondary-color">It's Week {league.currentWeek} of the {league.currentSeason} {league.currentSeasonType === 3 ? 'Postseason' : 'Season'}</span>
+                <span className="subtitle secondary-color indented-title">It's Week {league.currentWeek} of the {league.currentSeason} {league.currentSeasonType === 3 ? 'Postseason' : 'Season'}</span>
             </div>
         );
     };
@@ -145,9 +145,9 @@ export const Dashboard = () => {
                 <div className="sub-title secondary-color">Weekly Bonus <div className="success-color count">${league.bonus.currentPotAmt.toFixed(2)}</div></div>
                 {
                     (bonusUsers.length && !allGamesCompleted) 
-                    ? (<span className="secondary-color">Players currently in the running...</span>) 
+                    ? (<span className="secondary-color indented-title">Players currently in the running...</span>) 
                     : (bonusUsers.length && allGamesCompleted)
-                    ? (<span className="secondary-color">Bonus winner(s)</span>) 
+                    ? (<span className="secondary-color indented-title">Bonus winner(s)</span>) 
                     : (<></>)
                 }
                 {
@@ -172,7 +172,11 @@ export const Dashboard = () => {
                     teams={teams} 
                     isLoading={weekState === status.LOADING}/>
             </div>
-            <Schedule games={games} picks={picks} teams={teams}></Schedule>
+            <Schedule 
+                games={games} 
+                picks={picks} 
+                teams={teams}
+                isLoading={weekStatus === status.LOADING}></Schedule>
             <PickPeekModal />
         </>
     );

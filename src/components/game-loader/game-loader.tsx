@@ -5,7 +5,7 @@ import "./game-loader.css";
 type Props = {
     height: number,
     borderRadius?: string,
-    width?: number,
+    width?: number | string,
     rowCount?: number,
     count: number
 }

@@ -8,11 +8,13 @@ import { Team } from '../../../../model/week/team';
 import { formatDate } from '../../../../utils/dateFormatter';
 import './schedule.css';
 import { useHistory } from 'react-router-dom';
+import { GameLoader } from '../../../../components/game-loader/game-loader';
 
 type Props = {
     games: Array<Game>;
     picks: Array<Pick>;
     teams: Array<Team>;
+    isLoading: boolean;
 }
 
 interface ScheduleCard {
@@ -30,7 +32,7 @@ enum ScheduleCardType {
     picks = 'picks'
 }
 
-export const Schedule = ({games, picks, teams} : Props) => {
+export const Schedule = ({games, picks, teams, isLoading} : Props) => {
 
     const [schedules, setSchedule] = useState([] as ScheduleCard[]);
     const [pickSchedules, setPickSchedules] = useState([] as ScheduleCard[]);
@@ -163,6 +165,8 @@ export const Schedule = ({games, picks, teams} : Props) => {
         );
     })) :
     (<div className="tiertary-color empty">No Events</div>));
+
+    const loader = (<GameLoader height={80} width={'100%'} count={3} rowCount={1}/>)
     
     return (
         <div className='schedule-container'>
@@ -170,7 +174,11 @@ export const Schedule = ({games, picks, teams} : Props) => {
                 {formatDate(eventDay, true)}
             </div>
             <div className='schedule'>
-                {schedulesDisplay}
+                {
+                    isLoading ?
+                    (loader) :
+                    (schedulesDisplay)
+                }
             </div>
         </div>
     );

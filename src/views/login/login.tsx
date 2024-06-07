@@ -37,7 +37,6 @@ export const Login = () => {
     const tokenState = useSelector((state: RootState) => state.token.status);
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const userState = useSelector((state: RootState) => state.user.status);
     const dispatch = useDispatch();
 
     const handleChange = (event: { target: { name: any; value: any } }) => {

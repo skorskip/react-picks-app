@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { TeamCard } from '../team-card/team-card';
 import { PickStatus } from '../pick-staus/pick-status';
 import { Icon } from 'semantic-ui-react';
-import { GameWinStatusEnum, GameStatusEnum, Game } from '../../model/week/game';
+import { GameStatusEnum, Game } from '../../model/week/game';
 import { Pick } from '../../model/week/pick';
 import { Team, TeamSelect } from '../../model/week/team';
 import { PickSelected } from '../../model/pickSelected/pickSelected';

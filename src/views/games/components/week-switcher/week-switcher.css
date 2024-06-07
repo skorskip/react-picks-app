@@ -52,3 +52,20 @@
 .week-title {
 	font-size:1.5em;
 }
+
+.week-filter-icon {
+	position: absolute;
+    top: 55px;
+    right: 20px;
+    opacity: 0;
+	height: 60px;
+}
+
+.week-filter-notif {
+	position: absolute;
+    top: 50px;
+    right: 10px;
+	border-radius: 50%;
+	height: 20px;
+	width: 20px;
+}

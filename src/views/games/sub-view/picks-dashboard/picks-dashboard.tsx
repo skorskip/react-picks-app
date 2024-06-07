@@ -31,7 +31,7 @@ import { toInt } from '../../../../utils/tools';
 
 export const PicksDashboard = () => {
 
-    const games = useSelector(selectGamesPicks);
+
     const picks = useSelector(selectPicks);
     const teams = useSelector(selectTeams);
     const loader = useSelector((state: RootState) => state.week.status);
@@ -49,6 +49,9 @@ export const PicksDashboard = () => {
     let { search } = useLocation();
     const query = new URLSearchParams(search);
     const week = toInt(query.get("week"));
+    const filter = query.get("status") === "" ? null : query.get("status");
+
+    const games = useSelector(selectGamesPicks).filter(g => {if(!!filter) return g.game_status === filter; else return g});
 
     const dispatch = useDispatch();
 

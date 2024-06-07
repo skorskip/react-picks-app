@@ -14,6 +14,16 @@ jobs:
   run:
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
+    env:
+      REACT_APP_WEEK_URL: ${{ secrets.REACT_APP_WEEK_URL }}
+      REACT_APP_PICKS_URL: ${{ secrets.REACT_APP_PICKS_URL }}
+      REACT_APP_USER_URL: ${{ secrets.REACT_APP_USER_URL }}
+      REACT_APP_LEAGUE_URL: ${{ secrets.REACT_APP_LEAGUE_URL }}
+      REACT_APP_MESSAGE_URL: ${{ secrets.REACT_APP_MESSAGE_URL }}
+      REACT_APP_AWS_PROJECT_REGION: ${{ secrets.REACT_APP_AWS_PROJECT_REGION }}
+      REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID: ${{ secrets.REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID }}
+      REACT_APP_AWS_USER_POOLS_ID: ${{ secrets.REACT_APP_AWS_USER_POOLS_ID }}
+      REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID: ${{ secrets.REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
@@ -30,15 +40,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy
-        uses: reggionick/s3-deploy@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          folder: build
-          bucket: ${{ secrets.S3_BUCKET }}
-          bucket-region: ${{ secrets.REACT_APP_AWS_PROJECT_REGION }}
-          dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-          invalidation: /
-          delete-removed: true
-          no-cache: true
-          private: true
-          files-to-include: '.*/*,*/*,**'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.REACT_APP_AWS_PROJECT_REGION }}
+
+      - name: Deploy to S3
+        run: aws s3 sync ./build s3://${{ secrets.S3_BUCKET }} --delete
+
+      - name: Invalidate cloudfront
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

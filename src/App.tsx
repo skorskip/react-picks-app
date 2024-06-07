@@ -42,7 +42,7 @@ function App() {
     }
   }, [userState, tokenState, dispatch, leagueState]);
 
-  useEffect(() => {dispatch(fetchToken())},[dispatch]);
+  useEffect(() => {dispatch(fetchToken())}, []);
 
   useEffect(() => {
     if(leagueState === status.ERROR) {

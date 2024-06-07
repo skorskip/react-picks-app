@@ -18,7 +18,8 @@ import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { toInt } from '../../utils/tools';
 import "./games.css";
 import "../../utils/slideTransition.scss";
-import { GameStatusEnum } from '../../model/week/game';
+import { PickButton } from '../../common/PickButton/PickButton';
+import { stat } from 'fs';
 
 interface RouteParams {
     view: string
@@ -53,12 +54,7 @@ export const Games = ({routes}: Props) => {
     const currWeek = league.currentWeek 
     const currSeasonType = league.currentSeasonType
     const [weeksShown, setWeeksShown] = useState(false);
-
-    const filterList = [
-        {id: GameStatusEnum.completed, label: 'Completed'},
-        {id: GameStatusEnum.live, label: 'Live'},
-        {id: GameStatusEnum.unplayed, label: 'Unplayed'}
-    ] as Array<{id: string, label: string}>
+    const [showRefreshButton, setShowRefreshButton] = useState(false);
 
     const swipeView = (view: string) => {
         if(season === null) {
@@ -78,6 +74,11 @@ export const Games = ({routes}: Props) => {
         dispatch(publish(publishEvent));
     }
 
+    const refreshPage = () => {
+        setShowRefreshButton(false);
+        window.location.reload();
+    }
+
     const spectatorView = (user.current_season_data.user_type !== UserTypeEnum.PARTICIPANT) && (
         <div className="header-container">
             <div className="spectator-container warn-background">
@@ -88,6 +89,21 @@ export const Games = ({routes}: Props) => {
                     Spectator Mode
                 </span>
             </div>
+        </div>
+    );
+
+    const refreshView = (showRefreshButton) && (
+        <div className="refresh-container">
+            <PickButton 
+                type='primary'
+                clickEvent={refreshPage}
+                content={
+                    <>
+                        <Icon className="spectator-icon" name="redo"/>
+                        Refresh
+                    </>
+                }
+            />
         </div>
     );
 
@@ -137,19 +153,19 @@ export const Games = ({routes}: Props) => {
     }, [season, week, seasonType, other, setWeek, gamesState, dispatch]);
 
     useEffect(() => {
-        window.scrollTo(0,0);
-    },[]);
+        setTimeout(() => {setShowRefreshButton(true)}, 900000)
+    });
 
     return (
         <div {...swipeHandlers} style={{ touchAction: 'pan-y' }}>
             { spectatorView }
+            { refreshView }
             { gamesTab }
             <div className="games-week-container">
                 <div className="week-switcher-container">
                     <WeekSwitcher 
                         league={league}
                         showWeekEvent={setWeeksShown}
-                        filterList={filterList}
                     />
                 </div>
                 { transitionGroup }

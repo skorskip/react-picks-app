@@ -16,16 +16,6 @@
     width: 25px;
 }
 
-.pick-mini-score-time {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-
-    .pick-mini-score-icon {
-        transform: scale(2);
-    }
-}
-
 .pick-mini-card {
     border: solid 2px;
     border-radius: 8px;
@@ -34,10 +24,9 @@
 .pick-mini-card {
     display: flex;
     flex-direction: column;
-    width: 150px;
+    width: 125px;
     padding: 5px;
     margin: 10px;
-    justify-content: space-between;
 }
 
 .pick-mini-spread {
@@ -56,12 +45,6 @@
 .pick-mini-team {
     font-size: 15px;
     display: flex;
-    padding: 5px;
-}
-
-.pick-mini-score {
-    display: flex;
-    justify-content: space-between;;
     padding: 5px;
 }
 

@@ -7,14 +7,11 @@ import { Pick } from '../../../../model/week/pick';
 import { Team } from '../../../../model/week/team';
 import { formatDate } from '../../../../utils/dateFormatter';
 import './schedule.css';
-import { useHistory } from 'react-router-dom';
-import { GameLoader } from '../../../../components/game-loader/game-loader';
 
 type Props = {
     games: Array<Game>;
     picks: Array<Pick>;
     teams: Array<Team>;
-    isLoading: boolean;
 }
 
 interface ScheduleCard {
@@ -23,16 +20,9 @@ interface ScheduleCard {
     time: string;
     title: string;
     icon: SemanticICONS;
-    cardType: string;
 }
 
-enum ScheduleCardType {
-    submit = 'submit',
-    live = 'live',
-    picks = 'picks'
-}
-
-export const Schedule = ({games, picks, teams, isLoading} : Props) => {
+export const Schedule = ({games, picks, teams} : Props) => {
 
     const [schedules, setSchedule] = useState([] as ScheduleCard[]);
     const [pickSchedules, setPickSchedules] = useState([] as ScheduleCard[]);
@@ -40,23 +30,6 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
     const [submitSchedules, setSubmitSchedules] = useState([] as ScheduleCard[]);
     const [filteredGames, setFilteredGames] = useState([] as Game[]);
     const [eventDay, setEventDay] = useState(new Date());
-    const history = useHistory();
-
-    const openPage = (cardType: string) => {
-        switch(cardType) {
-            case ScheduleCardType.live:
-                history.push(`/games/game?status=${GameStatusEnum.live}`);
-                break;
-            case ScheduleCardType.submit:
-                history.push(`/games/game?status=${GameStatusEnum.unplayed}`);
-                break;
-            case ScheduleCardType.picks:
-                history.push(`/games/pick`);
-                break;
-            default:
-                history.push('/games/game');
-        };
-    }
 
     useEffect(() => {
         const currentGames = games.filter(game => game.game_status !== GameStatusEnum.completed);
@@ -81,8 +54,7 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
                 subTitle: `${liveGames.length} games`,
                 time: 'now',
                 title: 'Game(s) live',
-                icon: 'football ball',
-                cardType: ScheduleCardType.live
+                icon: 'football ball'
             } as ScheduleCard;
     
             setLiveSchedules([liveSchedule]);
@@ -109,8 +81,7 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
                 subTitle: `${submitMap[key].length} games`,
                 time: new Date(key).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
                 title: 'Picks deadline(s)',
-                icon: 'clock',
-                cardType: ScheduleCardType.submit
+                icon: 'clock'
             });
         });
 
@@ -130,12 +101,11 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
                 subTitle: `${awayTeam?.abbreviation} @ ${homeTeam?.abbreviation}`,
                 time: new Date(game.start_time).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
                 title: 'Pick',
-                icon: 'hand point down',
-                cardType: ScheduleCardType.picks
+                icon: 'hand point down'
             });
         });
         setPickSchedules([...pickSchedule]);
-    }, [filteredGames, picks, teams]);
+    }, [filteredGames]);
 
     useEffect(() => {
         const schedules = [...pickSchedules, ...submitSchedules];
@@ -145,10 +115,7 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
     const schedulesDisplay = ((schedules.length > 0) ? 
     (   schedules.map((schedule,i) => {
         return (
-            <div 
-                key={i + '-schedule-card'}
-                className={'schedule-card ' + schedule.type}
-                onClick={() => openPage(schedule.cardType)}>
+            <div key={i + '-schedule-card'} className={'schedule-card ' + schedule.type}>
                 <div className='schedule-header'>
                     <div className='schedule-topic secondary-color'>
                         <Icon name={schedule.icon}/>
@@ -166,7 +133,6 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
     })) :
     (<div className="tiertary-color empty">No Events</div>));
 
-    const loader = (<GameLoader height={80} width={'100%'} count={3} rowCount={1}/>)
     
     return (
         <div className='schedule-container'>
@@ -174,11 +140,7 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
                 {formatDate(eventDay, true)}
             </div>
             <div className='schedule'>
-                {
-                    isLoading ?
-                    (loader) :
-                    (schedulesDisplay)
-                }
+                {schedulesDisplay}
             </div>
         </div>
     );

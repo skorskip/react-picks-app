@@ -8,7 +8,7 @@ import { selectLeague } from '../../controller/league/leagueSlice';
 import { fetchUserStandings } from '../../controller/user-standings/userStandingsSlice';
 import { status } from '../../configs/status';
 import { PickMini } from '../../components/pick-mini/pick-mini';
-import { fetchWeek, selectGames, selectPicks, selectTeams, getSetWeek, selectIsAllGamesCompleted, selectUserPickData } from '../../controller/week/weekSlice';
+import { fetchWeek, selectGames, selectPicks, selectTeams, getSetWeek, selectIsAllGamesCompleted } from '../../controller/week/weekSlice';
 import { SeasonRequest } from '../../model/postRequests/seasonRequest';
 import { Button, Icon, Label } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
@@ -17,10 +17,6 @@ import { getAnnouncementCheckLocal, resetAnnouncementCheckLocal } from '../../ut
 import { DateRequest } from '../../model/postRequests/dateRequest';
 import { fetchBonusEligible, selectBonusEligible } from '../../controller/user/userSlice';
 import { UserStats } from '../../components/user-stats/user-stats';
-import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
-import { PicksUserData } from '../../model/week/picksUserData';
-import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
-import { SHOW_MODAL } from '../../configs/topics';
 
 export const Dashboard = () => {
     const standingsStatus = useSelector((state: RootState) => state.userStandings.status);
@@ -38,8 +34,6 @@ export const Dashboard = () => {
     const history = useHistory();
     const bonusState = useSelector((state: RootState) => state.user.bonusState);
     const bonusUsers = useSelector(selectBonusEligible);
-    const pickData = useSelector(selectUserPickData);
-    const weekStatus = useSelector((state: RootState) => state.week.status);
     const dispatch = useDispatch();
 
     const header = () => {
@@ -47,15 +41,9 @@ export const Dashboard = () => {
         return (
             <div className="header">
                 <div className="title secondary-color">
-                    {
-                        (today.getHours() >= 17) ? 
-                        'Good Evening!' :
-                        today.getHours() >= 12 ? 
-                        'Good Afternoon!' :
-                        'Good Morning!'
-                    }
+                    {(today.getHours() >= 12) ? 'Good Afternoon!' : 'Good Morning!'}
                 </div>
-                <span className="subtitle secondary-color indented-title">It's Week {league.currentWeek} of the {league.currentSeason} {league.currentSeasonType === 3 ? 'Postseason' : 'Season'}</span>
+                <span className="secondary-color">It's Week {league.currentWeek} of the {league.currentSeason} {league.currentSeasonType === 3 ? 'Postseason' : 'Season'}</span>
             </div>
         );
     };
@@ -70,10 +58,6 @@ export const Dashboard = () => {
     const clickAnnouncements = () => {
         setMessages(0);
         resetAnnouncementCheckLocal();
-    }
-
-    const setUserModal = (pick: PicksUserData | undefined) => {
-        if (pick) dispatch(publish(new PubSub(SHOW_MODAL, pick)));
     }
 
     const messageNotif = (messages > 0) && (
@@ -97,7 +81,7 @@ export const Dashboard = () => {
             let request = new SeasonRequest(league.currentSeason, league.currentSeasonType, league.currentWeek);
             dispatch(fetchWeek(request));
         }
-    }, [weekState, leagueStatus, league, setWeek, dispatch]);
+    }, [weekState, leagueStatus, league, dispatch]);
 
     useEffect(() => {
         if(announcementsStatus === status.IDLE) {
@@ -117,7 +101,7 @@ export const Dashboard = () => {
             let request = new SeasonRequest(league.currentSeason, league.currentSeasonType, league.currentWeek);
             dispatch(fetchBonusEligible(request));
         }
-    },[dispatch, bonusState, bonusUsers, league, leagueStatus]);
+    },[bonusState, bonusUsers, league, leagueStatus]);
 
     useEffect(() => {
         if(standingsStatus === status.IDLE) {
@@ -145,9 +129,9 @@ export const Dashboard = () => {
                 <div className="sub-title secondary-color">Weekly Bonus <div className="success-color count">${league.bonus.currentPotAmt.toFixed(2)}</div></div>
                 {
                     (bonusUsers.length && !allGamesCompleted) 
-                    ? (<span className="secondary-color indented-title">Players currently in the running...</span>) 
+                    ? (<span className="secondary-color">Players currently in the running...</span>) 
                     : (bonusUsers.length && allGamesCompleted)
-                    ? (<span className="secondary-color indented-title">Bonus winner(s)</span>) 
+                    ? (<span className="secondary-color">Bonus winner(s)</span>) 
                     : (<></>)
                 }
                 {
@@ -157,27 +141,15 @@ export const Dashboard = () => {
                         <HotStreak 
                             users={bonusUsers} 
                             allGamesCompleted={allGamesCompleted}
-                            userPicksData={pickData}
-                            isLoading={weekStatus === status.LOADING}
-                            showPickModal={(pick) => setUserModal(pick)}
                         />
                     )
                 }
             </div>
             <div className="dashboard-content">
                 <div className="sub-title secondary-color">Picks</div>
-                <PickMini 
-                    games={games} 
-                    picks={picks} 
-                    teams={teams} 
-                    isLoading={weekState === status.LOADING}/>
+                <PickMini games={games} picks={picks} teams={teams}/>
             </div>
-            <Schedule 
-                games={games} 
-                picks={picks} 
-                teams={teams}
-                isLoading={weekStatus === status.LOADING}></Schedule>
-            <PickPeekModal />
+            <Schedule games={games} picks={picks} teams={teams}></Schedule>
         </>
     );
 }

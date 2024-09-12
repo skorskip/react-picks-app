@@ -9,7 +9,7 @@ import { PickSelected } from '../../model/pickSelected/pickSelected';
 import { User } from '../../model/user/user';
 import './game-card.css';
 import { gameTimeStatusQuarters } from '../../utils/dateFormatter';
-import { PickButton } from '../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../common/PickButton/PickButton';
 import { pickResult } from '../../utils/tools';
 
 type Props = {
@@ -72,7 +72,7 @@ export const GameCard = ({
     const deleteButton = (editMode && !gameLocked && !remove) && (
         <PickButton 
             styling="delete-button" 
-            type="failure"
+            type={ButtonType.FAILURE}
             clickEvent={() => onDeleteClicked()}
             content={
                 <>

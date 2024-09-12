@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PickButton } from '../../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../../common/PickButton/PickButton';
 import { getThemeLocal, setThemeLocal } from '../../../utils/localData';
 import { themeList } from '../../../configs/themes';
 import './themes.scss';
@@ -24,7 +24,7 @@ export const Themes = ({themeClickEvent}:Props) => {
                 key={i + item.value} 
                 clickEvent={() => toggleTheme(item.value)} 
                 styling="theme-button" 
-                type={(theme === item.value ? "primary" : "secondary")}
+                type={(theme === item.value ? ButtonType.PRIMARY : ButtonType.SECONDARY)}
                 content={
                     <div className='theme-button-context'>
                         {item.name}

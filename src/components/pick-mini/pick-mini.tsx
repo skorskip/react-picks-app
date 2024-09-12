@@ -1,13 +1,13 @@
-import { Icon } from "semantic-ui-react";
-import { Game, GameStatusEnum, GameWinStatusEnum } from "../../model/week/game";
-import { Pick } from "../../model/week/pick"
-import { Team } from "../../model/week/team";
-import { pickResult } from "../../utils/tools";
-import "./pick-mini.scss";
-import { gameTimeStatusQuarters } from "../../utils/dateFormatter";
 import { useHistory } from "react-router-dom";
-import { PickButton } from "../../common/PickButton/PickButton";
+import { Icon } from "semantic-ui-react";
+import { ButtonType, PickButton } from "../../common/PickButton/PickButton";
+import { Game, GameStatusEnum, GameWinStatusEnum } from "../../model/week/game";
+import { Pick } from "../../model/week/pick";
+import { Team } from "../../model/week/team";
+import { gameTimeStatusQuarters } from "../../utils/dateFormatter";
+import { pickResult } from "../../utils/tools";
 import { GameLoader } from "../game-loader/game-loader";
+import "./pick-mini.scss";
 
 type Props = {
     picks: Array<Pick>,
@@ -47,7 +47,7 @@ export const PickMini = ({picks, games, teams, isLoading}: Props) => {
             return (<div>
                 {
                     (game.away_team_score === 0 && game.home_team_score === 0) ?
-                    'No score yet' : 
+                    '--' : 
                     (score === 0) ?
                     'All tied up' :
                     ((score < 0 && isHomeTeam) || (score > 0 && !isHomeTeam)) ?
@@ -105,7 +105,7 @@ export const PickMini = ({picks, games, teams, isLoading}: Props) => {
     (
         <div className="tiertary-color empty">
             <PickButton 
-                type="secondary"
+                type={ButtonType.SECONDARY}
                 clickEvent={() => history.push(`/games/game?status=${GameStatusEnum.unplayed}`)}
                 content={
                     <div>

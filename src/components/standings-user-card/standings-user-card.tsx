@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { ProfileImage } from '../profile-image/profile-image';
 import { User } from '../../model/user/user';
-import { PickButton } from '../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../common/PickButton/PickButton';
 
 import './standings-user-card.scss';
 
@@ -116,7 +116,7 @@ export const StandingsUserCard = ({ standing, isCurrentUser }: Props) => {
 
     return (
         <PickButton
-            type={(isCurrentUser) ? 'primary' : 'secondary'}
+            type={(isCurrentUser) ? ButtonType.PRIMARY : ButtonType.SECONDARY}
             styling='standing-card'
             clickEvent={viewModal}
             content={

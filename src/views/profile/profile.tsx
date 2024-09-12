@@ -8,7 +8,7 @@ import { SET_THEME } from '../../configs/topics';
 import { RootState, useAppThunkDispatch } from '../../store';
 import { status } from '../../configs/status';
 import { ProfileImage } from '../../components/profile-image/profile-image';
-import { PickButton } from '../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../common/PickButton/PickButton';
 import { Themes } from './components/themes';
 import { selectMessageSource } from '../../controller/league/leagueSlice';
 import './profile.scss';
@@ -105,7 +105,7 @@ export const Profile = () => {
                         <PickButton 
                             clickEvent={changePassword} 
                             styling="change-password-button" 
-                            type="secondary" 
+                            type={ButtonType.SECONDARY}
                             content="Reset password" 
                         />
                     </div>
@@ -135,7 +135,7 @@ export const Profile = () => {
                                 onChange={setSlackEmailInput}>
                             </input>
                             <PickButton 
-                                type='secondary'
+                                type={ButtonType.SECONDARY}
                                 content={(slackState === status.LOADING) ? undefined : 'Connect'}
                                 styling='connect-slack-button'
                                 clickEvent={connectSlack}
@@ -149,7 +149,7 @@ export const Profile = () => {
                         <div className="info-content">
                             <div className="change-password-button-container">
                                 <PickButton 
-                                    type='secondary'
+                                    type={ButtonType.SECONDARY}
                                     content={(updateProfileState === status.LOADING) ? undefined : 'Update Image From Slack'}
                                     styling='change-password-button'
                                     clickEvent={updateProfileImage}
@@ -172,7 +172,7 @@ export const Profile = () => {
                 <PickButton 
                     clickEvent={signOutUser} 
                     styling="update-profile-button" 
-                    type="failure"
+                    type={ButtonType.FAILURE}
                     content="Sign out"
                 />
             </div>

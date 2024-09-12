@@ -21,6 +21,7 @@ import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal'
 import { PicksUserData } from '../../model/week/picksUserData';
 import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { SHOW_MODAL } from '../../configs/topics';
+import { ButtonType, PickButton } from '../../common/PickButton/PickButton';
 
 export const Dashboard = () => {
     const standingsStatus = useSelector((state: RootState) => state.userStandings.status);
@@ -166,11 +167,33 @@ export const Dashboard = () => {
             </div>
             <div className="dashboard-content">
                 <div className="sub-title secondary-color">Picks</div>
-                <PickMini 
-                    games={games} 
-                    picks={picks} 
-                    teams={teams} 
-                    isLoading={weekState === status.LOADING}/>
+                {
+                    picks.length ? (
+                        <PickMini 
+                        games={games} 
+                        picks={picks} 
+                        teams={teams} 
+                        isLoading={weekState === status.LOADING}/>
+                    ) : (
+                        <div className="make-picks">
+                            {
+                                allGamesCompleted ? (
+                                    <div className="make-picks-empty tiertary-color">
+                                        <span>No Picks Made</span>
+                                    </div>
+                                ) : (
+                                    <PickButton
+                                        content="Make Picks"
+                                        styling="make-picks-button"
+                                        type={ButtonType.PRIMARY}
+                                        clickEvent={() => history.push('/games/game?status=UNPLAYED')}
+                                    />
+                                )
+                            }
+                        </div>
+                    )
+                }
+
             </div>
             <Schedule 
                 games={games} 

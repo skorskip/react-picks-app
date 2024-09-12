@@ -3,7 +3,7 @@ import { Icon } from 'semantic-ui-react';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import './week-switcher.css';
 import { toInt } from '../../../../utils/tools';
-import { PickButton } from '../../../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 import { League } from '../../../../model/league/league';
 
 interface RouteParams {
@@ -55,7 +55,7 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
     }
 
     const prevButton = (week !== 1) && (
-        <PickButton clickEvent={weekPrev} styling="next-button-style" type="secondary" content={(
+        <PickButton clickEvent={weekPrev} styling="next-button-style" type={ButtonType.SECONDARY} content={(
             <div className="week-arrow-next-icon">
                 <Icon name="chevron left" />
             </div>
@@ -63,7 +63,7 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
     );
 
     const nextButton = (currentWeek !== week) && (
-        <PickButton clickEvent={weekNext} styling="next-button-style" type="secondary" content={(
+        <PickButton clickEvent={weekNext} styling="next-button-style" type={ButtonType.SECONDARY} content={(
             <div className="week-arrow-next-icon">
                 <Icon name="chevron right" />
             </div>
@@ -71,7 +71,7 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
     );
 
     const filterButton = ((currentWeek === week || week === null) && (user === 'null' || user === null)) && (
-        <PickButton styling="next-button-style" type="secondary" content={(
+        <PickButton styling="next-button-style" type={ButtonType.SECONDARY} content={(
             <>
                 <div className="week-arrow-next-icon">
                     <Icon name="filter" />
@@ -97,7 +97,7 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
                 key={weekNum + "-week-number"} 
                 clickEvent={() => showWeeks(weekNum)} 
                 styling="weeks-button-style" 
-                type="secondary"
+                type={ButtonType.SECONDARY}
                 content={(
                 <div className="week-header">
                     <div className="week-title">

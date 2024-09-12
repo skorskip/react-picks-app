@@ -24,7 +24,7 @@ import { GameCard } from '../../../../components/game-card/game-card';
 import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
 import { GameSubmitTime } from '../../components/game-submit-time/game-submit-time';
 import './picks-dashboard.css';
-import { PickButton } from '../../../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 import { selectLeague } from '../../../../controller/league/leagueSlice';
 import { useLocation } from 'react-router-dom';
 import { toInt } from '../../../../utils/tools';
@@ -133,7 +133,7 @@ export const PicksDashboard = () => {
         league.currentSeason !== 3) && (
         <div className='delete-week-container'>
             <PickButton
-                type="failure"
+                type={ButtonType.FAILURE}
                 content="Drop This Week's Picks"
                 styling="delete-week-button"
                 clickEvent={() => deleteWeekDialog()}

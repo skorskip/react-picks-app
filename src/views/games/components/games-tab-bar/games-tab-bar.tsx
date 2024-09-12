@@ -3,7 +3,7 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON } from '../../../../configs/topics';
 import { PubSub } from '../../../../controller/pubSub/pubSubSlice';
-import { PickButton } from '../../../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 import { League } from '../../../../model/league/league';
 
 import './games-tab-bar.css';
@@ -54,7 +54,7 @@ export const GamesTabBar = ({league, pickCount, tabBarEvent}: Props) => {
         pickCount > 0 && 
         week === currentWeek) && (
         <PickButton 
-            type="secondary"
+            type={ButtonType.SECONDARY}
             clickEvent={selectEdit}
             content="Edit"
         />
@@ -62,7 +62,7 @@ export const GamesTabBar = ({league, pickCount, tabBarEvent}: Props) => {
 
     const doneButton = (param.view === "pick" && isEditSelected) && (
         <PickButton 
-            type="primary"
+            type={ButtonType.PRIMARY}
             clickEvent={selectDone}
             content="Done"
         />
@@ -72,13 +72,13 @@ export const GamesTabBar = ({league, pickCount, tabBarEvent}: Props) => {
         <div className="toggle-picks-container base-background">
             <div className="toggle-container tiertary-light-background">
                 <PickButton 
-                    type={(param.view === "game") ? "primary" : "toggle"}
+                    type={(param.view === "game") ? ButtonType.PRIMARY : ButtonType.TOGGLE}
                     clickEvent={() => clickView("game")}
                     content={(<div><Icon name='football ball' className='game-toggle-icon'/>Games</div>)}
                     styling="toggle-button"
                 />
                 <PickButton 
-                    type={(param.view === "pick") ? "primary" : "toggle"}
+                    type={(param.view === "pick") ? ButtonType.PRIMARY : ButtonType.TOGGLE}
                     clickEvent={() => clickView("pick")}
                     content={(<div><Icon name='hand point down' className='game-toggle-icon'/>Picks ({pickCount})</div>)}
                     styling="toggle-button"

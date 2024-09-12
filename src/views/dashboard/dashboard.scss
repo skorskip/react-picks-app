@@ -45,6 +45,22 @@
     .user-stats {
         width: 100%;
     }
+
+    .make-picks {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 20px;
+
+        &-empty {
+            font-size: 20px;
+        }
+
+        &-button {
+            width: 200px;
+        }
+    }
 }
 
 .indented-title {

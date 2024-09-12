@@ -1,11 +1,18 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Button } from 'semantic-ui-react'
 
+export enum ButtonType {
+    PRIMARY = 'primary',
+    SECONDARY = 'secondary',
+    TOGGLE = 'toggle',
+    FAILURE = 'failure'
+}
+
 type Props = {
     clickEvent?: (selected: any) => void,
     content?: ReactElement | string,
     styling?: string | null,
-    type: string,
+    type: ButtonType,
     loading?: boolean | null
 }
 
@@ -31,16 +38,16 @@ export const PickButton = ({clickEvent, content, styling, type, loading}: Props)
 
     useEffect(() => {
         switch(type) {
-            case "toggle":
+            case ButtonType.TOGGLE:
                 setTypeClass("tiertary-light-background secondary-color " + styling);
                 break;
-            case "secondary":
+            case ButtonType.SECONDARY:
                 setTypeClass("tiertary-light-background secondary-color tiertary-border " + styling);
                 break;
-            case "primary":
+            case ButtonType.PRIMARY:
                 setTypeClass("primary-background base-color primary-border " + styling);
                 break;
-            case "failure":
+            case ButtonType.FAILURE:
                 setTypeClass("failure-background base-color failure-border " + styling);
                 break;
             default :

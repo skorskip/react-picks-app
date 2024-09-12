@@ -18,7 +18,7 @@ import { UserTypeEnum } from '../../../../model/user/user';
 import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
 import { GameSubmitTime } from '../../components/game-submit-time/game-submit-time';
 import './game-dashboard.css';
-import { PickButton } from '../../../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 
 export const GameDashboard = () => {
     const dispatch = useAppThunkDispatch();
@@ -120,7 +120,7 @@ export const GameDashboard = () => {
             </div>
             <div className={getSubmitClass()}>
                 <PickButton 
-                    type="primary"
+                    type={ButtonType.PRIMARY}
                     styling="submit-button" 
                     clickEvent={submitPicks}
                     loading={pickStatus === status.LOADING}

@@ -10,7 +10,7 @@ import { UserStats } from '../../components/user-stats/user-stats';
 import { useLocation } from 'react-router-dom';
 import { status } from '../../configs/status';
 import { RootState } from '../../store';
-import { PickButton } from '../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../common/PickButton/PickButton';
 import { seletctWeekLastFetch } from '../../controller/week/weekSlice';
 
 export const Home = () => {   
@@ -59,7 +59,7 @@ export const Home = () => {
     const refreshView = (showRefreshButton) && (
         <div className="refresh-container">
             <PickButton 
-                type='primary'
+                type={ButtonType.PRIMARY}
                 clickEvent={refreshPage}
                 content={
                     <>

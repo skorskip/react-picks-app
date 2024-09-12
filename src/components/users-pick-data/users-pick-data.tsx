@@ -7,7 +7,7 @@ import { SHOW_MODAL } from '../../configs/topics';
 import './users-pick-data.css';
 import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
 import { ProfileImage } from '../profile-image/profile-image';
-import { PickButton } from '../../common/PickButton/PickButton';
+import { ButtonType, PickButton } from '../../common/PickButton/PickButton';
 
 type Props = {
     game: Game,
@@ -94,7 +94,7 @@ export const UsersPickData = ({ game, picksData }:Props) => {
             <PickButton 
                 styling="user-item"
                 clickEvent={() => setUserModal(pick)}
-                type="secondary"
+                type={ButtonType.SECONDARY}
                 content={
                     <div className="users-pick-button-content">
                         <ProfileImage size="xs" content={pick.user_inits} image={pick.slack_user_image} showImage={true}/>
@@ -118,7 +118,7 @@ export const UsersPickData = ({ game, picksData }:Props) => {
             <div className="show-less-button">
                 <PickButton 
                     clickEvent={closePicksData}
-                    type='secondary'
+                    type={ButtonType.SECONDARY}
                     content={
                         <div className="show-less-button-group">
                             <Icon name="chevron up" />

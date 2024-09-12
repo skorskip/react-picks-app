@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button, Icon, Label } from 'semantic-ui-react';
+import { SnackMessage } from '../../../../components/message/messagePopup';
 import { PickLogo } from '../../../../components/pick-logo/pick-logo';
-import { selectMessageSource,selectLeague } from '../../../../controller/league/leagueSlice';
-import { selectAnnouncements,fetchAnnouncements } from '../../../../controller/announcements/announcementsSlice';
-import './nav-bar.css';
+import { ProfileImage } from '../../../../components/profile-image/profile-image';
+import { endpoints } from '../../../../configs/endpoints';
 import { status } from '../../../../configs/status';
+import { SHOW_MESSAGE } from '../../../../configs/topics';
+import { fetchAnnouncements, selectAnnouncements } from '../../../../controller/announcements/announcementsSlice';
+import { selectLeague, selectMessageSource } from '../../../../controller/league/leagueSlice';
+import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
+import { selectUser } from '../../../../controller/user/userSlice';
+import { DateRequest } from '../../../../model/postRequests/dateRequest';
+import { RootState } from '../../../../store';
 import { client } from '../../../../utils/client';
 import { getAnnouncementCheckLocal, getLiveThreadCheckLocal, resetAnnouncementCheckLocal, resetLiveThreadCheckLocal } from '../../../../utils/localData';
-import { RootState } from '../../../../store';
-import { DateRequest } from '../../../../model/postRequests/dateRequest';
-import { publish, PubSub } from '../../../../controller/pubSub/pubSubSlice';
-import { SHOW_MESSAGE } from '../../../../configs/topics';
-import { SnackMessage } from '../../../../components/message/messagePopup';
-import { endpoints } from '../../../../configs/endpoints';
-import { selectUser } from '../../../../controller/user/userSlice';
-import { ProfileImage } from '../../../../components/profile-image/profile-image';
+import './nav-bar.css';
 
 export const NavBar = () => {
     const {pathname} = useLocation();
@@ -120,14 +120,14 @@ export const NavBar = () => {
                         { messageNotif }
                     </div>
                 </Button>
+                <Button icon basic className="nav-button" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
+                    <div className={getIconClass("games")}>
+                        <Icon size='large' name='football ball' className='nav-icon'/>
+                    </div>
+                </Button>
                 <Button icon basic className="nav-button" onClick={() => clickNav("/standings")}>
                     <div className={getIconClass("standings")}>
                         <Icon size='large' name='list'/>
-                    </div>
-                </Button>
-                <Button icon basic className="nav-button main-circle-container" onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
-                    <div className="main-circle base-background primary-color">
-                        <PickLogo sizeParam='xs'/>
                     </div>
                 </Button>
                 <Button icon basic className="nav-button" onClick={goToChat}>

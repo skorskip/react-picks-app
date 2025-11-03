@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectUser } from '../../controller/user/userSlice';
-import { fetchWeek, getSetWeek, selectPicksCount} from '../../controller/week/weekSlice';
-import { selectLeague } from '../../controller/league/leagueSlice';
-import { Switch, Route, useLocation, useParams, useHistory } from "react-router-dom";
-import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
-import { WeekSwitcher } from './components/week-switcher/week-switcher';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Switch, useHistory, useLocation, useParams } from "react-router-dom";
+import { useSwipeable } from 'react-swipeable';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Icon } from 'semantic-ui-react';
 import { PickPeekModal } from '../../components/pick-peek-modal/pick-peek-modal';
 import { status } from '../../configs/status';
-import { UserTypeEnum } from '../../model/user/user';
-import { useSwipeable } from 'react-swipeable';
-import { RootState } from '../../store';
-import { SeasonRequest } from '../../model/postRequests/seasonRequest';
+import { selectLeague } from '../../controller/league/leagueSlice';
 import { publish, PubSub } from '../../controller/pubSub/pubSubSlice';
-import { toInt } from '../../utils/tools';
-import "./games.css";
-import "../../utils/slideTransition.scss";
+import { selectUser } from '../../controller/user/userSlice';
+import { fetchWeek, getSetWeek, selectPicksCount } from '../../controller/week/weekSlice';
+import { SeasonRequest } from '../../model/postRequests/seasonRequest';
+import { UserTypeEnum } from '../../model/user/user';
 import { GameStatusEnum } from '../../model/week/game';
+import { RootState } from '../../store';
+import "../../utils/slideTransition.scss";
+import { toInt } from '../../utils/tools';
+import { GamesTabBar } from './components/games-tab-bar/games-tab-bar';
+import { WeekSwitcher } from './components/week-switcher/week-switcher';
+import "./games.css";
 
 interface RouteParams {
     view: string
@@ -52,7 +52,6 @@ export const Games = ({routes}: Props) => {
     const currSeason = league.currentSeason
     const currWeek = league.currentWeek 
     const currSeasonType = league.currentSeasonType
-    const [weeksShown, setWeeksShown] = useState(false);
 
     const filterList = [
         {id: GameStatusEnum.completed, label: 'Completed'},
@@ -99,7 +98,7 @@ export const Games = ({routes}: Props) => {
         />
     )
 
-    const transitionGroup = (!weeksShown) && (
+    const transitionGroup = (
         <TransitionGroup component="div" className="route-container">
             <CSSTransition 
                 key={param.view} 
@@ -148,7 +147,6 @@ export const Games = ({routes}: Props) => {
                 <div className="week-switcher-container">
                     <WeekSwitcher 
                         league={league}
-                        showWeekEvent={setWeeksShown}
                         filterList={filterList}
                     />
                 </div>

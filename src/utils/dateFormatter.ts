@@ -25,10 +25,10 @@ export const formatDate = (date: Date, justDay: boolean = false) => {
     return formattedDate;
 }
 
-export const gameTimeStatusQuarters = (game: Game) => {
+export const gameTimeStatusQuarters = (game: Game, hideStartLabel?: boolean) => {
     if(game.game_status === GameStatusEnum.unplayed || game.game_status === null) {
         if(new Date(game.pick_submit_by_date) < new Date()){
-          return "Start time: " + formatDate(new Date(game.start_time));
+          return ( hideStartLabel ? "" : "Start Time: ") + formatDate(new Date(game.start_time));
         }
       } else {
         if(game.game_status === GameStatusEnum.completed) {

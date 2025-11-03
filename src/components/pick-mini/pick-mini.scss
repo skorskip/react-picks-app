@@ -1,3 +1,5 @@
+@import '../../index.scss';
+
 .mini-pick-container {
     display: flex;
     flex-direction: row;
@@ -16,12 +18,21 @@
     width: 25px;
 }
 
-.pick-mini-score-time {
+.pick-mini-score {
     display: flex;
-    align-items: center;
-    font-size: 14px;
+    flex-direction: row;
 
-    .pick-mini-score-icon {
+    &-number {
+        padding-right: 5px;
+    }
+
+    &-time {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    &-icon {
         transform: scale(2);
     }
 }
@@ -63,6 +74,38 @@
     display: flex;
     justify-content: space-between;;
     padding: 5px;
+
+    &-ats {
+        padding-left: 10px;
+        margin: 5px;
+        border-radius: 5px;
+    }
+
+    &-number {
+        display: flex;
+        flex-direction: row;
+
+        &-diff {
+            padding-right: 10px;
+        }
+    }
+}
+
+.status {
+    &-success {
+        background: rgba($success, 0.1);
+        color: $success;
+    }
+
+    &-failure {
+        background: rgba($failure, 0.1);
+        color: $failure;
+    }
+
+    &-neutral {
+        background: rgba($secondary, 0.1);
+        color: $secondary;
+    }
 }
 
 .empty {

@@ -107,7 +107,7 @@ export const NavBar = () => {
     }, [announcementsStatus, dispatch]);
 
     return (
-        <div className="base-background nav-container">
+        <div className="nav-container glass">
             <div className="logo-container-large">
                 <div onClick={() => clickNav(`/games/game?season=${league.currentSeason}&seasonType=${league.currentSeasonType}&week=${league.currentWeek}`)}>
                     <PickLogo sizeParam='xs'/>

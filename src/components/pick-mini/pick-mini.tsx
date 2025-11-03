@@ -4,7 +4,7 @@ import { ButtonType, PickButton } from "../../common/PickButton/PickButton";
 import { Game, GameStatusEnum, GameWinStatusEnum } from "../../model/week/game";
 import { Pick } from "../../model/week/pick";
 import { Team } from "../../model/week/team";
-import { gameTimeStatusQuarters } from "../../utils/dateFormatter";
+import { formatDate, gameTimeStatusQuarters } from "../../utils/dateFormatter";
 import { pickResult } from "../../utils/tools";
 import { GameLoader } from "../game-loader/game-loader";
 import "./pick-mini.scss";
@@ -23,15 +23,15 @@ export const PickMini = ({picks, games, teams, isLoading}: Props) => {
         const status = pickResult(game, pick);
         switch(status) {
             case GameWinStatusEnum.win:
-                return (<div className="pick-mini-icon success-color">
+                return (<div className="success-color">
                         <Icon className="pick-mini-status-icon" name="check"/>
                     </div>);
             case GameWinStatusEnum.loss:
-                return (<div className="pick-mini-icon failure-color">
+                return (<div className="failure-color">
                         <Icon className="pick-mini-status-icon" name="times"/>
                     </div>);
             case GameWinStatusEnum.push:
-                return (<div className="pick-mini-icon secondary-color">
+                return (<div className="secondary-color">
                         <Icon className="pick-mini-status-icon" name="exchange"/>
                     </div>);
             default:
@@ -39,25 +39,58 @@ export const PickMini = ({picks, games, teams, isLoading}: Props) => {
         }
     }
 
+    enum winnginStatusEnum {
+        NEUTRAL='neutral',
+        FAILURE='failure',
+        SUCCESS='success'
+    }
+
+
+    const winningStatus = (score: number) => {
+        if (score === 0) return winnginStatusEnum.NEUTRAL;
+        if (score < 0) return winnginStatusEnum.FAILURE;
+        return winnginStatusEnum.SUCCESS;
+    }
+
     const gameScore = (pick: Pick, game: Game) => {
         const isHomeTeam = pick.team_id === game.home_team_id;
-        const score = game.home_team_score - game.away_team_score;
+        const homeScore = ((game.home_team_score || 0) + parseFloat(String(game.home_spread)));
+        const awayScore = (game.away_team_score || 0);
+        const score = (isHomeTeam) ? (homeScore - awayScore) : (awayScore - homeScore);
+        const status = winningStatus(score);
 
-        if (game.game_status === GameStatusEnum.live) {
-            return (<div>
-                {
-                    (game.away_team_score === 0 && game.home_team_score === 0) ?
-                    '--' : 
-                    (score === 0) ?
-                    'All tied up' :
-                    ((score < 0 && isHomeTeam) || (score > 0 && !isHomeTeam)) ?
-                    (<div className="secondary-color pick-mini-score-time"><div className="pick-mini-score-icon"><Icon name="caret down"/></div>{Math.abs(score)}</div>) :
-                    (<div className="secondary-color pick-mini-score-time"><div className="pick-mini-score-icon"><Icon name="caret up"/></div>{Math.abs(score)}</div>)
-                }
-            </div>)
+        if (game.game_status !== GameStatusEnum.unplayed) {
+            return (
+                <div className={"pick-mini-score pick-mini-score-ats status-" + status}>
+                    {
+                        // if game complete show pick status
+                        (game.game_status === GameStatusEnum.completed) ?
+                        pickStatus(pick, game) :
+                        // if game has no score show --
+                        (status === winnginStatusEnum.NEUTRAL) ?
+                        '--' : 
+                        // if the team picked is losing show down caret
+                        (status === winnginStatusEnum.FAILURE) ?
+                        (<div className="failure-color pick-mini-score-time">
+                            <div className="pick-mini-score-icon">
+                                <Icon name="caret down"/>
+                            </div>
+                        </div>) :
+                        (<div className="success-color pick-mini-score-time">
+                            <div className="pick-mini-score-icon">
+                                <Icon name="caret up"/>
+                            </div>
+                        </div>)
+                    }
+                    <div className="pick-mini-score-number">
+                        <div className="pick-mini-score-number-diff">{score}</div>
+                        <div>ATS</div>
+                    </div>
+                </div>
+            )
         }
 
-        return (<div>
+        return (<div className="pick-mini-score pick-mini-score-ats status-neutral">
             {
                 (game.game_status === GameStatusEnum.unplayed) ?
                 'Unplayed' : 'Game Over'
@@ -83,21 +116,21 @@ export const PickMini = ({picks, games, teams, isLoading}: Props) => {
                         <div className="pick-mini-spread">
                             {team?.abbreviation}
                         </div>
-                        <div>
-                            {pickStatus(pick, game)}
+                        <div className={'pick-mini-team '  + (parseFloat(spread.toString()) > 0 ? "success-color" : "failure-color") }>
+                            {parseFloat(spread).toFixed(1)}
                         </div>
                     </div>
-                    <div className={'pick-mini-team '  + (parseFloat(spread.toString()) > 0 ? "success-color" : "failure-color") }>
-                        {parseFloat(spread).toFixed(1)}
+                    <div>
+                        {gameScore(pick, game)}
                     </div>
                     <div className="pick-mini-score secondary-color">
-                        {gameScore(pick, game)}
-                        {
-                            (game.game_status === GameStatusEnum.live) &&
-                            (<div className="success-color">
-                                {gameTimeStatusQuarters(game)}
-                            </div>)
-                        }
+                        <div className="secondary-color">
+                            {
+                                game.game_status === GameStatusEnum.unplayed ? 
+                                formatDate(new Date(game.pick_submit_by_date)) : 
+                                gameTimeStatusQuarters(game, true)
+                            }
+                        </div>
                     </div>
                 </div>
             )

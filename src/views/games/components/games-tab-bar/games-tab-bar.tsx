@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
+import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 import { NAV_DONE_BUTTON, NAV_EDIT_BUTTON } from '../../../../configs/topics';
 import { PubSub } from '../../../../controller/pubSub/pubSubSlice';
-import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 import { League } from '../../../../model/league/league';
 
 import './games-tab-bar.css';
@@ -69,7 +69,7 @@ export const GamesTabBar = ({league, pickCount, tabBarEvent}: Props) => {
     )
 
     return (
-        <div className="toggle-picks-container base-background">
+        <div className="toggle-picks-container glass">
             <div className="toggle-container tiertary-light-background">
                 <PickButton 
                     type={(param.view === "game") ? ButtonType.PRIMARY : ButtonType.TOGGLE}

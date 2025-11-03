@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
-import './week-switcher.css';
-import { toInt } from '../../../../utils/tools';
 import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 import { League } from '../../../../model/league/league';
+import { toInt } from '../../../../utils/tools';
+import './week-switcher.css';
 
 interface RouteParams {
     view: string
@@ -12,11 +11,10 @@ interface RouteParams {
 
 type Props = {
     league: League,
-    filterList?: Array<{id: string, label: string}>, 
-    showWeekEvent: (showWeek:boolean) => void,
+    filterList?: Array<{id: string, label: string}>,
 }
 
-export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
+export const WeekSwitcher = ({ league, filterList }: Props) => {
 
     const history = useHistory();
     let param = useParams<RouteParams>();
@@ -28,7 +26,6 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
     const seasonType = query.get("seasonType") === null ? league.currentSeasonType : toInt(query.get("seasonType"));
     const user = query.get("user");
     const filter = query.get("status");
-    const [weeksShown, setWeeksShown] = useState(false);
 
     const weekPrev = () => {
         history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${week ? (week - 1) : 0}&user=${user}`);
@@ -39,19 +36,11 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
     }
 
     const filterClick = (filter: string) => {
-        console.log('filter:::', filter);
         history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${week}&user=${user}&status=${filter}`);
     }
 
     const showWeeks = (weekNum: number | null) => {
-        if(weeksShown) {
-            history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${weekNum}&user=${user}`);
-            setWeeksShown(false);
-            showWeekEvent(false)
-        } else {
-            setWeeksShown(true);
-            showWeekEvent(true);
-        }
+        history.push(`/games/${param.view}?season=${season}&seasonType=${seasonType}&week=${weekNum}&user=${user}`);
     }
 
     const prevButton = (week !== 1) && (
@@ -71,12 +60,12 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
     );
 
     const filterButton = ((currentWeek === week || week === null) && (user === 'null' || user === null)) && (
-        <PickButton styling="next-button-style" type={ButtonType.SECONDARY} content={(
+        <PickButton styling="next-button-style float-class" type={ButtonType.SECONDARY} content={(
             <>
-                <div className="week-arrow-next-icon">
+                <div className="week-arrow-next-icon week-filter-icon">
                     <Icon name="filter" />
                 </div>
-                <select className="week-filter-icon" onChange={e => filterClick(e.target.value)}>
+                <select id="filters-select" className="week-filter-select" onChange={e => filterClick(e.target.value)}>
                     <option value="">All Statuses</option>
                     {
                         filterList?.map(f => (
@@ -89,44 +78,45 @@ export const WeekSwitcher = ({ league, showWeekEvent, filterList }: Props) => {
                 { (filter) ? (<div className="week-filter-notif failure-background"></div>) : (<></>)}
             </>
         )}/>
-    )
-
-    const weekButton = (weekNum: number | null) => {
-        return (
-            <PickButton 
-                key={weekNum + "-week-number"} 
-                clickEvent={() => showWeeks(weekNum)} 
-                styling="weeks-button-style" 
-                type={ButtonType.SECONDARY}
-                content={(
-                <div className="week-header">
-                    <div className="week-title">
-                        Week {weekNum}
-                    </div>
-                    <div className="week-arrow-icon">
-                        {(weeksShown) ? (<Icon name="chevron down"/>) : (<Icon name="chevron up" />)}
-                    </div>  
-                </div>
-            )}/>
-        );
-    };
+    );
 
     const weeksButton = () => {
         var weeksObject = [];
         for(let i = currentWeek; i > 0; i--) { 
-            weeksObject.push(weekButton(i));
+            weeksObject.push(i);
         }
         return weeksObject;
     }
 
-    if(weeksShown) {
-        var object = weeksButton();
+    const weekButton = (weekNum: number | null) => {
         return (
-            <div className="weeks-container">
-                { object }
-            </div>
+            <PickButton 
+                key={weekNum + "-week-number"}
+                styling="weeks-button-style" 
+                type={ButtonType.SECONDARY}
+                content={(
+                    <>
+                        <div className="week-header">
+                            <div className="week-title">
+                                Week {weekNum}
+                            </div>
+                            <div className="week-arrow-icon">
+                                <Icon name="chevron down"/>
+                            </div> 
+                        </div>
+                        <select id="weeks-select" className="weeks-button-icon" onChange={e => showWeeks(parseInt(e.target.value))}>
+                            {
+                                weeksButton()?.map(f => (
+                                    <option key={'week-' + f} value={f} selected={week === f}>
+                                        Week {f}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                    </>
+            )}/>
         );
-    }
+    };
 
     return (
         <div className="week-header-container">

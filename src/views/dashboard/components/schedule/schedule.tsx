@@ -1,14 +1,14 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Icon } from 'semantic-ui-react';
 import { SemanticICONS } from 'semantic-ui-react/dist/commonjs/generic';
+import { GameLoader } from '../../../../components/game-loader/game-loader';
 import { Game, GameStatusEnum } from '../../../../model/week/game';
 import { Pick } from '../../../../model/week/pick';
 import { Team } from '../../../../model/week/team';
 import { formatDate } from '../../../../utils/dateFormatter';
 import './schedule.css';
-import { useHistory } from 'react-router-dom';
-import { GameLoader } from '../../../../components/game-loader/game-loader';
 
 type Props = {
     games: Array<Game>;
@@ -107,7 +107,7 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
             unplayedSchedule.push({
                 type: 'warn-color',
                 subTitle: `${submitMap[key].length} games`,
-                time: new Date(key).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
+                time: key,
                 title: 'Picks deadline(s)',
                 icon: 'clock',
                 cardType: ScheduleCardType.submit
@@ -128,7 +128,7 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
             pickSchedule.push({
                 type: 'primary-color',
                 subTitle: `${awayTeam?.abbreviation} @ ${homeTeam?.abbreviation}`,
-                time: new Date(game.start_time).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }),
+                time: game.start_time,
                 title: 'Pick',
                 icon: 'hand point down',
                 cardType: ScheduleCardType.picks
@@ -159,7 +159,11 @@ export const Schedule = ({games, picks, teams, isLoading} : Props) => {
                     </div>
                 </div>
                 <div>
-                    {schedule.time}
+                    {
+                        (schedule.time === 'now') ?
+                        'Now' :
+                        new Date(schedule.time).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+                    }
                 </div>
             </div>
         );

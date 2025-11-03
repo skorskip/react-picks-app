@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../../../controller/user/userSlice';
-import { selectGamesNoPicks, addPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
-import { GameLoader } from '../../../../components/game-loader/game-loader';
-import { Icon } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { selectLeague } from '../../../../controller/league/leagueSlice';
+import { Icon } from 'semantic-ui-react';
+import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
+import { GameCard } from '../../../../components/game-card/game-card';
+import { GameLoader } from '../../../../components/game-loader/game-loader';
+import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
 import { status } from '../../../../configs/status';
-import { setStagedPicksLocal, resetStagedPicksLocal, getStagedPicksLocal } from '../../../../utils/localData';
-import { RootState, useAppThunkDispatch } from '../../../../store';
+import { selectLeague } from '../../../../controller/league/leagueSlice';
+import { selectUser } from '../../../../controller/user/userSlice';
+import { addPicks, selectGamesNoPicks, selectTeams, selectUserPickData } from '../../../../controller/week/weekSlice';
 import { PickSelected } from '../../../../model/pickSelected/pickSelected';
 import { PickRequest } from '../../../../model/postRequests/pickRequest';
-import { Pick } from '../../../../model/week/pick';
-import { GameCard } from '../../../../components/game-card/game-card';
-import { toInt } from '../../../../utils/tools';
 import { UserTypeEnum } from '../../../../model/user/user';
-import { UsersPickData } from '../../../../components/users-pick-data/users-pick-data';
+import { Pick } from '../../../../model/week/pick';
+import { RootState, useAppThunkDispatch } from '../../../../store';
+import { getStagedPicksLocal, resetStagedPicksLocal, setStagedPicksLocal } from '../../../../utils/localData';
+import { toInt } from '../../../../utils/tools';
 import { GameSubmitTime } from '../../components/game-submit-time/game-submit-time';
 import './game-dashboard.css';
-import { ButtonType, PickButton } from '../../../../common/PickButton/PickButton';
 
 export const GameDashboard = () => {
     const dispatch = useAppThunkDispatch();
